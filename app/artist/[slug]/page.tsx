@@ -22,10 +22,10 @@ const artists = [
         exhibitions: `2024 — Galería Marlborough, Madrid\n2023 — Art Basel Hong Kong, Booth 3C\n2022 — Sala Parés, Barcelona (Solo)\n2021 — Collective Show, Galerie Templon, Paris\n2020 — Solo Exhibition, Galería Cayón, Madrid`,
         recognition: `Featured in Artsy's Top 50 Emerging Artists 2023\nWinner, Premio de Pintura Cataluña 2022\nArtwork acquired by Fundació Joan Miró collection`,
         artworks: [
-            { id: 1,  title: 'Golden horizon',    price: 1200, medium: 'Oil on canvas', size: '24 × 36 in', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
-            { id: 9,  title: 'Amber fields',      price: 950,  medium: 'Oil on canvas', size: '20 × 28 in', img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
-            { id: 10, title: 'Warm light',        price: 1450, medium: 'Oil on canvas', size: '30 × 40 in', img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
-            { id: 11, title: 'Dusk in Catalonia', price: 2200, medium: 'Oil on linen',  size: '36 × 48 in', img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
+            { id: 1,  handle: 'golden-horizon',    title: 'Golden horizon',    price: 1200, medium: 'Oil on canvas', size: '24 × 36 in', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
+            { id: 9,  handle: 'amber-fields',      title: 'Amber fields',      price: 950,  medium: 'Oil on canvas', size: '20 × 28 in', img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
+            { id: 10, handle: 'warm-light',        title: 'Warm light',        price: 1450, medium: 'Oil on canvas', size: '30 × 40 in', img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
+            { id: 11, handle: 'dusk-in-catalonia', title: 'Dusk in Catalonia', price: 2200, medium: 'Oil on linen',  size: '36 × 48 in', img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
         ],
         similar: ['sofia-martens', 'layla-hassan', 'james-lee'],
     },
@@ -45,10 +45,10 @@ const artists = [
         exhibitions: `2024 — NADA Art Fair, New York\n2023 — Printed Matter Art Book Fair, MoMA PS1\n2022 — Solo Show, Print Center, Philadelphia\n2021 — Group Exhibition, Tamarind Institute, Albuquerque`,
         recognition: `New York Foundation for the Arts Fellowship 2023\nPrint featured in MoMA permanent collection\nNamed one of Artforum's artists to watch 2022`,
         artworks: [
-            { id: 2,  title: 'Silent garden',   price: 850,  medium: 'Fine art print', size: '18 × 24 in', img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80' },
-            { id: 12, title: 'Morning fog',     price: 720,  medium: 'Etching',        size: '16 × 20 in', img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&q=80' },
-            { id: 13, title: 'Brooklyn bridge', price: 980,  medium: 'Fine art print', size: '20 × 30 in', img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80' },
-            { id: 14, title: 'City at rest',    price: 1100, medium: 'Lithograph',     size: '24 × 32 in', img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
+            { id: 2,  handle: 'silent-garden',   title: 'Silent garden',   price: 850,  medium: 'Fine art print', size: '18 × 24 in', img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80' },
+            { id: 12, handle: 'morning-fog',     title: 'Morning fog',     price: 720,  medium: 'Etching',        size: '16 × 20 in', img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&q=80' },
+            { id: 13, handle: 'brooklyn-bridge', title: 'Brooklyn bridge', price: 980,  medium: 'Fine art print', size: '20 × 30 in', img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80' },
+            { id: 14, handle: 'city-at-rest',    title: 'City at rest',    price: 1100, medium: 'Lithograph',     size: '24 × 32 in', img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
         ],
         similar: ['maria-ruiz', 'nina-storm', 'carlos-vega'],
     },
@@ -68,10 +68,10 @@ const artists = [
         exhibitions: `2024 — Art Brussels, Gallery Rodolphe Janssen\n2023 — FIAC Paris · Solo Show, Galerie Nathalie Obadia\n2022 — Frieze London, Booth B12\n2021 — Group Show, SMAK, Ghent`,
         recognition: `Prix de la Jeune Peinture Belge 2022\nFeatured in Wallpaper* Magazine's New Contemporaries\nWork acquired by the Musée d'Art Moderne de Paris`,
         artworks: [
-            { id: 3,  title: 'Urban dusk',     price: 2100, medium: 'Acrylic on canvas', size: '40 × 50 in', img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
-            { id: 15, title: 'Kinetic blue',   price: 1800, medium: 'Acrylic on canvas', size: '36 × 48 in', img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
-            { id: 16, title: 'Fracture lines', price: 2600, medium: 'Mixed media',       size: '48 × 60 in', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
-            { id: 17, title: 'Inner storm',    price: 1950, medium: 'Acrylic on canvas', size: '32 × 40 in', img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
+            { id: 3,  handle: 'urban-dusk',     title: 'Urban dusk',     price: 2100, medium: 'Acrylic on canvas', size: '40 × 50 in', img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
+            { id: 15, handle: 'kinetic-blue',   title: 'Kinetic blue',   price: 1800, medium: 'Acrylic on canvas', size: '36 × 48 in', img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
+            { id: 16, handle: 'fracture-lines', title: 'Fracture lines', price: 2600, medium: 'Mixed media',       size: '48 × 60 in', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
+            { id: 17, handle: 'inner-storm',    title: 'Inner storm',    price: 1950, medium: 'Acrylic on canvas', size: '32 × 40 in', img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
         ],
         similar: ['maria-ruiz', 'layla-hassan', 'james-lee'],
     },
@@ -91,10 +91,10 @@ const artists = [
         exhibitions: `2024 — ZONA MACO, Mexico City\n2023 — Latin American Art Fair, London\n2022 — Solo Show, Instituto de Artes Gráficas, Oaxaca\n2021 — Group Show, Kurimanzutto Gallery, Mexico City`,
         recognition: `Premio Jóvenes Creadores, FONCA 2023\nWork acquired by the Museo de Arte Moderno, Mexico City\nFeatured in Juxtapoz Magazine Issue 228`,
         artworks: [
-            { id: 4,  title: 'Morning bloom', price: 650, medium: 'Fine art print',  size: '16 × 20 in', img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&q=80' },
-            { id: 18, title: 'Serpent sun',   price: 580, medium: 'Screen print',    size: '14 × 18 in', img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80' },
-            { id: 19, title: 'Maize goddess', price: 890, medium: 'Fine art print',  size: '20 × 28 in', img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
-            { id: 20, title: 'Night market',  price: 720, medium: 'Risograph print', size: '18 × 24 in', img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80' },
+            { id: 4,  handle: 'morning-bloom', title: 'Morning bloom', price: 650, medium: 'Fine art print',  size: '16 × 20 in', img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&q=80' },
+            { id: 18, handle: 'serpent-sun',   title: 'Serpent sun',   price: 580, medium: 'Screen print',    size: '14 × 18 in', img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80' },
+            { id: 19, handle: 'maize-goddess', title: 'Maize goddess', price: 890, medium: 'Fine art print',  size: '20 × 28 in', img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
+            { id: 20, handle: 'night-market',  title: 'Night market',  price: 720, medium: 'Risograph print', size: '18 × 24 in', img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80' },
         ],
         similar: ['nina-storm', 'james-lee', 'maria-ruiz'],
     },
@@ -114,10 +114,10 @@ const artists = [
         exhibitions: `2024 — Cairo Art Fair · Solo Show, Mashrabia Gallery\n2023 — 1-54 African Art Fair, London\n2022 — Group Show, Kalfayan Galleries, Athens\n2021 — Solo Show, Galerie Imane Farès, Paris`,
         recognition: `Cairo Biennial Prize for Painting 2023\nNominated for the Sovereign African Art Prize 2022\nWork in the collection of the Museum of Egyptian Modern Art`,
         artworks: [
-            { id: 5,  title: 'Desert wind',    price: 1750, medium: 'Oil on canvas', size: '30 × 40 in', img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
-            { id: 21, title: 'Nile at dusk',   price: 1900, medium: 'Oil on canvas', size: '32 × 44 in', img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
-            { id: 22, title: 'Old Cairo',      price: 2400, medium: 'Oil on linen',  size: '40 × 52 in', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
-            { id: 23, title: 'Sahara morning', price: 1600, medium: 'Oil on canvas', size: '28 × 36 in', img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
+            { id: 5,  handle: 'desert-wind',    title: 'Desert wind',    price: 1750, medium: 'Oil on canvas', size: '30 × 40 in', img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
+            { id: 21, handle: 'nile-at-dusk',   title: 'Nile at dusk',   price: 1900, medium: 'Oil on canvas', size: '32 × 44 in', img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
+            { id: 22, handle: 'old-cairo',      title: 'Old Cairo',      price: 2400, medium: 'Oil on linen',  size: '40 × 52 in', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
+            { id: 23, handle: 'sahara-morning', title: 'Sahara morning', price: 1600, medium: 'Oil on canvas', size: '28 × 36 in', img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
         ],
         similar: ['maria-ruiz', 'sofia-martens', 'nina-storm'],
     },
@@ -137,10 +137,10 @@ const artists = [
         exhibitions: `2024 — Photokina, Cologne · Solo Show, Galleri Christoffer Egelund\n2023 — Unseen Photo Fair, Amsterdam\n2022 — Paris Photo, Grand Palais\n2021 — Solo Show, V1 Gallery, Copenhagen`,
         recognition: `Danish Arts Foundation Grant 2023\nWork acquired by the National Museum of Photography, Denmark\nFeatured in British Journal of Photography`,
         artworks: [
-            { id: 6,  title: 'Ocean whisper',   price: 980,  medium: 'Fine art print', size: '20 × 28 in', img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80' },
-            { id: 24, title: 'Nordic white',    price: 850,  medium: 'Fine art print', size: '16 × 24 in', img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
-            { id: 25, title: 'Helsingør shore', price: 1200, medium: 'C-type print',   size: '24 × 36 in', img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80' },
-            { id: 26, title: 'Winter light',    price: 760,  medium: 'Fine art print', size: '14 × 20 in', img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&q=80' },
+            { id: 6,  handle: 'ocean-whisper',  title: 'Ocean whisper',   price: 980,  medium: 'Fine art print', size: '20 × 28 in', img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80' },
+            { id: 24, handle: 'nordic-white',   title: 'Nordic white',    price: 850,  medium: 'Fine art print', size: '16 × 24 in', img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
+            { id: 25, handle: 'helsingr-shore', title: 'Helsingør shore', price: 1200, medium: 'C-type print',   size: '24 × 36 in', img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80' },
+            { id: 26, handle: 'winter-light',   title: 'Winter light',    price: 760,  medium: 'Fine art print', size: '14 × 20 in', img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&q=80' },
         ],
         similar: ['james-lee', 'carlos-vega', 'layla-hassan'],
     },
@@ -149,15 +149,14 @@ const artists = [
 const TABS = ['About', 'Education', 'Exhibitions', 'Recognition']
 
 export default function ArtistPage({ params }: { params: Promise<{ slug: string }> }) {
-    // ✅ Fix for Next.js 16 — params is a Promise
     const { slug } = use(params)
     const artist = artists.find(a => a.slug === slug)
     if (!artist) notFound()
 
     const [activeTab, setActiveTab] = useState(0)
-    const [followed, setFollowed]   = useState(false)
+    const [followed,  setFollowed]  = useState(false)
 
-    const tabContent = [artist.about, artist.education, artist.exhibitions, artist.recognition]
+    const tabContent     = [artist.about, artist.education, artist.exhibitions, artist.recognition]
     const similarArtists = artists.filter(a => artist.similar.includes(a.slug))
 
     return (
@@ -226,8 +225,8 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
                             />
                             <div style={{ display: 'flex', borderTop: '1px solid #e8e8e8' }}>
                                 {[
-                                    { label: 'Works',        value: artist.works },
-                                    { label: 'Member since', value: artist.joined },
+                                    { label: 'Works',        value: artist.works    },
+                                    { label: 'Member since', value: artist.joined   },
                                 ].map(s => (
                                     <div key={s.label} style={{ flex: 1, padding: '16px 0', textAlign: 'center', borderRight: '1px solid #e8e8e8', background: '#fff' }}>
                                         <p style={{ fontSize: 20, fontWeight: 600, marginBottom: 2 }}>{s.value}</p>
@@ -280,7 +279,7 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
                         </div>
                     </div>
 
-                    {/* ARTWORKS */}
+                    {/* ── ARTWORKS ── */}
                     <section style={{ paddingTop: 56, paddingBottom: 48, borderTop: '1px solid #e8e8e8', marginTop: 48 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 28 }}>
                             <h2 style={{ fontSize: 20, fontWeight: 400, fontFamily: 'Georgia, serif' }}>
@@ -292,12 +291,21 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
                             {artist.artworks.map(art => (
-                                <Link key={art.id} href={`/artwork/${art.id}`} style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
-                                    <div style={{ position: 'relative', overflow: 'hidden', background: '#f0ede8', marginBottom: 10, aspectRatio: '3/4' }}>
+                                // ✅ Uses handle not id
+                                <Link key={art.handle} href={`/artwork/${art.handle}`} style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
+                                    <div
+                                        style={{ position: 'relative', overflow: 'hidden', background: '#f0ede8', marginBottom: 10, aspectRatio: '3/4' }}
+                                        onMouseEnter={e => {
+                                            const img = (e.currentTarget as HTMLElement).querySelector('img') as HTMLImageElement
+                                            if (img) img.style.transform = 'scale(1.05)'
+                                        }}
+                                        onMouseLeave={e => {
+                                            const img = (e.currentTarget as HTMLElement).querySelector('img') as HTMLImageElement
+                                            if (img) img.style.transform = 'scale(1)'
+                                        }}
+                                    >
                                         <img src={art.img} alt={art.title} loading="lazy"
                                              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.6s ease' }}
-                                             onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
-                                             onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
                                         />
                                     </div>
                                     <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>${art.price.toLocaleString()}</p>
@@ -343,7 +351,7 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
                                     <div style={{ position: 'relative', marginBottom: 12, overflow: 'hidden' }}>
                                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
                                             {sim.artworks.slice(0, 4).map(art => (
-                                                <img key={art.id} src={art.img} alt={art.title} loading="lazy"
+                                                <img key={art.handle} src={art.img} alt={art.title} loading="lazy"
                                                      style={{ width: '100%', height: 90, objectFit: 'cover', display: 'block', transition: 'transform 0.5s ease' }}
                                                      onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
                                                      onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}

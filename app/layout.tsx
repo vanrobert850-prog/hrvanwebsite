@@ -6,6 +6,7 @@ import CookieBannerWrapper from './components/CookieBannerWrapper'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
+import { CartProvider } from './context/CartContext'
 
 export const metadata: Metadata = {
     title: {
@@ -70,8 +71,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </head>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <LanguageProvider>
-            <CookieBannerWrapper />
-            {children}
+            <CartProvider>
+                <CookieBannerWrapper />
+                {children}
+            </CartProvider>
         </LanguageProvider>
         </body>
         </html>
