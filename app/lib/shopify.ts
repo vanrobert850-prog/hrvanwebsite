@@ -16,7 +16,7 @@ export type ShopifyProduct = {
         minVariantPrice: { amount: string; currencyCode: string }
     }
     images: {
-        edges: { node: { url: string; altText: string } }[]
+        edges: { node: { url: string; altText: string; width: number; height: number } }[]
     }
     variants: {
         edges: { node: { id: string; title: string; price: { amount: string; currencyCode: string }; availableForSale: boolean } }[]
@@ -54,7 +54,7 @@ export type ShopifyCart = {
 const PRODUCT_FRAGMENT = `
   id title handle description vendor productType tags
   priceRange { minVariantPrice { amount currencyCode } }
-  images(first: 10) { edges { node { url altText } } }
+  images(first: 10) { edges { node { url altText width height } } }
   variants(first: 10) {
     edges {
       node {
@@ -102,7 +102,6 @@ export async function getAllProducts(): Promise<ShopifyProduct[]> {
     return data?.products?.edges?.map((e: { node: ShopifyProduct }) => e.node) ?? []
 }
 
-// ✅ Fixed: uses product(handle:) not productByHandle — deprecated in 2026-01
 export async function getProductByHandle(handle: string): Promise<ShopifyProduct | null> {
     const { data, errors } = await shopifyClient.request(`
     query getProduct($handle: String!) {

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useLang } from '../context/LanguageContext'
 import { useCart } from '../context/CartContext'
+import { SignInButton, UserButton, Show } from '@clerk/nextjs'
 
 const searchData = {
     artists: [
@@ -708,7 +709,16 @@ export default function Navbar() {
 
                 <div className="navbar-right">
                     <SearchBar />
-                    <button className="navbar-icon-btn" aria-label="Account"><UserIcon /></button>
+                    <Show when="signed-out">
+                        <SignInButton mode="modal">
+                            <button className="navbar-icon-btn" aria-label="Sign in">
+                                <UserIcon />
+                            </button>
+                        </SignInButton>
+                    </Show>
+                    <Show when="signed-in">
+                        <UserButton />
+                    </Show>
                     <FlagSwitcher />
 
                     {/* CART — live count badge */}

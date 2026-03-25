@@ -1,5 +1,6 @@
 'use client'
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { useUser } from '@clerk/nextjs'
 import { createCart, addToCart, removeFromCart, updateCartLine, getCart, ShopifyCart } from '../lib/shopify'
 
 interface CartContextType {
@@ -22,22 +23,109 @@ const CartContext = createContext<CartContextType>({
 })
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [cart,      setCart]      = useState<ShopifyCart | null>(null)
-    const [cartOpen,  setCartOpen]  = useState(false)
-    const [loading,   setLoading]   = useState(false)
+    const { user, isLoaded } = useUser()
+    const [cart,     setCart]     = useState<ShopifyCart | null>(null)
+    const [cartOpen, setCartOpen] = useState(false)
+    const [loading,  setLoading]  = useState(false)
 
-    // Load cart from localStorage on mount
-    useEffect(() => {
-        const savedCartId = localStorage.getItem('hr_cart_id')
-        if (savedCartId) {
-            getCart(savedCartId).then(c => { if (c) setCart(c) })
+    // ── Save cartId to Clerk user metadata ────────────────────────
+    const saveCartIdToAccount = async (cartId: string) => {
+        try {
+            await fetch('/api/cart/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cartId }),
+            })
+        } catch (e) {
+            console.error('Failed to save cart to account:', e)
         }
-    }, [])
+    }
 
+    // ── Load cartId from Clerk user metadata ──────────────────────
+    const loadCartIdFromAccount = async (): Promise<string | null> => {
+        try {
+            const res = await fetch('/api/cart/save')
+            const data = await res.json()
+            return data.cartId ?? null
+        } catch {
+            return null
+        }
+    }
+
+    // ── Clear cartId from Clerk user metadata ─────────────────────
+    const clearCartFromAccount = async () => {
+        try {
+            await fetch('/api/cart/save', { method: 'DELETE' })
+        } catch (e) {
+            console.error('Failed to clear cart from account:', e)
+        }
+    }
+
+    // ── Bootstrap cart on mount / user change ─────────────────────
+    useEffect(() => {
+        if (!isLoaded) return
+
+        const initCart = async () => {
+            setLoading(true)
+
+            if (user) {
+                // Signed in: try to load cart from account first
+                const accountCartId = await loadCartIdFromAccount()
+
+                if (accountCartId) {
+                    const existingCart = await getCart(accountCartId)
+                    if (existingCart) {
+                        setCart(existingCart)
+                        // Also keep localStorage in sync
+                        localStorage.setItem('hr_cart_id', accountCartId)
+                        setLoading(false)
+                        return
+                    }
+                }
+
+                // No account cart — check if there's a guest cart in localStorage to migrate
+                const guestCartId = localStorage.getItem('hr_cart_id')
+                if (guestCartId) {
+                    const guestCart = await getCart(guestCartId)
+                    if (guestCart) {
+                        // Migrate guest cart to account
+                        setCart(guestCart)
+                        await saveCartIdToAccount(guestCartId)
+                        setLoading(false)
+                        return
+                    }
+                }
+
+                // No cart at all — will be created on first addItem
+            } else {
+                // Signed out: use localStorage cart only
+                const savedCartId = localStorage.getItem('hr_cart_id')
+                if (savedCartId) {
+                    const existingCart = await getCart(savedCartId)
+                    if (existingCart) {
+                        setCart(existingCart)
+                    }
+                }
+            }
+
+            setLoading(false)
+        }
+
+        initCart()
+    }, [user, isLoaded])
+
+    // ── Get or create a cart ──────────────────────────────────────
     const getOrCreateCart = async () => {
         if (cart) return cart
+
         const newCart = await createCart()
         localStorage.setItem('hr_cart_id', newCart.id)
+
+        // If signed in, save to account too
+        if (user) {
+            await saveCartIdToAccount(newCart.id)
+        }
+
         setCart(newCart)
         return newCart
     }

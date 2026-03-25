@@ -2,11 +2,12 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { LanguageProvider } from './context/LanguageContext'
+import { CartProvider } from './context/CartContext'
 import CookieBannerWrapper from './components/CookieBannerWrapper'
+import { ClerkProvider } from '@clerk/nextjs'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
-import { CartProvider } from './context/CartContext'
 
 export const metadata: Metadata = {
     title: {
@@ -47,36 +48,38 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="en">
-        <head>
-            <link rel="preconnect" href="https://images.unsplash.com" />
-            <link rel="preconnect" href="https://flagcdn.com" />
-            <link rel="dns-prefetch" href="https://images.unsplash.com" />
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-                    '@context': 'https://schema.org',
-                    '@type': 'Organization',
-                    'name': 'HR FineArt',
-                    'url': 'https://hrfineart.com',
-                    'description': 'A curated marketplace connecting art collectors with independent artists worldwide.',
-                    'sameAs': ['https://instagram.com/hrfineart', 'https://facebook.com/hrfineart'],
-                    'contactPoint': { '@type': 'ContactPoint', 'contactType': 'customer service', 'email': 'hello@hrfineart.com', 'availableLanguage': ['English', 'Spanish'] }
-                })}} />
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-                    '@context': 'https://schema.org',
-                    '@type': 'WebSite',
-                    'name': 'HR FineArt',
-                    'url': 'https://hrfineart.com',
-                    'potentialAction': { '@type': 'SearchAction', 'target': { '@type': 'EntryPoint', 'urlTemplate': 'https://hrfineart.com/gallery?q={search_term_string}' }, 'query-input': 'required name=search_term_string' }
-                })}} />
-        </head>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <LanguageProvider>
-            <CartProvider>
-                <CookieBannerWrapper />
-                {children}
-            </CartProvider>
-        </LanguageProvider>
-        </body>
-        </html>
+        <ClerkProvider>
+            <html lang="en">
+            <head>
+                <link rel="preconnect" href="https://images.unsplash.com" />
+                <link rel="preconnect" href="https://flagcdn.com" />
+                <link rel="dns-prefetch" href="https://images.unsplash.com" />
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+                        '@context': 'https://schema.org',
+                        '@type': 'Organization',
+                        'name': 'HR FineArt',
+                        'url': 'https://hrfineart.com',
+                        'description': 'A curated marketplace connecting art collectors with independent artists worldwide.',
+                        'sameAs': ['https://instagram.com/hrfineart', 'https://facebook.com/hrfineart'],
+                        'contactPoint': { '@type': 'ContactPoint', 'contactType': 'customer service', 'email': 'hello@hrfineart.com', 'availableLanguage': ['English', 'Spanish'] }
+                    })}} />
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+                        '@context': 'https://schema.org',
+                        '@type': 'WebSite',
+                        'name': 'HR FineArt',
+                        'url': 'https://hrfineart.com',
+                        'potentialAction': { '@type': 'SearchAction', 'target': { '@type': 'EntryPoint', 'urlTemplate': 'https://hrfineart.com/gallery?q={search_term_string}' }, 'query-input': 'required name=search_term_string' }
+                    })}} />
+            </head>
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <LanguageProvider>
+                <CartProvider>
+                    <CookieBannerWrapper />
+                    {children}
+                </CartProvider>
+            </LanguageProvider>
+            </body>
+            </html>
+        </ClerkProvider>
     )
 }

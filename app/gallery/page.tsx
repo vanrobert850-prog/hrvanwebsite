@@ -4,55 +4,15 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import {
+    getAllProducts,
+    formatPrice,
+    type ShopifyProduct,
+} from '../lib/shopify'
 
-const allArtworks = [
-    { id: 1,  handle: 'golden-horizon',      title: 'Golden horizon',      artist: 'Maria Ruiz',    country: 'Spain',         price: 1200, medium: 'Oil on canvas',     size: '24 × 36 in', category: 'Paintings', style: 'Contemporary',           subject: 'Landscape',    img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
-    { id: 2,  handle: 'silent-garden',       title: 'Silent garden',       artist: 'James Lee',     country: 'United States',  price: 850,  medium: 'Fine art print',    size: '18 × 24 in', category: 'Prints',    style: 'Contemporary',           subject: 'Nature',       img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80' },
-    { id: 3,  handle: 'urban-dusk',          title: 'Urban dusk',          artist: 'Sofia Martens', country: 'Belgium',        price: 2100, medium: 'Acrylic on canvas', size: '40 × 50 in', category: 'Paintings', style: 'Abstract',               subject: 'Abstract',     img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
-    { id: 4,  handle: 'morning-bloom',       title: 'Morning bloom',       artist: 'Carlos Vega',   country: 'Mexico',         price: 650,  medium: 'Fine art print',    size: '16 × 20 in', category: 'Prints',    style: 'Pop Art',                subject: 'Nature',       img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&q=80' },
-    { id: 5,  handle: 'desert-wind',         title: 'Desert wind',         artist: 'Layla Hassan',  country: 'Egypt',          price: 1750, medium: 'Oil on canvas',     size: '30 × 40 in', category: 'Paintings', style: 'Figurative',             subject: 'Landscape',    img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
-    { id: 6,  handle: 'ocean-whisper',       title: 'Ocean whisper',       artist: 'Nina Storm',    country: 'Denmark',        price: 980,  medium: 'Fine art print',    size: '20 × 28 in', category: 'Prints',    style: 'Contemporary',           subject: 'Landscape',    img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80' },
-    { id: 7,  handle: 'crimson-fields',      title: 'Crimson fields',      artist: 'Andres Mora',   country: 'Colombia',       price: 3200, medium: 'Oil on canvas',     size: '48 × 60 in', category: 'Paintings', style: 'Abstract Expressionism', subject: 'Abstract',     img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
-    { id: 8,  handle: 'quiet-forest',        title: 'Quiet forest',        artist: 'Yuki Tanaka',   country: 'Japan',          price: 720,  medium: 'Fine art print',    size: '14 × 20 in', category: 'Prints',    style: 'Contemporary',           subject: 'Nature',       img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
-    { id: 9,  handle: 'amber-fields',        title: 'Amber fields',        artist: 'Maria Ruiz',    country: 'Spain',          price: 950,  medium: 'Oil on canvas',     size: '20 × 28 in', category: 'Paintings', style: 'Figurative',             subject: 'Landscape',    img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
-    { id: 10, handle: 'warm-light',          title: 'Warm light',          artist: 'Maria Ruiz',    country: 'Spain',          price: 1450, medium: 'Oil on canvas',     size: '30 × 40 in', category: 'Paintings', style: 'Contemporary',           subject: 'People',       img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
-    { id: 11, handle: 'dusk-in-catalonia',   title: 'Dusk in Catalonia',   artist: 'Maria Ruiz',    country: 'Spain',          price: 2200, medium: 'Oil on linen',      size: '36 × 48 in', category: 'Paintings', style: 'Contemporary',           subject: 'Landscape',    img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
-    { id: 12, handle: 'morning-fog',         title: 'Morning fog',         artist: 'James Lee',     country: 'United States',  price: 720,  medium: 'Etching',           size: '16 × 20 in', category: 'Prints',    style: 'Contemporary',           subject: 'Landscape',    img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&q=80' },
-    { id: 13, handle: 'brooklyn-bridge',     title: 'Brooklyn bridge',     artist: 'James Lee',     country: 'United States',  price: 980,  medium: 'Fine art print',    size: '20 × 30 in', category: 'Prints',    style: 'Contemporary',           subject: 'Architecture', img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80' },
-    { id: 14, handle: 'city-at-rest',        title: 'City at rest',        artist: 'James Lee',     country: 'United States',  price: 1100, medium: 'Lithograph',        size: '24 × 32 in', category: 'Prints',    style: 'Modernism',              subject: 'Architecture', img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
-    { id: 15, handle: 'kinetic-blue',        title: 'Kinetic blue',        artist: 'Sofia Martens', country: 'Belgium',        price: 1800, medium: 'Acrylic on canvas', size: '36 × 48 in', category: 'Paintings', style: 'Abstract',               subject: 'Abstract',     img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
-    { id: 16, handle: 'fracture-lines',      title: 'Fracture lines',      artist: 'Sofia Martens', country: 'Belgium',        price: 2600, medium: 'Mixed media',       size: '48 × 60 in', category: 'Paintings', style: 'Abstract Expressionism', subject: 'Abstract',     img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
-    { id: 17, handle: 'inner-storm',         title: 'Inner storm',         artist: 'Sofia Martens', country: 'Belgium',        price: 1950, medium: 'Acrylic on canvas', size: '32 × 40 in', category: 'Paintings', style: 'Abstract',               subject: 'Abstract',     img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
-    { id: 18, handle: 'serpent-sun',         title: 'Serpent sun',         artist: 'Carlos Vega',   country: 'Mexico',         price: 580,  medium: 'Screen print',      size: '14 × 18 in', category: 'Prints',    style: 'Pop Art',                subject: 'Abstract',     img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80' },
-    { id: 19, handle: 'maize-goddess',       title: 'Maize goddess',       artist: 'Carlos Vega',   country: 'Mexico',         price: 890,  medium: 'Fine art print',    size: '20 × 28 in', category: 'Prints',    style: 'Pop Art',                subject: 'People',       img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
-    { id: 20, handle: 'night-market',        title: 'Night market',        artist: 'Carlos Vega',   country: 'Mexico',         price: 720,  medium: 'Risograph print',   size: '18 × 24 in', category: 'Prints',    style: 'Street Art',             subject: 'People',       img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80' },
-    { id: 21, handle: 'nile-at-dusk',        title: 'Nile at dusk',        artist: 'Layla Hassan',  country: 'Egypt',          price: 1900, medium: 'Oil on canvas',     size: '32 × 44 in', category: 'Paintings', style: 'Figurative',             subject: 'Landscape',    img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
-    { id: 22, handle: 'old-cairo',           title: 'Old Cairo',           artist: 'Layla Hassan',  country: 'Egypt',          price: 2400, medium: 'Oil on linen',      size: '40 × 52 in', category: 'Paintings', style: 'Figurative',             subject: 'Architecture', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
-    { id: 23, handle: 'sahara-morning',      title: 'Sahara morning',      artist: 'Layla Hassan',  country: 'Egypt',          price: 1600, medium: 'Oil on canvas',     size: '28 × 36 in', category: 'Paintings', style: 'Contemporary',           subject: 'Landscape',    img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
-    { id: 24, handle: 'nordic-white',        title: 'Nordic white',        artist: 'Nina Storm',    country: 'Denmark',        price: 850,  medium: 'Fine art print',    size: '16 × 24 in', category: 'Prints',    style: 'Modernism',              subject: 'Landscape',    img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
-    { id: 25, handle: 'helsingr-shore',      title: 'Helsingør shore',     artist: 'Nina Storm',    country: 'Denmark',        price: 1200, medium: 'C-type print',      size: '24 × 36 in', category: 'Prints',    style: 'Contemporary',           subject: 'Landscape',    img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80' },
-    { id: 26, handle: 'winter-light',        title: 'Winter light',        artist: 'Nina Storm',    country: 'Denmark',        price: 760,  medium: 'Fine art print',    size: '14 × 20 in', category: 'Prints',    style: 'Contemporary',           subject: 'Nature',       img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&q=80' },
-    { id: 27, handle: 'the-blue-hour',       title: 'The blue hour',       artist: 'Andres Mora',   country: 'Colombia',       price: 2800, medium: 'Oil on canvas',     size: '44 × 56 in', category: 'Paintings', style: 'Abstract Expressionism', subject: 'Abstract',     img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
-    { id: 28, handle: 'street-echo',         title: 'Street echo',         artist: 'Andres Mora',   country: 'Colombia',       price: 1400, medium: 'Acrylic on canvas', size: '30 × 40 in', category: 'Paintings', style: 'Street Art',             subject: 'People',       img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
-    { id: 29, handle: 'mountain-stillness',  title: 'Mountain stillness',  artist: 'Yuki Tanaka',   country: 'Japan',          price: 680,  medium: 'Fine art print',    size: '16 × 20 in', category: 'Prints',    style: 'Contemporary',           subject: 'Landscape',    img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
-    { id: 30, handle: 'cherry-blossom-rain', title: 'Cherry blossom rain', artist: 'Yuki Tanaka',   country: 'Japan',          price: 890,  medium: 'Fine art print',    size: '20 × 28 in', category: 'Prints',    style: 'Contemporary',           subject: 'Nature',       img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
-]
-
-const STYLES   = ['Modernism', 'Pop Art', 'Street Art', 'Abstract', 'Abstract Expressionism', 'Contemporary', 'Figurative']
-const SUBJECTS = ['People', 'Landscape', 'Still life', 'Nature', 'Architecture', 'Abstract']
-const MEDIUMS  = ['Oil on canvas', 'Acrylic on canvas', 'Fine art print', 'Mixed media', 'Etching', 'Lithograph', 'Screen print']
-const PRICES   = [
-    { label: 'Under $500',      min: 0,    max: 499      },
-    { label: '$500 – $1,000',   min: 500,  max: 1000     },
-    { label: '$1,000 – $2,000', min: 1001, max: 2000     },
-    { label: '$2,000 – $5,000', min: 2001, max: 5000     },
-    { label: 'Over $5,000',     min: 5001, max: Infinity  },
-]
-const SORTS = ['Featured', 'Price: Low to High', 'Price: High to Low', 'Newest']
-
+// ── ICONS ─────────────────────────────────────────────────────────
 const HeartIcon = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
 const CartIcon  = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-const PlusIcon  = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
 
 function ChevronIcon({ open }: { open: boolean }) {
     return (
@@ -63,6 +23,33 @@ function ChevronIcon({ open }: { open: boolean }) {
     )
 }
 
+// ── HELPERS ───────────────────────────────────────────────────────
+function parseTags(tags: string[]): Record<string, string> {
+    const map: Record<string, string> = {}
+    tags.forEach(tag => {
+        const [key, ...rest] = tag.split(':')
+        if (rest.length) map[key.trim()] = rest.join(':').trim()
+        else map[tag.trim()] = tag.trim()
+    })
+    return map
+}
+
+function getProductPrice(product: ShopifyProduct): number {
+    return parseFloat(product.priceRange.minVariantPrice.amount)
+}
+
+// ── PRICE RANGES ──────────────────────────────────────────────────
+const PRICES = [
+    { label: 'Under $500',      min: 0,    max: 499      },
+    { label: '$500 – $1,000',   min: 500,  max: 1000     },
+    { label: '$1,000 – $2,000', min: 1001, max: 2000     },
+    { label: '$2,000 – $5,000', min: 2001, max: 5000     },
+    { label: 'Over $5,000',     min: 5001, max: Infinity  },
+]
+
+const SORTS = ['Featured', 'Price: Low to High', 'Price: High to Low', 'Newest']
+
+// ── FILTER SECTION ────────────────────────────────────────────────
 function FilterSection({ title, children, defaultOpen = true }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
     const [open, setOpen] = useState(defaultOpen)
     return (
@@ -104,8 +91,34 @@ function CheckRow({ label, checked, onChange, radio }: { label: string; checked:
     )
 }
 
-function ArtCard({ art, index }: { art: typeof allArtworks[0]; index: number }) {
+// ── SKELETON CARD ─────────────────────────────────────────────────
+function SkeletonCard() {
+    return (
+        <div>
+            <div style={{
+                width: '100%', aspectRatio: '4/5',
+                background: 'linear-gradient(90deg, #f0ede8 25%, #e8e4de 50%, #f0ede8 75%)',
+                backgroundSize: '200% 100%', animation: 'shimmer 1.4s infinite', marginBottom: 10,
+            }} />
+            <div style={{ height: 14, width: '40%', background: '#f0ede8', borderRadius: 2, marginBottom: 6, animation: 'shimmer 1.4s infinite' }} />
+            <div style={{ height: 12, width: '70%', background: '#f0ede8', borderRadius: 2, marginBottom: 4, animation: 'shimmer 1.4s infinite' }} />
+            <div style={{ height: 11, width: '50%', background: '#f0ede8', borderRadius: 2, animation: 'shimmer 1.4s infinite' }} />
+        </div>
+    )
+}
+
+// ── ART CARD ──────────────────────────────────────────────────────
+function ArtCard({ product, index }: { product: ShopifyProduct; index: number }) {
     const ref = useRef<HTMLDivElement>(null)
+    const tagMap    = parseTags(product.tags)
+    const price     = getProductPrice(product)
+    const imageNode = product.images?.edges?.[0]?.node
+
+    // Use the actual image dimensions from Shopify to preserve natural aspect ratio
+    const imgUrl    = imageNode?.url ?? ''
+    const imgWidth  = imageNode?.width  ?? 800
+    const imgHeight = imageNode?.height ?? 800
+    const aspectRatio = `${imgWidth} / ${imgHeight}`
 
     useEffect(() => {
         const el = ref.current; if (!el) return
@@ -118,8 +131,7 @@ function ArtCard({ art, index }: { art: typeof allArtworks[0]; index: number }) 
 
     return (
         <div ref={ref} style={{ opacity: 0, transform: 'translateY(20px)', transition: 'opacity 0.5s ease, transform 0.5s ease' }}>
-            {/* ✅ Uses handle not id */}
-            <Link href={`/artwork/${art.handle}`} style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
+            <Link href={`/artwork/${product.handle}`} style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
                 <div
                     style={{ position: 'relative', overflow: 'hidden', background: '#f0ede8', marginBottom: 10 }}
                     onMouseEnter={e => {
@@ -135,111 +147,159 @@ function ArtCard({ art, index }: { art: typeof allArtworks[0]; index: number }) 
                         if (acts) { acts.style.opacity = '0'; acts.style.transform = 'translateY(6px)' }
                     }}
                 >
-                    <img src={art.img} alt={art.title} loading="lazy"
-                         style={{ width: '100%', aspectRatio: '3/4', objectFit: 'cover', display: 'block', transition: 'transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94)' }}
-                    />
+                    {imgUrl ? (
+                        <img
+                            src={imgUrl}
+                            alt={imageNode?.altText || product.title}
+                            loading="lazy"
+                            width={imgWidth}
+                            height={imgHeight}
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                                aspectRatio,
+                                objectFit: 'cover',
+                                display: 'block',
+                                transition: 'transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94)',
+                            }}
+                        />
+                    ) : (
+                        <div style={{ width: '100%', aspectRatio: '4/5', background: '#e8e4de', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#bbb" strokeWidth="1">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <path d="M21 15l-5-5L5 21"/>
+                            </svg>
+                        </div>
+                    )}
+
+                    {/* Action buttons */}
                     <div className="acts" style={{
                         position: 'absolute', bottom: 8, right: 8, display: 'flex', gap: 5,
                         opacity: 0, transform: 'translateY(6px)', transition: 'opacity 0.25s ease, transform 0.25s ease',
                     }}>
-                        {[<HeartIcon key="h"/>, <PlusIcon key="p"/>, <CartIcon key="c"/>].map((icon, i) => (
+                        {[<HeartIcon key="h"/>, <CartIcon key="c"/>].map((icon, i) => (
                             <button key={i} onClick={e => e.preventDefault()} style={{
                                 width: 30, height: 30, background: '#fff', border: 'none',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
                             }}>{icon}</button>
                         ))}
                     </div>
-                    <div style={{
-                        position: 'absolute', top: 8, left: 8,
-                        background: 'rgba(255,255,255,0.9)', padding: '3px 7px',
-                        fontSize: 9, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#666',
-                    }}>{art.style}</div>
+
+                    {/* Style badge */}
+                    {(tagMap.style || product.productType) && (
+                        <div style={{
+                            position: 'absolute', top: 8, left: 8,
+                            background: 'rgba(255,255,255,0.9)', padding: '3px 7px',
+                            fontSize: 9, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#666',
+                        }}>
+                            {tagMap.style || product.productType}
+                        </div>
+                    )}
                 </div>
-                <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>${art.price.toLocaleString()}</p>
-                <p style={{ fontSize: 12, fontWeight: 500, marginBottom: 2 }}>{art.title}</p>
-                <p style={{ fontSize: 11, color: '#888', marginBottom: 1 }}>{art.artist}, {art.country}</p>
-                <p style={{ fontSize: 10, color: '#bbb' }}>{art.medium} · {art.size}</p>
+
+                <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>
+                    {formatPrice(String(price), product.priceRange.minVariantPrice.currencyCode)}
+                </p>
+                <p style={{ fontSize: 12, fontWeight: 500, marginBottom: 2 }}>{product.title}</p>
+                <p style={{ fontSize: 11, color: '#888', marginBottom: 1 }}>
+                    {product.vendor}{tagMap.country ? `, ${tagMap.country}` : ''}
+                </p>
+                <p style={{ fontSize: 10, color: '#bbb' }}>
+                    {tagMap.medium || product.productType}
+                </p>
             </Link>
         </div>
     )
 }
 
+// ── MAIN GALLERY ──────────────────────────────────────────────────
 function GalleryInner() {
     const searchParams = useSearchParams()
 
-    const [category,         setCategory]         = useState('All')
-    const [selectedStyles,   setSelectedStyles]   = useState<string[]>([])
-    const [selectedSubjects, setSelectedSubjects] = useState<string[]>([])
-    const [selectedMediums,  setSelectedMediums]  = useState<string[]>([])
-    const [selectedPrice,    setSelectedPrice]    = useState('')
-    const [sortBy,           setSortBy]           = useState('Featured')
-    const [sidebarOpen,      setSidebarOpen]      = useState(true)
-    const [showAllStyles,    setShowAllStyles]    = useState(false)
-    const [showAllSubjects,  setShowAllSubjects]  = useState(false)
-    const [headerVisible,    setHeaderVisible]    = useState(false)
+    const [allProducts,     setAllProducts]     = useState<ShopifyProduct[]>([])
+    const [loading,         setLoading]         = useState(true)
+    const [category,        setCategory]        = useState('All')
+    const [selectedStyles,  setSelectedStyles]  = useState<string[]>([])
+    const [selectedMediums, setSelectedMediums] = useState<string[]>([])
+    const [selectedPrice,   setSelectedPrice]   = useState('')
+    const [sortBy,          setSortBy]          = useState('Featured')
+    const [sidebarOpen,     setSidebarOpen]     = useState(true)
+    const [headerVisible,   setHeaderVisible]   = useState(false)
+
+    // Fetch all products from Shopify on mount
+    useEffect(() => {
+        setLoading(true)
+        getAllProducts()
+            .then(products => { setAllProducts(products); setLoading(false) })
+            .catch(() => setLoading(false))
+    }, [])
 
     useEffect(() => { setTimeout(() => setHeaderVisible(true), 50) }, [])
 
-    // ✅ Re-sync ALL filters whenever URL changes
+    // Sync filters from URL params
     useEffect(() => {
-        const cat     = searchParams.get('category') || 'All'
-        const style   = searchParams.get('style')    || ''
-        const subject = searchParams.get('subject')  || ''
-        const medium  = searchParams.get('medium')   || ''
-        const price   = searchParams.get('price')    || ''
-
-        setCategory(cat)
-        setSelectedStyles(style     ? [style]   : [])
-        setSelectedSubjects(subject ? [subject] : [])
-        setSelectedMediums(medium   ? [medium]  : [])
-        setSelectedPrice(price)
+        setCategory(searchParams.get('category') || 'All')
+        setSelectedStyles(searchParams.get('style')  ? [searchParams.get('style')!]  : [])
+        setSelectedMediums(searchParams.get('medium') ? [searchParams.get('medium')!] : [])
+        setSelectedPrice(searchParams.get('price') || '')
     }, [searchParams])
 
-    const toggleStyle   = (s: string) => setSelectedStyles(p => p.includes(s) ? p.filter(x => x !== s) : [...p, s])
-    const toggleSubject = (s: string) => setSelectedSubjects(p => p.includes(s) ? p.filter(x => x !== s) : [...p, s])
-    const toggleMedium  = (s: string) => setSelectedMediums(p => p.includes(s) ? p.filter(x => x !== s) : [...p, s])
+    // Build filter options dynamically from real Shopify data
+    const allStyles = [...new Set(
+        allProducts.map(p => parseTags(p.tags).style).filter(Boolean)
+    )].sort() as string[]
+
+    const allMediums = [...new Set(
+        allProducts.map(p => parseTags(p.tags).medium || p.productType).filter(Boolean)
+    )].sort() as string[]
+
+    const allCategories = ['All', ...new Set(
+        allProducts.map(p => p.productType).filter(Boolean)
+    )]
+
+    const toggleStyle  = (s: string) => setSelectedStyles(p  => p.includes(s) ? p.filter(x => x !== s) : [...p, s])
+    const toggleMedium = (s: string) => setSelectedMediums(p => p.includes(s) ? p.filter(x => x !== s) : [...p, s])
 
     const activeCount =
         (category !== 'All' ? 1 : 0) +
-        selectedStyles.length + selectedSubjects.length +
-        selectedMediums.length + (selectedPrice ? 1 : 0)
+        selectedStyles.length + selectedMediums.length +
+        (selectedPrice ? 1 : 0)
 
     const clearAll = () => {
         setCategory('All')
         setSelectedStyles([])
-        setSelectedSubjects([])
         setSelectedMediums([])
         setSelectedPrice('')
     }
 
-    let filtered = allArtworks.filter(a => {
-        if (category !== 'All' && a.category !== category)          return false
-        if (selectedStyles.length   && !selectedStyles.includes(a.style))     return false
-        if (selectedSubjects.length && !selectedSubjects.includes(a.subject)) return false
-        if (selectedMediums.length  && !selectedMediums.includes(a.medium))   return false
+    // Filter products
+    let filtered = allProducts.filter(p => {
+        const tagMap = parseTags(p.tags)
+        const price  = getProductPrice(p)
+        if (category !== 'All' && p.productType !== category)                            return false
+        if (selectedStyles.length  && !selectedStyles.includes(tagMap.style  || ''))    return false
+        if (selectedMediums.length && !selectedMediums.includes(tagMap.medium || p.productType)) return false
         if (selectedPrice) {
-            const r = PRICES.find(p => p.label === selectedPrice)
-            if (r && (a.price < r.min || a.price > r.max)) return false
+            const r = PRICES.find(pr => pr.label === selectedPrice)
+            if (r && (price < r.min || price > r.max)) return false
         }
         return true
     })
 
-    if (sortBy === 'Price: Low to High') filtered = [...filtered].sort((a, b) => a.price - b.price)
-    if (sortBy === 'Price: High to Low') filtered = [...filtered].sort((a, b) => b.price - a.price)
+    // Sort
+    if (sortBy === 'Price: Low to High') filtered = [...filtered].sort((a, b) => getProductPrice(a) - getProductPrice(b))
+    if (sortBy === 'Price: High to Low') filtered = [...filtered].sort((a, b) => getProductPrice(b) - getProductPrice(a))
     if (sortBy === 'Newest')             filtered = [...filtered].reverse()
 
-    const pageTitle = category === 'Paintings' ? 'Original Paintings For Sale'
-        : category === 'Prints'    ? 'Fine Art Prints For Sale'
-            : 'All Original Artworks'
-
-    const pageDesc = category === 'Paintings'
-        ? 'Discover a global selection of original paintings from emerging and independent artists worldwide. Find the perfect handmade artwork to transform your space.'
-        : category === 'Prints'
-            ? 'Browse fine art prints from independent artists worldwide. Each print is produced to archival standards and comes with a certificate of authenticity.'
-            : 'Discover original artworks — paintings and fine art prints — from independent artists around the world.'
+    const pageTitle = category === 'All' ? 'All Original Artworks' : `${category} For Sale`
 
     return (
         <main style={{ background: '#FAF7F2', minHeight: '100vh' }}>
+            <style>{`
+                @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+                @keyframes sideIn  { from { opacity:0; transform:translateX(-16px); } to { opacity:1; transform:translateX(0); } }
+            `}</style>
 
             {/* HEADER */}
             <div style={{
@@ -253,14 +313,13 @@ function GalleryInner() {
                         All Artworks
                     </Link>
                     {category !== 'All' && <> / {category}</>}
-                    {selectedStyles.length   > 0 && <> / {selectedStyles[0]}</>}
-                    {selectedSubjects.length > 0 && <> / {selectedSubjects[0]}</>}
-                    {selectedMediums.length  > 0 && <> / {selectedMediums[0]}</>}
                 </p>
                 <h1 style={{ fontSize: 28, fontWeight: 400, fontFamily: 'Georgia, serif', marginBottom: 10 }}>
                     {pageTitle}
                 </h1>
-                <p style={{ fontSize: 14, color: '#666', maxWidth: 780, lineHeight: 1.7 }}>{pageDesc}</p>
+                <p style={{ fontSize: 14, color: '#666', maxWidth: 780, lineHeight: 1.7 }}>
+                    Discover original artworks from independent artists worldwide.
+                </p>
             </div>
 
             {/* TOOLBAR */}
@@ -286,45 +345,26 @@ function GalleryInner() {
                             Clear all
                         </button>
                     )}
-                    <span style={{ fontSize: 12, color: '#999' }}>{filtered.length} results</span>
+                    <span style={{ fontSize: 12, color: '#999' }}>
+                        {loading ? 'Loading...' : `${filtered.length} result${filtered.length !== 1 ? 's' : ''}`}
+                    </span>
                 </div>
 
-                {/* ANIMATED SORT PILLS */}
+                {/* SORT PILLS */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 11, color: '#999', letterSpacing: '1px', textTransform: 'uppercase' }}>
-            Sort by:
-          </span>
+                    <span style={{ fontSize: 11, color: '#999', letterSpacing: '1px', textTransform: 'uppercase' }}>Sort by:</span>
                     <div style={{ display: 'flex', gap: 4 }}>
                         {SORTS.map(s => (
-                            <button
-                                key={s}
-                                onClick={() => setSortBy(s)}
-                                style={{
-                                    padding: '7px 14px',
-                                    fontSize: 11,
-                                    letterSpacing: '0.3px',
-                                    border: `1px solid ${sortBy === s ? '#111' : '#ddd'}`,
-                                    background: sortBy === s ? '#111' : '#fff',
-                                    color: sortBy === s ? '#fff' : '#666',
-                                    cursor: 'pointer',
-                                    fontFamily: 'inherit',
-                                    transition: 'background 0.25s cubic-bezier(0.4,0,0.2,1), color 0.25s cubic-bezier(0.4,0,0.2,1), border-color 0.25s cubic-bezier(0.4,0,0.2,1), transform 0.15s ease, box-shadow 0.15s ease',
-                                    transform: sortBy === s ? 'translateY(-1px)' : 'translateY(0)',
-                                    boxShadow: sortBy === s ? '0 2px 8px rgba(0,0,0,0.12)' : 'none',
-                                }}
-                                onMouseEnter={e => {
-                                    if (sortBy !== s) {
-                                        (e.currentTarget as HTMLElement).style.borderColor = '#999'
-                                        ;(e.currentTarget as HTMLElement).style.color = '#333'
-                                    }
-                                }}
-                                onMouseLeave={e => {
-                                    if (sortBy !== s) {
-                                        (e.currentTarget as HTMLElement).style.borderColor = '#ddd'
-                                        ;(e.currentTarget as HTMLElement).style.color = '#666'
-                                    }
-                                }}
-                            >
+                            <button key={s} onClick={() => setSortBy(s)} style={{
+                                padding: '7px 14px', fontSize: 11, letterSpacing: '0.3px',
+                                border: `1px solid ${sortBy === s ? '#111' : '#ddd'}`,
+                                background: sortBy === s ? '#111' : '#fff',
+                                color: sortBy === s ? '#fff' : '#666',
+                                cursor: 'pointer', fontFamily: 'inherit',
+                                transition: 'all 0.25s ease',
+                                transform: sortBy === s ? 'translateY(-1px)' : 'translateY(0)',
+                                boxShadow: sortBy === s ? '0 2px 8px rgba(0,0,0,0.12)' : 'none',
+                            }}>
                                 {s}
                             </button>
                         ))}
@@ -333,42 +373,33 @@ function GalleryInner() {
             </div>
 
             {/* SIDEBAR + GRID */}
-            <div style={{ display: 'flex', flexDirection: 'row', padding: '0 48px 80px', gap: 40, alignItems: 'flex-start' }}>
+            <div style={{ display: 'flex', padding: '0 48px 80px', gap: 40, alignItems: 'flex-start' }}>
 
                 {/* SIDEBAR */}
                 {sidebarOpen && (
                     <aside style={{ width: 220, minWidth: 220, flexShrink: 0, animation: 'sideIn 0.3s ease' }}>
-                        <style>{`@keyframes sideIn { from { opacity:0; transform:translateX(-16px); } to { opacity:1; transform:translateX(0); } }`}</style>
 
                         <FilterSection title="Category">
-                            {['All', 'Paintings', 'Prints'].map(c => (
+                            {allCategories.map(c => (
                                 <CheckRow key={c} label={c} checked={category === c} onChange={() => setCategory(c)} radio />
                             ))}
                         </FilterSection>
 
-                        <FilterSection title="Style">
-                            {(showAllStyles ? STYLES : STYLES.slice(0, 5)).map(s => (
-                                <CheckRow key={s} label={s} checked={selectedStyles.includes(s)} onChange={() => toggleStyle(s)} />
-                            ))}
-                            <button onClick={() => setShowAllStyles(o => !o)} style={{ fontSize: 11, color: '#888', background: 'none', border: 'none', cursor: 'pointer', marginTop: 4, textDecoration: 'underline', textUnderlineOffset: 3, fontFamily: 'inherit' }}>
-                                {showAllStyles ? 'Show less' : 'Show more'}
-                            </button>
-                        </FilterSection>
+                        {allStyles.length > 0 && (
+                            <FilterSection title="Style">
+                                {allStyles.map(s => (
+                                    <CheckRow key={s} label={s} checked={selectedStyles.includes(s)} onChange={() => toggleStyle(s)} />
+                                ))}
+                            </FilterSection>
+                        )}
 
-                        <FilterSection title="Subject">
-                            {(showAllSubjects ? SUBJECTS : SUBJECTS.slice(0, 4)).map(s => (
-                                <CheckRow key={s} label={s} checked={selectedSubjects.includes(s)} onChange={() => toggleSubject(s)} />
-                            ))}
-                            <button onClick={() => setShowAllSubjects(o => !o)} style={{ fontSize: 11, color: '#888', background: 'none', border: 'none', cursor: 'pointer', marginTop: 4, textDecoration: 'underline', textUnderlineOffset: 3, fontFamily: 'inherit' }}>
-                                {showAllSubjects ? 'Show less' : 'Show more'}
-                            </button>
-                        </FilterSection>
-
-                        <FilterSection title="Medium" defaultOpen={false}>
-                            {MEDIUMS.map(m => (
-                                <CheckRow key={m} label={m} checked={selectedMediums.includes(m)} onChange={() => toggleMedium(m)} />
-                            ))}
-                        </FilterSection>
+                        {allMediums.length > 0 && (
+                            <FilterSection title="Medium" defaultOpen={false}>
+                                {allMediums.map(m => (
+                                    <CheckRow key={m} label={m} checked={selectedMediums.includes(m)} onChange={() => toggleMedium(m)} />
+                                ))}
+                            </FilterSection>
+                        )}
 
                         <FilterSection title="Price">
                             {PRICES.map(p => (
@@ -384,28 +415,44 @@ function GalleryInner() {
                     </aside>
                 )}
 
-                {/* ART GRID */}
+                {/* ART GRID — masonry-style using CSS columns so images show at natural size */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                    {filtered.length === 0 ? (
+                    {loading ? (
+                        <div style={{ columns: '3 auto', columnGap: 20 }}>
+                            {Array.from({ length: 6 }).map((_, i) => (
+                                <div key={i} style={{ breakInside: 'avoid', marginBottom: 20 }}>
+                                    <SkeletonCard />
+                                </div>
+                            ))}
+                        </div>
+                    ) : filtered.length === 0 ? (
                         <div style={{ textAlign: 'center', padding: '80px 0' }}>
                             <p style={{ fontSize: 18, fontFamily: 'Georgia, serif', color: '#888', marginBottom: 16 }}>
-                                No artworks match your filters
+                                {allProducts.length === 0
+                                    ? 'No artworks found in your Shopify store yet.'
+                                    : 'No artworks match your filters'}
                             </p>
-                            <button onClick={clearAll} style={{
-                                fontSize: 11, letterSpacing: '2px', textTransform: 'uppercase',
-                                border: '1px solid #111', padding: '10px 24px', cursor: 'pointer',
-                                fontFamily: 'inherit', background: 'transparent',
-                            }}>
-                                Clear all filters
-                            </button>
+                            {activeCount > 0 && (
+                                <button onClick={clearAll} style={{
+                                    fontSize: 11, letterSpacing: '2px', textTransform: 'uppercase',
+                                    border: '1px solid #111', padding: '10px 24px', cursor: 'pointer',
+                                    fontFamily: 'inherit', background: 'transparent',
+                                }}>
+                                    Clear all filters
+                                </button>
+                            )}
                         </div>
                     ) : (
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
-                            {filtered.map((art, i) => <ArtCard key={art.id} art={art} index={i} />)}
+                        // CSS columns (masonry layout) — each image uses its natural aspect ratio
+                        <div style={{ columns: '3 auto', columnGap: 20 }}>
+                            {filtered.map((product, i) => (
+                                <div key={product.id} style={{ breakInside: 'avoid', marginBottom: 20 }}>
+                                    <ArtCard product={product} index={i} />
+                                </div>
+                            ))}
                         </div>
                     )}
                 </div>
-
             </div>
         </main>
     )
