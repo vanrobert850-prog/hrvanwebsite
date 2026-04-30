@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
+import FollowButton from '../../components/FollowButton'
 
 const artists = [
     {
@@ -154,7 +155,6 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
     if (!artist) notFound()
 
     const [activeTab, setActiveTab] = useState(0)
-    const [followed,  setFollowed]  = useState(false)
 
     const tabContent     = [artist.about, artist.education, artist.exhibitions, artist.recognition]
     const similarArtists = artists.filter(a => artist.similar.includes(a.slug))
@@ -193,25 +193,11 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
                                 </p>
                             </div>
                         </div>
-                        <button
-                            onClick={() => setFollowed(f => !f)}
-                            style={{
-                                display: 'flex', alignItems: 'center', gap: 8,
-                                border: '1px solid #111',
-                                background: followed ? '#111' : 'transparent',
-                                color: followed ? '#fff' : '#111',
-                                padding: '10px 24px', fontSize: 11, letterSpacing: '2px',
-                                textTransform: 'uppercase', cursor: 'pointer',
-                                fontFamily: 'inherit', transition: 'all 0.25s ease',
-                                flexShrink: 0, alignSelf: 'center',
-                            }}
-                        >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
-                            </svg>
-                            {followed ? 'Following' : 'Follow'}
-                        </button>
+
+                        {/* ✅ Replaced hardcoded follow button with live FollowButton */}
+                        <div style={{ flexShrink: 0, alignSelf: 'center' }}>
+                            <FollowButton artistSlug={artist.slug} />
+                        </div>
                     </div>
 
                     {/* TWO COL */}
@@ -291,7 +277,6 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
                             {artist.artworks.map(art => (
-                                // ✅ Uses handle not id
                                 <Link key={art.handle} href={`/artwork/${art.handle}`} style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
                                     <div
                                         style={{ position: 'relative', overflow: 'hidden', background: '#f0ede8', marginBottom: 10, aspectRatio: '3/4' }}

@@ -4,7 +4,9 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useLang } from '../context/LanguageContext'
 import { useCart } from '../context/CartContext'
-import { SignInButton, UserButton, Show } from '@clerk/nextjs'
+import { SignInButton, UserButton, Show, useUser } from '@clerk/nextjs'
+
+const ADMIN_USER_ID = process.env.NEXT_PUBLIC_ADMIN_USER_ID
 
 const searchData = {
     artists: [
@@ -102,9 +104,9 @@ const megaMenus = {
     },
     prints: {
         cols: [
-            { titleKey: 'gallery.style',   links: ['Contemporary', 'Modernism', 'Pop Art', 'Street Art'],        paramKey: 'style'   },
-            { titleKey: 'gallery.subject', links: ['Landscape', 'Nature', 'Architecture', 'Abstract'],           paramKey: 'subject' },
-            { titleKey: 'gallery.medium',  links: ['Fine art print', 'Etching', 'Lithograph', 'Screen print'],  paramKey: 'medium'  },
+            { titleKey: 'gallery.style',   links: ['Contemporary', 'Modernism', 'Pop Art', 'Street Art'],       paramKey: 'style'   },
+            { titleKey: 'gallery.subject', links: ['Landscape', 'Nature', 'Architecture', 'Abstract'],          paramKey: 'subject' },
+            { titleKey: 'gallery.medium',  links: ['Fine art print', 'Etching', 'Lithograph', 'Screen print'], paramKey: 'medium'  },
         ],
         featured: [
             { label: 'Featured Prints', img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=400&q=80' },
@@ -114,8 +116,71 @@ const megaMenus = {
 }
 
 // ── ICONS ─────────────────────────────────────────────────────────
-const UserIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-const CartIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+const UserIcon  = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+const CartIcon  = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+const AdminIcon = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+const ArtIcon   = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+
+// ── ROLE BADGE — shown in navbar when signed in ───────────────────
+function RoleBadge() {
+    const { user, isLoaded } = useUser()
+    const [artistSlug, setArtistSlug] = useState<string | null>(null)
+    const [checking,   setChecking]   = useState(true)
+
+    const isAdmin = isLoaded && user?.id === ADMIN_USER_ID
+
+    useEffect(() => {
+        if (!isLoaded || !user || isAdmin) { setChecking(false); return }
+
+        // Check if this user is a linked artist
+        fetch('/api/admin/artists')
+            .then(r => r.json())
+            .then(data => {
+                const profile = data.profiles?.find(
+                    (p: { clerk_user_id: string; artist_slug: string }) => p.clerk_user_id === user.id
+                )
+                setArtistSlug(profile?.artist_slug ?? null)
+            })
+            .catch(() => {})
+            .finally(() => setChecking(false))
+    }, [user, isLoaded, isAdmin])
+
+    if (!isLoaded || checking || !user) return null
+
+    if (isAdmin) {
+        return (
+            <Link href="/admin" style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                background: '#111', color: '#fff',
+                padding: '6px 12px', fontSize: 10,
+                letterSpacing: '1.5px', textTransform: 'uppercase',
+                textDecoration: 'none', border: '1px solid #333',
+                transition: 'background 0.2s',
+            }}>
+                <AdminIcon />
+                Admin
+            </Link>
+        )
+    }
+
+    if (artistSlug) {
+        return (
+            <Link href={`/artist-dashboard/${artistSlug}`} style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                background: '#B85C38', color: '#fff',
+                padding: '6px 12px', fontSize: 10,
+                letterSpacing: '1.5px', textTransform: 'uppercase',
+                textDecoration: 'none',
+                transition: 'background 0.2s',
+            }}>
+                <ArtIcon />
+                My Studio
+            </Link>
+        )
+    }
+
+    return null
+}
 
 // ── MEGA MENU ─────────────────────────────────────────────────────
 function MegaMenu({ type }: { type: 'paintings' | 'prints' }) {
@@ -318,7 +383,6 @@ function SearchBar() {
                     )}
                 </div>
 
-                {/* DROPDOWN — fixed so it's never clipped */}
                 {open && query.trim().length >= 1 && (() => {
                     const rect  = wrapRef.current?.getBoundingClientRect()
                     const top   = rect ? rect.bottom + 8 : 80
@@ -335,7 +399,6 @@ function SearchBar() {
                                 </div>
                             ) : (
                                 <>
-                                    {/* ARTISTS */}
                                     {artistResults.length > 0 && (
                                         <>
                                             <span className="hr-search-label">Artists</span>
@@ -348,28 +411,17 @@ function SearchBar() {
                                                             onClick={() => navigateTo(r)}
                                                             onMouseEnter={() => setActiveIdx(idx)}
                                                     >
-                                                        <img src={a.photo} alt={a.name} style={{
-                                                            width: 44, height: 44, borderRadius: '50%',
-                                                            objectFit: 'cover', border: '1.5px solid #e8e8e8', flexShrink: 0,
-                                                        }} />
+                                                        <img src={a.photo} alt={a.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #e8e8e8', flexShrink: 0 }} />
                                                         <div style={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
                                                             <p style={{ fontSize: 14, fontWeight: 500, color: '#111', marginBottom: 2 }}>{a.name}</p>
                                                             <p style={{ fontSize: 11, color: '#888' }}>{a.specialty} · {a.location}</p>
                                                         </div>
-                                                        <span style={{
-                                                            fontSize: 9, color: '#B85C38', letterSpacing: '1.5px',
-                                                            textTransform: 'uppercase', border: '1px solid #B85C38',
-                                                            padding: '2px 6px', flexShrink: 0,
-                                                        }}>
-                              Artist
-                            </span>
+                                                        <span style={{ fontSize: 9, color: '#B85C38', letterSpacing: '1.5px', textTransform: 'uppercase', border: '1px solid #B85C38', padding: '2px 6px', flexShrink: 0 }}>Artist</span>
                                                     </button>
                                                 )
                                             })}
                                         </>
                                     )}
-
-                                    {/* ARTWORKS */}
                                     {artworkResults.length > 0 && (
                                         <>
                                             {artistResults.length > 0 && <hr className="hr-search-divider" />}
@@ -383,32 +435,17 @@ function SearchBar() {
                                                             onClick={() => navigateTo(r)}
                                                             onMouseEnter={() => setActiveIdx(idx)}
                                                     >
-                                                        <img src={a.img} alt={a.title} style={{
-                                                            width: 44, height: 44, objectFit: 'cover',
-                                                            border: '1px solid #e8e8e8', flexShrink: 0,
-                                                        }} />
+                                                        <img src={a.img} alt={a.title} style={{ width: 44, height: 44, objectFit: 'cover', border: '1px solid #e8e8e8', flexShrink: 0 }} />
                                                         <div style={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
-                                                            <p style={{ fontSize: 14, fontWeight: 500, color: '#111', marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                                                {a.title}
-                                                            </p>
-                                                            <p style={{ fontSize: 11, color: '#888' }}>
-                                                                {a.artist} · <span style={{ color: '#111', fontWeight: 500 }}>${a.price.toLocaleString()}</span>
-                                                            </p>
+                                                            <p style={{ fontSize: 14, fontWeight: 500, color: '#111', marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.title}</p>
+                                                            <p style={{ fontSize: 11, color: '#888' }}>{a.artist} · <span style={{ color: '#111', fontWeight: 500 }}>${a.price.toLocaleString()}</span></p>
                                                         </div>
-                                                        <span style={{
-                                                            fontSize: 9, color: '#555', letterSpacing: '1.5px',
-                                                            textTransform: 'uppercase', border: '1px solid #ddd',
-                                                            padding: '2px 6px', flexShrink: 0,
-                                                        }}>
-                              {a.category}
-                            </span>
+                                                        <span style={{ fontSize: 9, color: '#555', letterSpacing: '1.5px', textTransform: 'uppercase', border: '1px solid #ddd', padding: '2px 6px', flexShrink: 0 }}>{a.category}</span>
                                                     </button>
                                                 )
                                             })}
                                         </>
                                     )}
-
-                                    {/* CATEGORIES */}
                                     {categoryResults.length > 0 && (
                                         <>
                                             {(artistResults.length > 0 || artworkResults.length > 0) && <hr className="hr-search-divider" />}
@@ -422,11 +459,7 @@ function SearchBar() {
                                                             onClick={() => navigateTo(r)}
                                                             onMouseEnter={() => setActiveIdx(idx)}
                                                     >
-                                                        <div style={{
-                                                            width: 44, height: 44, background: '#F7F4F0',
-                                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                            flexShrink: 0, border: '1px solid #e8e8e8',
-                                                        }}>
+                                                        <div style={{ width: 44, height: 44, background: '#F7F4F0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid #e8e8e8' }}>
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B85C38" strokeWidth="1.5">
                                                                 <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
                                                                 <circle cx="7" cy="7" r="1" fill="#B85C38"/>
@@ -441,9 +474,7 @@ function SearchBar() {
                                             })}
                                         </>
                                     )}
-
-                                    <button className="hr-search-all"
-                                            onClick={() => { router.push(`/gallery?q=${encodeURIComponent(query)}`); setOpen(false) }}>
+                                    <button className="hr-search-all" onClick={() => { router.push(`/gallery?q=${encodeURIComponent(query)}`); setOpen(false) }}>
                                         View all results for "<strong>{query}</strong>" →
                                     </button>
                                 </>
@@ -458,7 +489,6 @@ function SearchBar() {
 
 // ── CART DRAWER ───────────────────────────────────────────────────
 function CartDrawer() {
-    // ✅ Both hooks called at the top of this component
     const { cart, cartOpen, setCartOpen, removeItem, updateItem, checkout, loading } = useCart()
     const { lang } = useLang()
 
@@ -467,160 +497,40 @@ function CartDrawer() {
     const currency = cart?.cost?.totalAmount?.currencyCode ?? 'USD'
 
     const L = {
-        en: {
-            title:    'Your Cart',
-            empty:    'Your cart is empty',
-            browse:   'Browse artworks',
-            checkout: 'Proceed to checkout',
-            subtotal: 'Subtotal',
-            total:    'Total',
-            remove:   'Remove',
-            secure:   'Secure checkout powered by Shopify',
-        },
-        es: {
-            title:    'Tu Carrito',
-            empty:    'Tu carrito está vacío',
-            browse:   'Explorar obras',
-            checkout: 'Proceder al pago',
-            subtotal: 'Subtotal',
-            total:    'Total',
-            remove:   'Eliminar',
-            secure:   'Pago seguro impulsado por Shopify',
-        },
+        en: { title: 'Your Cart', empty: 'Your cart is empty', browse: 'Browse artworks', checkout: 'Proceed to checkout', total: 'Total', remove: 'Remove', secure: 'Secure checkout powered by Shopify' },
+        es: { title: 'Tu Carrito', empty: 'Tu carrito está vacío', browse: 'Explorar obras', checkout: 'Proceder al pago', total: 'Total', remove: 'Eliminar', secure: 'Pago seguro impulsado por Shopify' },
     }[lang]
 
     return (
         <>
-            {/* Backdrop */}
-            {cartOpen && (
-                <div
-                    onClick={() => setCartOpen(false)}
-                    style={{
-                        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
-                        zIndex: 998, animation: 'fadeIn 0.25s ease',
-                    }}
-                />
-            )}
-
-            {/* Drawer panel */}
-            <div style={{
-                position: 'fixed', top: 0, right: 0, bottom: 0, width: 420,
-                background: '#fff', zIndex: 999,
-                display: 'flex', flexDirection: 'column',
-                boxShadow: '-8px 0 40px rgba(0,0,0,0.15)',
-                transform: cartOpen ? 'translateX(0)' : 'translateX(100%)',
-                transition: 'transform 0.4s cubic-bezier(0.4,0,0.2,1)',
-            }}>
-
-                {/* Header */}
-                <div style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '24px 24px 20px', borderBottom: '1px solid #e8e8e8',
-                }}>
-                    <h2 style={{ fontSize: 14, fontWeight: 600, letterSpacing: '2px', textTransform: 'uppercase' }}>
-                        {L.title}
-                    </h2>
-                    <button
-                        onClick={() => setCartOpen(false)}
-                        style={{
-                            background: 'none', border: 'none', cursor: 'pointer',
-                            color: '#555', fontSize: 22, padding: 4,
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            transition: 'color 0.2s ease',
-                        }}
-                    >
-                        ×
-                    </button>
+            {cartOpen && <div onClick={() => setCartOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 998, animation: 'fadeIn 0.25s ease' }} />}
+            <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 420, background: '#fff', zIndex: 999, display: 'flex', flexDirection: 'column', boxShadow: '-8px 0 40px rgba(0,0,0,0.15)', transform: cartOpen ? 'translateX(0)' : 'translateX(100%)', transition: 'transform 0.4s cubic-bezier(0.4,0,0.2,1)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px 24px 20px', borderBottom: '1px solid #e8e8e8' }}>
+                    <h2 style={{ fontSize: 14, fontWeight: 600, letterSpacing: '2px', textTransform: 'uppercase' }}>{L.title}</h2>
+                    <button onClick={() => setCartOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#555', fontSize: 22, padding: 4 }}>×</button>
                 </div>
-
-                {/* Items list */}
                 <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
                     {lines.length === 0 ? (
                         <div style={{ textAlign: 'center', padding: '64px 0' }}>
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ddd" strokeWidth="1"
-                                 style={{ margin: '0 auto 16px' }}>
-                                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-                                <line x1="3" y1="6" x2="21" y2="6"/>
-                                <path d="M16 10a4 4 0 01-8 0"/>
-                            </svg>
-                            <p style={{ fontSize: 15, fontFamily: 'Georgia, serif', color: '#888', fontStyle: 'italic', marginBottom: 24 }}>
-                                {L.empty}
-                            </p>
-                            <Link
-                                href="/gallery"
-                                onClick={() => setCartOpen(false)}
-                                style={{
-                                    display: 'inline-block', border: '1px solid #111',
-                                    padding: '10px 24px', fontSize: 11,
-                                    letterSpacing: '2px', textTransform: 'uppercase', color: '#111',
-                                    transition: 'all 0.25s ease',
-                                }}
-                            >
-                                {L.browse}
-                            </Link>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ddd" strokeWidth="1" style={{ margin: '0 auto 16px' }}><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                            <p style={{ fontSize: 15, fontFamily: 'Georgia, serif', color: '#888', fontStyle: 'italic', marginBottom: 24 }}>{L.empty}</p>
+                            <Link href="/gallery" onClick={() => setCartOpen(false)} style={{ display: 'inline-block', border: '1px solid #111', padding: '10px 24px', fontSize: 11, letterSpacing: '2px', textTransform: 'uppercase', color: '#111' }}>{L.browse}</Link>
                         </div>
                     ) : (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                             {lines.map(({ node }) => (
-                                <div key={node.id} style={{
-                                    display: 'flex', gap: 14,
-                                    padding: '16px 0', borderBottom: '1px solid #f4f4f4',
-                                }}>
-                                    <img
-                                        src={node.merchandise.image?.url}
-                                        alt={node.merchandise.product.title}
-                                        style={{
-                                            width: 80, height: 80, objectFit: 'cover',
-                                            border: '1px solid #e8e8e8', flexShrink: 0,
-                                        }}
-                                    />
+                                <div key={node.id} style={{ display: 'flex', gap: 14, padding: '16px 0', borderBottom: '1px solid #f4f4f4' }}>
+                                    <img src={node.merchandise.image?.url} alt={node.merchandise.product.title} style={{ width: 80, height: 80, objectFit: 'cover', border: '1px solid #e8e8e8', flexShrink: 0 }} />
                                     <div style={{ flex: 1, minWidth: 0 }}>
-                                        <p style={{
-                                            fontSize: 14, fontWeight: 500, marginBottom: 4,
-                                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                                        }}>
-                                            {node.merchandise.product.title}
-                                        </p>
-                                        <p style={{ fontSize: 13, color: '#B85C38', fontWeight: 600, marginBottom: 10 }}>
-                                            ${parseFloat(node.merchandise.price.amount).toLocaleString()} {node.merchandise.price.currencyCode}
-                                        </p>
+                                        <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{node.merchandise.product.title}</p>
+                                        <p style={{ fontSize: 13, color: '#B85C38', fontWeight: 600, marginBottom: 10 }}>${parseFloat(node.merchandise.price.amount).toLocaleString()} {node.merchandise.price.currencyCode}</p>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                                            {/* Quantity */}
                                             <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #e8e8e8' }}>
-                                                <button
-                                                    onClick={() => updateItem(node.id, Math.max(0, node.quantity - 1))}
-                                                    style={{
-                                                        width: 28, height: 28, background: 'none', border: 'none',
-                                                        cursor: 'pointer', fontSize: 15, color: '#555',
-                                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                        transition: 'background 0.15s',
-                                                    }}
-                                                >−</button>
-                                                <span style={{ width: 28, textAlign: 'center', fontSize: 13, userSelect: 'none' }}>
-                          {node.quantity}
-                        </span>
-                                                <button
-                                                    onClick={() => updateItem(node.id, node.quantity + 1)}
-                                                    style={{
-                                                        width: 28, height: 28, background: 'none', border: 'none',
-                                                        cursor: 'pointer', fontSize: 15, color: '#555',
-                                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                        transition: 'background 0.15s',
-                                                    }}
-                                                >+</button>
+                                                <button onClick={() => updateItem(node.id, Math.max(0, node.quantity - 1))} style={{ width: 28, height: 28, background: 'none', border: 'none', cursor: 'pointer', fontSize: 15, color: '#555', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
+                                                <span style={{ width: 28, textAlign: 'center', fontSize: 13, userSelect: 'none' }}>{node.quantity}</span>
+                                                <button onClick={() => updateItem(node.id, node.quantity + 1)} style={{ width: 28, height: 28, background: 'none', border: 'none', cursor: 'pointer', fontSize: 15, color: '#555', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
                                             </div>
-                                            {/* Remove */}
-                                            <button
-                                                onClick={() => removeItem(node.id)}
-                                                style={{
-                                                    background: 'none', border: 'none', cursor: 'pointer',
-                                                    fontSize: 11, color: '#B85C38', textDecoration: 'underline',
-                                                    fontFamily: 'inherit', letterSpacing: '0.5px', padding: 0,
-                                                    transition: 'opacity 0.2s',
-                                                }}
-                                            >
-                                                {L.remove}
-                                            </button>
+                                            <button onClick={() => removeItem(node.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, color: '#B85C38', textDecoration: 'underline', fontFamily: 'inherit', padding: 0 }}>{L.remove}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -628,37 +538,16 @@ function CartDrawer() {
                         </div>
                     )}
                 </div>
-
-                {/* Footer — only shown when cart has items */}
                 {lines.length > 0 && (
                     <div style={{ padding: '20px 24px', borderTop: '1px solid #e8e8e8' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <span style={{ fontSize: 13, color: '#888', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                {L.total}
-              </span>
-                            <span style={{ fontSize: 20, fontWeight: 600 }}>
-                ${parseFloat(total).toLocaleString()} {currency}
-              </span>
+                            <span style={{ fontSize: 13, color: '#888', textTransform: 'uppercase', letterSpacing: '1px' }}>{L.total}</span>
+                            <span style={{ fontSize: 20, fontWeight: 600 }}>${parseFloat(total).toLocaleString()} {currency}</span>
                         </div>
-                        <button
-                            onClick={checkout}
-                            disabled={loading}
-                            style={{
-                                width: '100%', padding: '16px',
-                                background: loading ? '#555' : '#111',
-                                color: '#fff', border: 'none',
-                                cursor: loading ? 'not-allowed' : 'pointer',
-                                fontSize: 12, letterSpacing: '2.5px', textTransform: 'uppercase',
-                                fontFamily: 'inherit',
-                                transition: 'background 0.25s ease, transform 0.15s ease',
-                                transform: loading ? 'scale(0.99)' : 'scale(1)',
-                            }}
-                        >
+                        <button onClick={checkout} disabled={loading} style={{ width: '100%', padding: '16px', background: loading ? '#555' : '#111', color: '#fff', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', fontSize: 12, letterSpacing: '2.5px', textTransform: 'uppercase', fontFamily: 'inherit' }}>
                             {loading ? '...' : L.checkout}
                         </button>
-                        <p style={{ fontSize: 11, color: '#aaa', textAlign: 'center', marginTop: 10, lineHeight: 1.5 }}>
-                            {L.secure}
-                        </p>
+                        <p style={{ fontSize: 11, color: '#aaa', textAlign: 'center', marginTop: 10 }}>{L.secure}</p>
                     </div>
                 )}
             </div>
@@ -668,7 +557,6 @@ function CartDrawer() {
 
 // ── MAIN NAVBAR ───────────────────────────────────────────────────
 export default function Navbar() {
-    // ✅ Both t and lang destructured here
     const { t, lang } = useLang()
     const { cartCount, setCartOpen } = useCart()
     const [mobileOpen,  setMobileOpen]  = useState(false)
@@ -709,6 +597,13 @@ export default function Navbar() {
 
                 <div className="navbar-right">
                     <SearchBar />
+
+                    {/* ── ROLE BADGE — Admin panel or Artist studio ── */}
+                    <Show when="signed-in">
+                        <RoleBadge />
+                    </Show>
+
+                    {/* ── AUTH ── */}
                     <Show when="signed-out">
                         <SignInButton mode="modal">
                             <button className="navbar-icon-btn" aria-label="Sign in">
@@ -719,68 +614,32 @@ export default function Navbar() {
                     <Show when="signed-in">
                         <UserButton />
                     </Show>
+
                     <FlagSwitcher />
 
-                    {/* CART — live count badge */}
-                    <button
-                        onClick={() => setCartOpen(true)}
-                        className="navbar-icon-btn"
-                        style={{ position: 'relative' }}
-                        aria-label="Cart"
-                    >
+                    {/* CART */}
+                    <button onClick={() => setCartOpen(true)} className="navbar-icon-btn" style={{ position: 'relative' }} aria-label="Cart">
                         <CartIcon />
                         {cartCount > 0 && (
-                            <span style={{
-                                position: 'absolute', top: 5, right: 5,
-                                width: 17, height: 17, borderRadius: '50%',
-                                background: '#B85C38', color: '#fff',
-                                fontSize: 9, fontWeight: 700,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                border: '1.5px solid #fff',
-                                animation: 'fadeIn 0.2s ease',
-                            }}>
-                {cartCount > 9 ? '9+' : cartCount}
-              </span>
+                            <span style={{ position: 'absolute', top: 5, right: 5, width: 17, height: 17, borderRadius: '50%', background: '#B85C38', color: '#fff', fontSize: 9, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1.5px solid #fff', animation: 'fadeIn 0.2s ease' }}>
+                                {cartCount > 9 ? '9+' : cartCount}
+                            </span>
                         )}
                     </button>
                 </div>
 
-                <button
-                    className={`mobile-menu-btn${mobileOpen ? ' open' : ''}`}
-                    onClick={() => setMobileOpen(o => !o)}
-                    aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-                >
+                <button className={`mobile-menu-btn${mobileOpen ? ' open' : ''}`} onClick={() => setMobileOpen(o => !o)} aria-label={mobileOpen ? 'Close menu' : 'Open menu'}>
                     <span /><span /><span />
                 </button>
             </nav>
 
             {/* MOBILE NAV */}
             <div className={`mobile-nav${mobileOpen ? ' open' : ''}`}>
-                {/* Mobile search */}
-                <div style={{
-                    display: 'flex', alignItems: 'center', gap: 10,
-                    border: '1px solid #e8e8e8', padding: '10px 14px',
-                    marginBottom: 8, background: '#fff',
-                }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bbb" strokeWidth="2">
-                        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-                    </svg>
-                    <input
-                        type="text"
-                        value={mobileQuery}
-                        placeholder={t('nav.search')}
-                        onChange={e => setMobileQuery(e.target.value)}
-                        onKeyDown={e => {
-                            if (e.key === 'Enter' && mobileQuery.trim()) {
-                                router.push(`/gallery?q=${encodeURIComponent(mobileQuery)}`)
-                                setMobileOpen(false)
-                                setMobileQuery('')
-                            }
-                        }}
-                        style={{
-                            border: 'none', outline: 'none', fontSize: 15,
-                            fontFamily: 'inherit', width: '100%', background: 'transparent',
-                        }}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, border: '1px solid #e8e8e8', padding: '10px 14px', marginBottom: 8, background: '#fff' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bbb" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    <input type="text" value={mobileQuery} placeholder={t('nav.search')} onChange={e => setMobileQuery(e.target.value)}
+                           onKeyDown={e => { if (e.key === 'Enter' && mobileQuery.trim()) { router.push(`/gallery?q=${encodeURIComponent(mobileQuery)}`); setMobileOpen(false); setMobileQuery('') } }}
+                           style={{ border: 'none', outline: 'none', fontSize: 15, fontFamily: 'inherit', width: '100%', background: 'transparent' }}
                     />
                 </div>
 
@@ -789,28 +648,18 @@ export default function Navbar() {
                 <Link href="/artists"                    className="mobile-nav-link" onClick={() => setMobileOpen(false)}>{t('nav.artists')}</Link>
                 <Link href="/gallery"                    className="mobile-nav-link" onClick={() => setMobileOpen(false)}>{t('nav.all')}</Link>
 
+                {/* Mobile role links */}
+                <Show when="signed-in">
+                    <div style={{ padding: '16px 0', borderBottom: '1px solid #e8e8e8' }}>
+                        <RoleBadge />
+                    </div>
+                </Show>
+
                 <div style={{ padding: '24px 0', display: 'flex', alignItems: 'center', gap: 16 }}>
                     <FlagSwitcher />
-                    {/* ✅ lang is now available here from the Navbar scope */}
-                    <button
-                        onClick={() => { setCartOpen(true); setMobileOpen(false) }}
-                        style={{
-                            display: 'flex', alignItems: 'center', gap: 8,
-                            border: '1px solid #e8e8e8', padding: '8px 16px',
-                            background: 'transparent', cursor: 'pointer',
-                            fontFamily: 'inherit', fontSize: 13, color: '#555',
-                        }}
-                    >
+                    <button onClick={() => { setCartOpen(true); setMobileOpen(false) }} style={{ display: 'flex', alignItems: 'center', gap: 8, border: '1px solid #e8e8e8', padding: '8px 16px', background: 'transparent', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, color: '#555' }}>
                         <CartIcon />
-                        {cartCount > 0 && (
-                            <span style={{
-                                background: '#B85C38', color: '#fff', borderRadius: '50%',
-                                width: 18, height: 18, fontSize: 10,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700,
-                            }}>
-                {cartCount}
-              </span>
-                        )}
+                        {cartCount > 0 && <span style={{ background: '#B85C38', color: '#fff', borderRadius: '50%', width: 18, height: 18, fontSize: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>{cartCount}</span>}
                         {lang === 'en' ? 'Cart' : 'Carrito'}
                     </button>
                 </div>
