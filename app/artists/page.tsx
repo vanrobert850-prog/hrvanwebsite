@@ -6,6 +6,18 @@ import { useState, useEffect, useRef } from 'react'
 
 const artists = [
     {
+        slug: 'van-robert',
+        name: 'Van Robert',
+        location: 'Santo Domingo, Dominican Republic',
+        specialty: 'Paintings',
+        joined: '2026',
+        photo: '/artists/van-robert/portrait.jpg',
+        photoPosition: 'center top',
+        cover: '/artists/van-robert/cover.jpg',
+        bio: 'Master colorist and genius of his time — born in Santo Domingo, Van Robert is one of the leading revelations of Dominican art, with collections spanning 15 countries and exhibitions from New York to Venice.',
+        works: 0,
+    },
+    {
         slug: 'freddy-javier',
         name: 'Freddy Javier',
         location: 'Hato Mayor, Dominican Republic',

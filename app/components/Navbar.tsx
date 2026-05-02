@@ -10,7 +10,8 @@ const ADMIN_USER_ID = process.env.NEXT_PUBLIC_ADMIN_USER_ID
 
 const searchData = {
     artists: [
-        { slug: 'freddy-javier',  name: 'Freddy Javier',  specialty: 'Paintings',          location: 'Hato Mayor, Dominican Republic',    photo: '/artists/freddy-javier/portrait.jpg'  },
+        { slug: 'van-robert',     name: 'Van Robert',      specialty: 'Paintings',          location: 'Santo Domingo, Dominican Republic', photo: '/artists/van-robert/portrait.jpg'     },
+        { slug: 'freddy-javier',  name: 'Freddy Javier',   specialty: 'Paintings',          location: 'Hato Mayor, Dominican Republic',    photo: '/artists/freddy-javier/portrait.jpg'  },
         { slug: 'juan-b-nina',    name: 'Juan B. Nina',    specialty: 'Paintings & Poetry', location: 'San Cristóbal, Dominican Republic', photo: '/artists/juan-b-nina/portrait.jpg'    },
         { slug: 'pablo-palasso',  name: 'Pablo Palasso',   specialty: 'Paintings',          location: 'Santo Domingo, Dominican Republic', photo: '/artists/pablo-palasso/portrait.jpg'  },
     ],
@@ -545,7 +546,7 @@ export default function Navbar() {
 
             <nav className="navbar">
                 <Link href="/" className="navbar-logo">
-                    <img src="/logo/logo.png" alt="Van Robert Art Gallery" style={{ height: 44, width: 'auto', display: 'block' }} />
+                    <img src="/logo/logo.png" alt="Van Robert Art Gallery" style={{ height: 64, width: 'auto', display: 'block' }} />
                 </Link>
 
                 <div className="navbar-links">

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed 's/.*\\\\.from\\(\\\\x27//')",
+      "Bash(sed \"s/\\\\x27.*//\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(gh pr create --title 'Add Juan B. Nina profile, fix portrait cropping, improve artist cards' --body ' *)",
+      "PowerShell(Get-Command gh -ErrorAction SilentlyContinue)"
+    ]
+  }
+}

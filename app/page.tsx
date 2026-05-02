@@ -6,9 +6,9 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 
 const heroSlides = [
-    'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1600&q=80',
-    'https://images.unsplash.com/photo-1578926288207-a90a103f8021?w=1600&q=80',
-    'https://images.unsplash.com/photo-1549289524-06cf8837ace5?w=1600&q=80',
+    '/banner/slide1.jpg',
+    '/banner/slide2.jpg',
+    '/banner/slide3.jpg',
 ]
 
 const artworks = [
@@ -23,6 +23,7 @@ const artworks = [
 ]
 
 const allArtists = [
+    { slug: 'van-robert',    name: 'Van Robert',    specialty: { en: 'Paintings',          es: 'Pinturas'              }, photo: '/artists/van-robert/portrait.jpg'    },
     { slug: 'freddy-javier', name: 'Freddy Javier', specialty: { en: 'Paintings',          es: 'Pinturas'              }, photo: '/artists/freddy-javier/portrait.jpg' },
     { slug: 'juan-b-nina',   name: 'Juan B. Nina',  specialty: { en: 'Paintings & Poetry', es: 'Pinturas y Poesía'     }, photo: '/artists/juan-b-nina/portrait.jpg'   },
     { slug: 'pablo-palasso', name: 'Pablo Palasso', specialty: { en: 'Paintings',          es: 'Pinturas'              }, photo: '/artists/pablo-palasso/portrait.jpg' },
