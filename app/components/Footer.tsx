@@ -20,7 +20,7 @@ export default function Footer() {
                 <div>
                     <div className="footer-logo">
                         <div className="footer-logo-ring"><div className="footer-logo-dot" /></div>
-                        HR FineArt
+                        Van Robert Art Gallery
                     </div>
                     <p className="footer-tagline">{t('footer.tagline')}</p>
                     <div className="footer-email-wrap">

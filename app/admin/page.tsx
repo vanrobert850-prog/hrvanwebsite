@@ -32,7 +32,7 @@ export default async function AdminDashboard() {
                     Dashboard
                 </h1>
                 <p style={{ fontSize: 13, color: '#444' }}>
-                    Welcome back. Here's what's happening on HR FineArt.
+                    Welcome back. Here's what's happening on Van Robert Art Gallery.
                 </p>
             </div>
 

@@ -37,7 +37,7 @@ const translations = {
         'section.shopCat': 'Shop by category',
         'section.catPaintings': 'Paintings',
         'section.catPrints': 'Fine art prints',
-        'section.whyShop': 'Why shop on HR FineArt?',
+        'section.whyShop': 'Why shop on Van Robert Art Gallery?',
         'section.whyShopSub': 'The best place to buy original art online, with confidence.',
         'section.shopPrice': 'Shop by price',
         'section.featuredArtists': 'Featured artists',
@@ -83,7 +83,7 @@ const translations = {
         'footer.contact': 'Contact',
         'footer.under500': 'Under $500',
         'footer.allWorks': 'All works',
-        'footer.bottom': '© 2026 HR FineArt. All rights reserved.',
+        'footer.bottom': '© 2026 Van Robert Art Gallery. All rights reserved.',
         'footer.stripe': 'Payments secured by Shopify',
         // Cookies
         'cookie.msg': 'We use cookies to improve your experience, save preferences, and analyze traffic.',
@@ -144,11 +144,11 @@ const translations = {
         'sort.highLow': 'Price: High to Low',
         'sort.newest': 'Newest',
         // Meta
-        'meta.home.title': 'HR FineArt — Buy Original Art Online | Paintings & Fine Art Prints',
+        'meta.home.title': 'Van Robert Art Gallery — Buy Original Art Online | Paintings & Fine Art Prints',
         'meta.home.desc': 'Discover and buy original paintings and fine art prints from independent artists worldwide.',
-        'meta.artists.title': 'Artists — HR FineArt | Independent Artists Worldwide',
+        'meta.artists.title': 'Artists — Van Robert Art Gallery | Independent Artists Worldwide',
         'meta.artists.desc': 'Discover independent artists from around the world. Buy original paintings and fine art prints directly from the artists.',
-        'meta.gallery.title': 'Gallery — HR FineArt | Original Artworks For Sale',
+        'meta.gallery.title': 'Gallery — Van Robert Art Gallery | Original Artworks For Sale',
         'meta.gallery.desc': 'Browse and buy original artworks — paintings and prints — from independent artists worldwide.',
     },
     es: {
@@ -178,7 +178,7 @@ const translations = {
         'section.shopCat': 'Comprar por categoría',
         'section.catPaintings': 'Pinturas',
         'section.catPrints': 'Grabados de arte',
-        'section.whyShop': '¿Por qué comprar en HR FineArt?',
+        'section.whyShop': '¿Por qué comprar en Van Robert Art Gallery?',
         'section.whyShopSub': 'El mejor lugar para comprar arte original en línea, con confianza.',
         'section.shopPrice': 'Comprar por precio',
         'section.featuredArtists': 'Artistas destacados',
@@ -224,7 +224,7 @@ const translations = {
         'footer.contact': 'Contacto',
         'footer.under500': 'Menos de $500',
         'footer.allWorks': 'Todas las obras',
-        'footer.bottom': '© 2026 HR FineArt. Todos los derechos reservados.',
+        'footer.bottom': '© 2026 Van Robert Art Gallery. Todos los derechos reservados.',
         'footer.stripe': 'Pagos asegurados por Shopify',
         // Cookies
         'cookie.msg': 'Usamos cookies para mejorar tu experiencia, guardar preferencias y analizar el tráfico.',
@@ -285,11 +285,11 @@ const translations = {
         'sort.highLow': 'Precio: Mayor a Menor',
         'sort.newest': 'Más recientes',
         // Meta
-        'meta.home.title': 'HR FineArt — Compra Arte Original | Pinturas y Grabados',
+        'meta.home.title': 'Van Robert Art Gallery — Compra Arte Original | Pinturas y Grabados',
         'meta.home.desc': 'Descubre y compra pinturas originales y grabados de artistas independientes de todo el mundo.',
-        'meta.artists.title': 'Artistas — HR FineArt | Artistas Independientes Mundiales',
+        'meta.artists.title': 'Artistas — Van Robert Art Gallery | Artistas Independientes Mundiales',
         'meta.artists.desc': 'Descubre artistas independientes de todo el mundo. Compra arte original directamente de los artistas.',
-        'meta.gallery.title': 'Galería — HR FineArt | Obras Originales en Venta',
+        'meta.gallery.title': 'Galería — Van Robert Art Gallery | Obras Originales en Venta',
         'meta.gallery.desc': 'Explora y compra obras originales — pinturas y grabados — de artistas independientes de todo el mundo.',
     }
 }

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 
 const ARTIST_SLUGS = [
-    'maria-ruiz', 'james-lee', 'sofia-martens',
+    'freddy-javier', 'james-lee', 'sofia-martens',
     'carlos-vega', 'layla-hassan', 'nina-storm',
 ]
 

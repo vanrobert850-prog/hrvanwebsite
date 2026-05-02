@@ -115,7 +115,7 @@ export default function ArtistDashboardPage({ params }: { params: Promise<{ slug
                     <Link href="/" style={{ textDecoration: 'none' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                             <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#B85C38' }} />
-                            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: '#fff' }}>HR FineArt</span>
+                            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: '#fff' }}>Van Robert Art Gallery</span>
                         </div>
                     </Link>
                     <span style={{ color: '#333' }}>/</span>

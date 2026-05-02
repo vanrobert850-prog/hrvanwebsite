@@ -10,7 +10,7 @@ const ADMIN_USER_ID = process.env.NEXT_PUBLIC_ADMIN_USER_ID
 
 const searchData = {
     artists: [
-        { slug: 'maria-ruiz',    name: 'Maria Ruiz',    specialty: 'Oil Paintings',         location: 'Barcelona, Spain',        photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80' },
+        { slug: 'freddy-javier', name: 'Freddy Javier', specialty: 'Paintings',             location: 'Hato Mayor, Dominican Republic', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80' },
         { slug: 'james-lee',     name: 'James Lee',     specialty: 'Fine Art Prints',       location: 'New York, United States', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80' },
         { slug: 'sofia-martens', name: 'Sofia Martens', specialty: 'Abstract Paintings',    location: 'Brussels, Belgium',       photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80' },
         { slug: 'carlos-vega',   name: 'Carlos Vega',   specialty: 'Prints & Illustration', location: 'Mexico City, Mexico',     photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80' },
@@ -18,7 +18,7 @@ const searchData = {
         { slug: 'nina-storm',    name: 'Nina Storm',    specialty: 'Fine Art Prints',       location: 'Copenhagen, Denmark',     photo: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=200&q=80' },
     ],
     artworks: [
-        { id: 1,  title: 'Golden horizon',      artist: 'Maria Ruiz',    price: 1200, category: 'Paintings', style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=200&q=80' },
+        { id: 1,  title: 'Caribbean light',     artist: 'Freddy Javier', price: 1800, category: 'Paintings', style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=200&q=80' },
         { id: 2,  title: 'Silent garden',       artist: 'James Lee',     price: 850,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=200&q=80' },
         { id: 3,  title: 'Urban dusk',          artist: 'Sofia Martens', price: 2100, category: 'Paintings', style: 'Abstract',               img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=200&q=80' },
         { id: 4,  title: 'Morning bloom',       artist: 'Carlos Vega',   price: 650,  category: 'Prints',    style: 'Pop Art',                img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=200&q=80' },
@@ -26,9 +26,9 @@ const searchData = {
         { id: 6,  title: 'Ocean whisper',       artist: 'Nina Storm',    price: 980,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=200&q=80' },
         { id: 7,  title: 'Crimson fields',      artist: 'Andres Mora',   price: 3200, category: 'Paintings', style: 'Abstract Expressionism', img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=200&q=80' },
         { id: 8,  title: 'Quiet forest',        artist: 'Yuki Tanaka',   price: 720,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=200&q=80' },
-        { id: 9,  title: 'Amber fields',        artist: 'Maria Ruiz',    price: 950,  category: 'Paintings', style: 'Figurative',             img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=200&q=80' },
-        { id: 10, title: 'Warm light',          artist: 'Maria Ruiz',    price: 1450, category: 'Paintings', style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=200&q=80' },
-        { id: 11, title: 'Dusk in Catalonia',   artist: 'Maria Ruiz',    price: 2200, category: 'Paintings', style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=200&q=80' },
+        { id: 9,  title: 'Hato Mayor memory',   artist: 'Freddy Javier', price: 2200, category: 'Paintings', style: 'Figurative',             img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=200&q=80' },
+        { id: 10, title: 'Tropical reverie',    artist: 'Freddy Javier', price: 1950, category: 'Paintings', style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=200&q=80' },
+        { id: 11, title: 'Santo Domingo mural', artist: 'Freddy Javier', price: 2800, category: 'Paintings', style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=200&q=80' },
         { id: 12, title: 'Morning fog',         artist: 'James Lee',     price: 720,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=200&q=80' },
         { id: 13, title: 'Brooklyn bridge',     artist: 'James Lee',     price: 980,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=200&q=80' },
         { id: 14, title: 'City at rest',        artist: 'James Lee',     price: 1100, category: 'Prints',    style: 'Modernism',              img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=200&q=80' },
@@ -575,7 +575,7 @@ export default function Navbar() {
             <nav className="navbar">
                 <Link href="/" className="navbar-logo">
                     <div className="logo-ring"><div className="logo-dot" /></div>
-                    HR FineArt
+                    Van Robert Art Gallery
                 </Link>
 
                 <div className="navbar-links">

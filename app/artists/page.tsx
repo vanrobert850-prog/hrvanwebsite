@@ -6,15 +6,15 @@ import { useState, useEffect, useRef } from 'react'
 
 const artists = [
     {
-        slug: 'maria-ruiz',
-        name: 'Maria Ruiz',
-        location: 'Barcelona, Spain',
-        specialty: 'Oil Paintings',
-        joined: '2018',
-        photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',
-        cover: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=800&q=80',
-        bio: 'Maria Ruiz is a Spanish painter known for her luminous oil paintings that explore the relationship between light, color, and emotion. Born in Barcelona, she studied Fine Arts at the Escola de la Llotja.',
-        works: 24,
+        slug: 'freddy-javier',
+        name: 'Freddy Javier',
+        location: 'Hato Mayor, Dominican Republic',
+        specialty: 'Paintings',
+        joined: '1970',
+        photo: '/artists/freddy-javier/portrait.jpg',
+        cover: '/artists/freddy-javier/cover.jpg',
+        bio: 'Freddy Javier is a Dominican painter and muralist born in Hato Mayor in 1946. He graduated from the National School of Fine Arts in Santo Domingo and his work is held in collections across the Americas and Europe.',
+        works: 0, // not used reliably without Shopify call — keep as 0 or just remove from UI
     },
     {
         slug: 'james-lee',
@@ -169,7 +169,6 @@ export default function ArtistsPage() {
             <Navbar />
             <main style={{ background: '#fff', minHeight: '100vh' }}>
 
-                {/* HERO — fades in first */}
                 <section style={{
                     background: '#F7F4F0',
                     padding: '80px 48px 64px',
@@ -190,7 +189,6 @@ export default function ArtistsPage() {
                     </p>
                 </section>
 
-                {/* GRID — each card staggers in */}
                 <section style={{ padding: '64px 48px', maxWidth: 1400, margin: '0 auto' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 32 }}>
                         {artists.map((artist, i) => (

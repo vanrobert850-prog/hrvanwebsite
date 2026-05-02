@@ -37,7 +37,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                         <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px #22c55e55' }} />
                         <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: '#fff' }}>
-                            HR FineArt
+                            Van Robert Art Gallery
                         </span>
                         <span style={{ fontSize: 10, color: '#333', letterSpacing: '2px', textTransform: 'uppercase', marginLeft: 4 }}>
                             / Admin

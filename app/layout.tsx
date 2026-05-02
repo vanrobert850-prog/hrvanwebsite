@@ -11,25 +11,25 @@ const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin']
 
 export const metadata: Metadata = {
     title: {
-        default: 'HR FineArt — Buy Original Art Online | Paintings & Fine Art Prints',
-        template: '%s | HR FineArt',
+        default: 'Van Robert Art Gallery — Buy Original Art Online | Paintings & Fine Art Prints',
+        template: '%s | Van Robert Art Gallery',
     },
     description: 'Discover and buy original paintings and fine art prints from independent artists worldwide. Unique, one-of-a-kind artworks delivered to your door.',
     keywords: ['original art', 'buy paintings online', 'fine art prints', 'independent artists', 'art marketplace', 'oil paintings', 'contemporary art', 'art collector'],
-    authors: [{ name: 'HR FineArt' }],
-    creator: 'HR FineArt',
-    publisher: 'HR FineArt',
+    authors: [{ name: 'Van Robert Art Gallery' }],
+    creator: 'Van Robert Art Gallery',
+    publisher: 'Van Robert Art Gallery',
     robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
     openGraph: {
         type: 'website', locale: 'en_US', alternateLocale: ['es_DO'],
-        url: 'https://hrfineart.com', siteName: 'HR FineArt',
-        title: 'HR FineArt — Buy Original Art Online',
+        url: 'https://hrfineart.com', siteName: 'Van Robert Art Gallery',
+        title: 'Van Robert Art Gallery — Buy Original Art Online',
         description: 'Discover and buy original paintings and fine art prints from independent artists worldwide.',
-        images: [{ url: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80', width: 1200, height: 630, alt: 'HR FineArt' }],
+        images: [{ url: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80', width: 1200, height: 630, alt: 'Van Robert Art Gallery' }],
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'HR FineArt — Buy Original Art Online',
+        title: 'Van Robert Art Gallery — Buy Original Art Online',
         description: 'Discover and buy original paintings and fine art prints from independent artists worldwide.',
         images: ['https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80'],
     },
@@ -57,7 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
                         '@context': 'https://schema.org',
                         '@type': 'Organization',
-                        'name': 'HR FineArt',
+                        'name': 'Van Robert Art Gallery',
                         'url': 'https://hrfineart.com',
                         'description': 'A curated marketplace connecting art collectors with independent artists worldwide.',
                         'sameAs': ['https://instagram.com/hrfineart', 'https://facebook.com/hrfineart'],
@@ -66,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
                         '@context': 'https://schema.org',
                         '@type': 'WebSite',
-                        'name': 'HR FineArt',
+                        'name': 'Van Robert Art Gallery',
                         'url': 'https://hrfineart.com',
                         'potentialAction': { '@type': 'SearchAction', 'target': { '@type': 'EntryPoint', 'urlTemplate': 'https://hrfineart.com/gallery?q={search_term_string}' }, 'query-input': 'required name=search_term_string' }
                     })}} />

@@ -12,18 +12,18 @@ const heroSlides = [
 ]
 
 const artworks = [
-    { handle: 'golden-horizon',      title: 'Golden horizon',      artist: 'Maria Ruiz',    country: 'Spain',         price: 1200, medium: 'Oil on canvas',     size: '24 × 36 in', cat: 'Paintings', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
-    { handle: 'silent-garden',       title: 'Silent garden',       artist: 'James Lee',     country: 'United States',  price: 850,  medium: 'Fine art print',    size: '18 × 24 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80' },
-    { handle: 'urban-dusk',          title: 'Urban dusk',          artist: 'Sofia Martens', country: 'Belgium',        price: 2100, medium: 'Acrylic on canvas', size: '40 × 50 in', cat: 'Paintings', img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
-    { handle: 'morning-bloom',       title: 'Morning bloom',       artist: 'Carlos Vega',   country: 'Mexico',         price: 650,  medium: 'Fine art print',    size: '16 × 20 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&q=80' },
-    { handle: 'desert-wind',         title: 'Desert wind',         artist: 'Layla Hassan',  country: 'Egypt',          price: 1750, medium: 'Oil on canvas',     size: '30 × 40 in', cat: 'Paintings', img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
-    { handle: 'ocean-whisper',       title: 'Ocean whisper',       artist: 'Nina Storm',    country: 'Denmark',        price: 980,  medium: 'Fine art print',    size: '20 × 28 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80' },
-    { handle: 'crimson-fields',      title: 'Crimson fields',      artist: 'Andres Mora',   country: 'Colombia',       price: 3200, medium: 'Oil on canvas',     size: '48 × 60 in', cat: 'Paintings', img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
-    { handle: 'quiet-forest',        title: 'Quiet forest',        artist: 'Yuki Tanaka',   country: 'Japan',          price: 720,  medium: 'Fine art print',    size: '14 × 20 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
+    { handle: 'caribbean-light',     title: 'Caribbean light',     artist: 'Freddy Javier', country: 'Dominican Republic', price: 1800, medium: 'Oil on canvas',     size: '24 × 36 in', cat: 'Paintings', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
+    { handle: 'silent-garden',       title: 'Silent garden',       artist: 'James Lee',     country: 'United States',      price: 850,  medium: 'Fine art print',    size: '18 × 24 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80' },
+    { handle: 'urban-dusk',          title: 'Urban dusk',          artist: 'Sofia Martens', country: 'Belgium',            price: 2100, medium: 'Acrylic on canvas', size: '40 × 50 in', cat: 'Paintings', img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
+    { handle: 'morning-bloom',       title: 'Morning bloom',       artist: 'Carlos Vega',   country: 'Mexico',             price: 650,  medium: 'Fine art print',    size: '16 × 20 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&q=80' },
+    { handle: 'desert-wind',         title: 'Desert wind',         artist: 'Layla Hassan',  country: 'Egypt',              price: 1750, medium: 'Oil on canvas',     size: '30 × 40 in', cat: 'Paintings', img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
+    { handle: 'ocean-whisper',       title: 'Ocean whisper',       artist: 'Nina Storm',    country: 'Denmark',            price: 980,  medium: 'Fine art print',    size: '20 × 28 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80' },
+    { handle: 'crimson-fields',      title: 'Crimson fields',      artist: 'Andres Mora',   country: 'Colombia',           price: 3200, medium: 'Oil on canvas',     size: '48 × 60 in', cat: 'Paintings', img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
+    { handle: 'quiet-forest',        title: 'Quiet forest',        artist: 'Yuki Tanaka',   country: 'Japan',              price: 720,  medium: 'Fine art print',    size: '14 × 20 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
 ]
 
 const artists = [
-    { slug: 'maria-ruiz',    name: 'Maria Ruiz',    specialty: { en: 'Oil paintings',         es: 'Pinturas al óleo'       }, photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80' },
+    { slug: 'freddy-javier', name: 'Freddy Javier', specialty: { en: 'Paintings',              es: 'Pinturas'               }, photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80' },
     { slug: 'james-lee',     name: 'James Lee',     specialty: { en: 'Fine art prints',       es: 'Grabados de arte'       }, photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80' },
     { slug: 'sofia-martens', name: 'Sofia Martens', specialty: { en: 'Abstract paintings',    es: 'Pinturas abstractas'    }, photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80' },
     { slug: 'carlos-vega',   name: 'Carlos Vega',   specialty: { en: 'Prints & illustration', es: 'Grabados e ilustración' }, photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80' },
@@ -37,9 +37,9 @@ const whyRows = [
 ]
 
 const testimonials = [
-    { quoteKey: 'testimonial1', name: 'Sarah M.', piece: 'Golden horizon by Maria Ruiz', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=300&q=80' },
-    { quoteKey: 'testimonial2', name: 'David K.',  piece: 'Ocean whisper by Nina Storm',  img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=300&q=80' },
-    { quoteKey: 'testimonial3', name: 'Carlos V.', piece: 'Artist on HR FineArt',         img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=300&q=80' },
+    { quoteKey: 'testimonial1', name: 'Sarah M.', piece: 'Caribbean light by Freddy Javier', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=300&q=80' },
+    { quoteKey: 'testimonial2', name: 'David K.',  piece: 'Ocean whisper by Nina Storm',     img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=300&q=80' },
+    { quoteKey: 'testimonial3', name: 'Carlos V.', piece: 'Artist on Van Robert Art Gallery', img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=300&q=80' },
 ]
 
 const ArrowIcon   = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -133,11 +133,10 @@ export default function HomePage() {
             <Navbar />
             <main>
 
-                {/* HERO */}
                 <section className="hero" aria-label="Featured artwork carousel">
                     {heroSlides.map((slide, i) => (
                         <img key={slide} className="hero-img" src={slide}
-                             alt={`HR FineArt featured artwork ${i + 1}`}
+                             alt={`Van Robert Art Gallery featured artwork ${i + 1}`}
                              style={{ opacity: heroIndex === i ? 1 : 0, transition: 'opacity 1.2s ease', zIndex: heroIndex === i ? 1 : 0 }}
                              width="1600" height="540" loading={i === 0 ? 'eager' : 'lazy'}
                         />
@@ -161,7 +160,6 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* FILTER BAR */}
                 <div className="filter-bar" role="group" aria-label="Filter artworks">
                     {([
                         ['all',       t('filter.all')],
@@ -175,7 +173,6 @@ export default function HomePage() {
                     ))}
                 </div>
 
-                {/* FEATURED WORKS */}
                 <section className="section-wrap" aria-labelledby="featured-heading">
                     <div className="section-head">
                         <h2 id="featured-heading">{t('section.featured')}</h2>
@@ -186,7 +183,6 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* WHY BUY */}
                 <section className="why-section" aria-labelledby="why-heading">
                     <div className="why-left reveal-left">
                         <h2 id="why-heading">{t('why.title1')}<br />{t('why.title2')}</h2>
@@ -207,7 +203,6 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* SHOP BY CATEGORY */}
                 <section className="category-section reveal" aria-labelledby="category-heading">
                     <h2 id="category-heading">{t('section.shopCat')}</h2>
                     <div className="category-pills">
@@ -216,7 +211,6 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* TRUST */}
                 <section className="trust-section" aria-labelledby="trust-heading">
                     <h2 id="trust-heading">{t('section.whyShop')}</h2>
                     <p>{t('section.whyShopSub')}</p>
@@ -233,7 +227,6 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* NEW ARRIVALS */}
                 <section className="section-wrap" style={{ paddingTop: '56px' }} aria-labelledby="arrivals-heading">
                     <div className="section-head">
                         <h2 id="arrivals-heading">{t('section.newArrivals')}</h2>
@@ -244,7 +237,6 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* SHOP BY PRICE */}
                 <div className="price-section reveal" role="group" aria-label="Shop by price range">
                     <h2>{t('section.shopPrice')}</h2>
                     <div className="price-pills">
@@ -254,7 +246,6 @@ export default function HomePage() {
                     </div>
                 </div>
 
-                {/* FEATURED ARTISTS */}
                 <section className="artists-section" aria-labelledby="artists-heading">
                     <div className="section-head">
                         <h2 id="artists-heading">{t('section.featuredArtists')}</h2>
@@ -272,7 +263,6 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* TESTIMONIALS */}
                 <section className="testimonials-section" aria-labelledby="testimonials-heading">
                     <h2 id="testimonials-heading">{t('section.loved')}</h2>
                     <blockquote className={`testimonial-card${fading ? ' fading' : ''}`}>
@@ -293,7 +283,6 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* CTA BANNER */}
                 <section className="cta-banner" aria-labelledby="cta-heading">
                     <img className="cta-banner-img" src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=1600&q=80"
                          alt="Art advisor" loading="lazy" width="1600" height="360" />
