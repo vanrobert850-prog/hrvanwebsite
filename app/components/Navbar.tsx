@@ -10,44 +10,15 @@ const ADMIN_USER_ID = process.env.NEXT_PUBLIC_ADMIN_USER_ID
 
 const searchData = {
     artists: [
-        { slug: 'freddy-javier', name: 'Freddy Javier', specialty: 'Paintings',             location: 'Hato Mayor, Dominican Republic', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80' },
-        { slug: 'james-lee',     name: 'James Lee',     specialty: 'Fine Art Prints',       location: 'New York, United States', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80' },
-        { slug: 'sofia-martens', name: 'Sofia Martens', specialty: 'Abstract Paintings',    location: 'Brussels, Belgium',       photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80' },
-        { slug: 'carlos-vega',   name: 'Carlos Vega',   specialty: 'Prints & Illustration', location: 'Mexico City, Mexico',     photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80' },
-        { slug: 'layla-hassan',  name: 'Layla Hassan',  specialty: 'Oil Paintings',         location: 'Cairo, Egypt',            photo: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&q=80' },
-        { slug: 'nina-storm',    name: 'Nina Storm',    specialty: 'Fine Art Prints',       location: 'Copenhagen, Denmark',     photo: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=200&q=80' },
+        { slug: 'freddy-javier',  name: 'Freddy Javier',  specialty: 'Paintings',          location: 'Hato Mayor, Dominican Republic',    photo: '/artists/freddy-javier/portrait.jpg'  },
+        { slug: 'juan-b-nina',    name: 'Juan B. Nina',    specialty: 'Paintings & Poetry', location: 'San Cristóbal, Dominican Republic', photo: '/artists/juan-b-nina/portrait.jpg'    },
+        { slug: 'pablo-palasso',  name: 'Pablo Palasso',   specialty: 'Paintings',          location: 'Santo Domingo, Dominican Republic', photo: '/artists/pablo-palasso/portrait.jpg'  },
     ],
     artworks: [
-        { id: 1,  title: 'Caribbean light',     artist: 'Freddy Javier', price: 1800, category: 'Paintings', style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=200&q=80' },
-        { id: 2,  title: 'Silent garden',       artist: 'James Lee',     price: 850,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=200&q=80' },
-        { id: 3,  title: 'Urban dusk',          artist: 'Sofia Martens', price: 2100, category: 'Paintings', style: 'Abstract',               img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=200&q=80' },
-        { id: 4,  title: 'Morning bloom',       artist: 'Carlos Vega',   price: 650,  category: 'Prints',    style: 'Pop Art',                img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=200&q=80' },
-        { id: 5,  title: 'Desert wind',         artist: 'Layla Hassan',  price: 1750, category: 'Paintings', style: 'Figurative',             img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=200&q=80' },
-        { id: 6,  title: 'Ocean whisper',       artist: 'Nina Storm',    price: 980,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=200&q=80' },
-        { id: 7,  title: 'Crimson fields',      artist: 'Andres Mora',   price: 3200, category: 'Paintings', style: 'Abstract Expressionism', img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=200&q=80' },
-        { id: 8,  title: 'Quiet forest',        artist: 'Yuki Tanaka',   price: 720,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=200&q=80' },
-        { id: 9,  title: 'Hato Mayor memory',   artist: 'Freddy Javier', price: 2200, category: 'Paintings', style: 'Figurative',             img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=200&q=80' },
-        { id: 10, title: 'Tropical reverie',    artist: 'Freddy Javier', price: 1950, category: 'Paintings', style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=200&q=80' },
-        { id: 11, title: 'Santo Domingo mural', artist: 'Freddy Javier', price: 2800, category: 'Paintings', style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=200&q=80' },
-        { id: 12, title: 'Morning fog',         artist: 'James Lee',     price: 720,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=200&q=80' },
-        { id: 13, title: 'Brooklyn bridge',     artist: 'James Lee',     price: 980,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=200&q=80' },
-        { id: 14, title: 'City at rest',        artist: 'James Lee',     price: 1100, category: 'Prints',    style: 'Modernism',              img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=200&q=80' },
-        { id: 15, title: 'Kinetic blue',        artist: 'Sofia Martens', price: 1800, category: 'Paintings', style: 'Abstract',               img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=200&q=80' },
-        { id: 16, title: 'Fracture lines',      artist: 'Sofia Martens', price: 2600, category: 'Paintings', style: 'Abstract Expressionism', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=200&q=80' },
-        { id: 17, title: 'Inner storm',         artist: 'Sofia Martens', price: 1950, category: 'Paintings', style: 'Abstract',               img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=200&q=80' },
-        { id: 18, title: 'Serpent sun',         artist: 'Carlos Vega',   price: 580,  category: 'Prints',    style: 'Pop Art',                img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=200&q=80' },
-        { id: 19, title: 'Maize goddess',       artist: 'Carlos Vega',   price: 890,  category: 'Prints',    style: 'Pop Art',                img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=200&q=80' },
-        { id: 20, title: 'Night market',        artist: 'Carlos Vega',   price: 720,  category: 'Prints',    style: 'Street Art',             img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=200&q=80' },
-        { id: 21, title: 'Nile at dusk',        artist: 'Layla Hassan',  price: 1900, category: 'Paintings', style: 'Figurative',             img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=200&q=80' },
-        { id: 22, title: 'Old Cairo',           artist: 'Layla Hassan',  price: 2400, category: 'Paintings', style: 'Figurative',             img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=200&q=80' },
-        { id: 23, title: 'Sahara morning',      artist: 'Layla Hassan',  price: 1600, category: 'Paintings', style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=200&q=80' },
-        { id: 24, title: 'Nordic white',        artist: 'Nina Storm',    price: 850,  category: 'Prints',    style: 'Modernism',              img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=200&q=80' },
-        { id: 25, title: 'Helsingør shore',     artist: 'Nina Storm',    price: 1200, category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=200&q=80' },
-        { id: 26, title: 'Winter light',        artist: 'Nina Storm',    price: 760,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=200&q=80' },
-        { id: 27, title: 'The blue hour',       artist: 'Andres Mora',   price: 2800, category: 'Paintings', style: 'Abstract Expressionism', img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=200&q=80' },
-        { id: 28, title: 'Street echo',         artist: 'Andres Mora',   price: 1400, category: 'Paintings', style: 'Street Art',             img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=200&q=80' },
-        { id: 29, title: 'Mountain stillness',  artist: 'Yuki Tanaka',   price: 680,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=200&q=80' },
-        { id: 30, title: 'Cherry blossom rain', artist: 'Yuki Tanaka',   price: 890,  category: 'Prints',    style: 'Contemporary',           img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=200&q=80' },
+        { id: 1,  title: 'Caribbean light',     artist: 'Freddy Javier', price: 1800, category: 'Paintings', style: 'Contemporary', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=200&q=80' },
+        { id: 9,  title: 'Hato Mayor memory',   artist: 'Freddy Javier', price: 2200, category: 'Paintings', style: 'Figurative',   img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=200&q=80' },
+        { id: 10, title: 'Tropical reverie',    artist: 'Freddy Javier', price: 1950, category: 'Paintings', style: 'Contemporary', img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=200&q=80' },
+        { id: 11, title: 'Santo Domingo mural', artist: 'Freddy Javier', price: 2800, category: 'Paintings', style: 'Contemporary', img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=200&q=80' },
     ],
     categories: [
         { label: 'Paintings',       href: '/gallery?category=Paintings'   },
@@ -574,8 +545,7 @@ export default function Navbar() {
 
             <nav className="navbar">
                 <Link href="/" className="navbar-logo">
-                    <div className="logo-ring"><div className="logo-dot" /></div>
-                    Van Robert Art Gallery
+                    <img src="/logo/logo.png" alt="Van Robert Art Gallery" style={{ height: 44, width: 'auto', display: 'block' }} />
                 </Link>
 
                 <div className="navbar-links">
