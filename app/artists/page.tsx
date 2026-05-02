@@ -12,9 +12,22 @@ const artists = [
         specialty: 'Paintings',
         joined: '1970',
         photo: '/artists/freddy-javier/portrait.jpg',
+        photoPosition: 'center top',
         cover: '/artists/freddy-javier/cover.jpg',
-        bio: 'Freddy Javier is a Dominican painter and muralist born in Hato Mayor in 1946. He graduated from the National School of Fine Arts in Santo Domingo and his work is held in collections across the Americas and Europe.',
-        works: 0, // not used reliably without Shopify call — keep as 0 or just remove from UI
+        bio: 'Dominican painter and muralist born in Hato Mayor in 1946. Graduated from the National School of Fine Arts in Santo Domingo; his work is held in collections across the Americas and Europe.',
+        works: 0,
+    },
+    {
+        slug: 'juan-b-nina',
+        name: 'Juan B. Nina',
+        location: 'San Cristóbal, Dominican Republic',
+        specialty: 'Paintings & Poetry',
+        joined: '1992',
+        photo: '/artists/juan-b-nina/portrait.jpg',
+        photoPosition: 'center top',
+        cover: '/artists/juan-b-nina/cover.jpg',
+        bio: 'Dominican painter, poet, and essayist born in San Cristóbal. Participated in over thirty collective exhibitions and biennials, with solo shows in the Dominican Republic, Cuba, the United States, and Puerto Rico.',
+        works: 0,
     },
     {
         slug: 'james-lee',
@@ -23,8 +36,9 @@ const artists = [
         specialty: 'Fine Art Prints',
         joined: '2019',
         photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
+        photoPosition: 'center top',
         cover: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=800&q=80',
-        bio: 'James Lee is a New York-based printmaker whose work merges traditional etching techniques with digital processes. His prints explore themes of urban solitude.',
+        bio: 'New York-based printmaker whose work merges traditional etching techniques with digital processes. His prints explore themes of urban solitude.',
         works: 18,
     },
     {
@@ -34,8 +48,9 @@ const artists = [
         specialty: 'Abstract Paintings',
         joined: '2017',
         photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',
+        photoPosition: 'center top',
         cover: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=800&q=80',
-        bio: 'Sofia Martens creates large-scale abstract paintings that pulsate with energy and movement. She uses acrylic and mixed media to build layers of texture and color.',
+        bio: 'Creates large-scale abstract paintings that pulsate with energy and movement. Uses acrylic and mixed media to build layers of texture and color.',
         works: 31,
     },
     {
@@ -45,8 +60,9 @@ const artists = [
         specialty: 'Prints & Illustration',
         joined: '2020',
         photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
+        photoPosition: 'center top',
         cover: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=800&q=80',
-        bio: 'Carlos Vega is a Mexican artist whose work draws deeply from pre-Columbian mythology and contemporary street culture. His prints blend ancient symbolism with vibrant color.',
+        bio: 'Mexican artist whose work draws deeply from pre-Columbian mythology and contemporary street culture. His prints blend ancient symbolism with vibrant color.',
         works: 15,
     },
     {
@@ -56,8 +72,9 @@ const artists = [
         specialty: 'Oil Paintings',
         joined: '2016',
         photo: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80',
+        photoPosition: 'center top',
         cover: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=800&q=80',
-        bio: 'Layla Hassan paints the quiet dignity of everyday life in North Africa and the Middle East. Her oil paintings capture light falling on ancient walls and desert landscapes.',
+        bio: 'Paints the quiet dignity of everyday life in North Africa and the Middle East. Her oil paintings capture light falling on ancient walls and desert landscapes.',
         works: 22,
     },
     {
@@ -67,8 +84,9 @@ const artists = [
         specialty: 'Fine Art Prints',
         joined: '2019',
         photo: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&q=80',
+        photoPosition: 'center top',
         cover: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&q=80',
-        bio: 'Nina Storm creates photographic fine art prints that blur the boundary between documentation and painting. Her lens captures Nordic light in a timeless way.',
+        bio: 'Creates photographic fine art prints that blur the boundary between documentation and painting. Her lens captures Nordic light in a timeless way.',
         works: 19,
     },
 ]
@@ -107,7 +125,7 @@ function ArtistCard({ artist, index }: { artist: typeof artists[0]; index: numbe
                         ;(e.currentTarget as HTMLElement).style.boxShadow = 'none'
                     }}
                 >
-                    <div style={{ height: 200, overflow: 'hidden' }}>
+                    <div style={{ height: 180, overflow: 'hidden' }}>
                         <img
                             src={artist.cover}
                             alt={artist.name}
@@ -115,39 +133,41 @@ function ArtistCard({ artist, index }: { artist: typeof artists[0]; index: numbe
                             loading="lazy"
                         />
                     </div>
-                    <div style={{ padding: '20px 20px 24px', background: '#fff' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
-                            <img
-                                src={artist.photo}
-                                alt={artist.name}
-                                style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', border: '2px solid #F0EDE8', flexShrink: 0 }}
-                                loading="lazy"
-                            />
-                            <div>
-                                <p style={{ fontSize: 15, fontWeight: 500, marginBottom: 2 }}>{artist.name}</p>
-                                <p style={{ fontSize: 12, color: '#888', fontFamily: 'Arial', marginBottom: 2 }}>{artist.location}</p>
-                                <p style={{ fontSize: 11, color: '#B85C38', fontFamily: 'Arial', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                    <div style={{ padding: '0 20px 24px', background: '#fff' }}>
+                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 14, marginBottom: 14, marginTop: -28 }}>
+                            <div style={{
+                                width: 60, height: 60, borderRadius: '50%', overflow: 'hidden', flexShrink: 0,
+                                border: '3px solid #fff', boxShadow: '0 2px 10px rgba(0,0,0,0.12)',
+                                background: '#F0EDE8',
+                            }}>
+                                <img
+                                    src={artist.photo}
+                                    alt={artist.name}
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: artist.photoPosition ?? 'center top', display: 'block' }}
+                                    loading="lazy"
+                                />
+                            </div>
+                            <div style={{ paddingBottom: 4 }}>
+                                <p style={{ fontSize: 11, color: '#B85C38', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: 2 }}>
                                     {artist.specialty}
                                 </p>
+                                <p style={{ fontSize: 15, fontWeight: 500, marginBottom: 1 }}>{artist.name}</p>
+                                <p style={{ fontSize: 11, color: '#999', marginBottom: 0 }}>{artist.location}</p>
                             </div>
                         </div>
                         <p style={{ fontSize: 13, color: '#666', lineHeight: 1.7, marginBottom: 16, fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
-                            {artist.bio.slice(0, 120)}...
+                            {artist.bio.slice(0, 130)}...
                         </p>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 12, borderTop: '1px solid #f0ede8' }}>
                             <div style={{ display: 'flex', gap: 20 }}>
                                 <div>
-                                    <p style={{ fontSize: 16, fontWeight: 600 }}>{artist.works}</p>
-                                    <p style={{ fontSize: 10, color: '#aaa', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'Arial' }}>Works</p>
-                                </div>
-                                <div>
-                                    <p style={{ fontSize: 16, fontWeight: 600 }}>{artist.joined}</p>
-                                    <p style={{ fontSize: 10, color: '#aaa', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'Arial' }}>Member since</p>
+                                    <p style={{ fontSize: 15, fontWeight: 600 }}>{artist.joined}</p>
+                                    <p style={{ fontSize: 10, color: '#aaa', textTransform: 'uppercase', letterSpacing: '1px' }}>Since</p>
                                 </div>
                             </div>
-                            <span style={{ fontSize: 11, letterSpacing: '2px', textTransform: 'uppercase', borderBottom: '1px solid #111', paddingBottom: 2, fontFamily: 'Arial' }}>
-                View Profile
-              </span>
+                            <span style={{ fontSize: 11, letterSpacing: '2px', textTransform: 'uppercase', borderBottom: '1px solid #111', paddingBottom: 2 }}>
+                                View Profile
+                            </span>
                         </div>
                     </div>
                 </div>

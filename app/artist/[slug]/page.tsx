@@ -15,6 +15,7 @@ const artists = [
         specialty: 'Paintings',
         joined: '1970',
         photo: '/artists/freddy-javier/portrait.jpg',
+        photoPosition: 'center top',
         cover: '/artists/freddy-javier/cover.jpg',
         studio: '/artists/freddy-javier/studio.jpg',
         bioShort: 'Dominican painter and muralist bridging fine art tradition with Caribbean visual heritage, exhibited across the Americas and Europe since the 1960s.',
@@ -22,7 +23,24 @@ const artists = [
         education: `National School of Fine Arts, Santo Domingo — Graduated as Fine Arts Professor (1970)`,
         exhibitions: `SOLO EXHIBITIONS\n2012 — Sala de Arte Evolutivo, Contemporary Art\n2012 — Sala de Arte Centro Cultural Ocho, Miami\n2009 — Sala de Arte UNESCO (Two-Artist Show)\n2007 — Sala de Arte Ramón Oviedo\n2006 — Galería de Artes Arawak\n2002 — Isla del Sol, Galería de Bodden, Santo Domingo\n2001 — Museo de las Casas Reales, Casa de Bastidas, Santo Domingo\n1996 — Museum of Modern Art, Santo Domingo\n1992 — Museum of Modern Art, Santo Domingo\n1991 — Dominican College of Visual Artists (CODAP)\n1989 — Museo Voluntario de las Casas Reales\n1988 — Galería Sebelén\n1985 — Sala de Arte Maria-Lejos\n1984 — Galerías Arawak\n1975 — Casa de Teatro\n\nSELECTED GROUP EXHIBITIONS\n2003 — "Dominican Art on the Cigar Route," Miami (benefit for Corazones Unidos Foundation)\n2000 — Joint Exhibition, Japan\n1999 — Joint Exhibition, Caracas, Venezuela\n1998 — Group Exhibition, Florence, Italy\n1997 — Benefit Exhibition for Oncological & Integral Health Foundation, St. Joseph's\n1996 — "Color of Santo Domingo," Galería de Arte Latino\n1994 — 1st Magistral Painting Collective, Hotel Hamaca Beach Resort, Boca Chica\n1994 — "Testimonio, sólo una Época," Casa de Francia / Caribbean Culture, Germany\n1993 — Third Drawing Salon, Arawak — "The Flowers of May," CODAP\n1993 — National Day of Visual Artists, CODAP\n1993 — 16th Anniversary of CODAP\n1991 — First Lithography Collective, Latin American & Caribbean Print Biennial, San Juan, Puerto Rico\n1990 — Banco Metropolitano\n1989 — Banco Miramar, Santiago & San Francisco de Macorís\n1988 — First Dominican Festival of Visual Arts\n1988 — San Juan Biennial of Latin American & Caribbean Print, Puerto Rico\n1987 — Museum of Art & History, San Juan, Puerto Rico\n1987 — "20 Artists," Galería de Arte Sebelén\n1987 — Dominican Contemporary Art (CDAP)\n1987 — Young Dominican Art in New York\n1986 — "Tribute to Liberty," Dominican Painters in New York\n1986 — Pan-American of Dominican Visual Arts\n1985 — III Exhibition, Hotel Sheraton — Galería de Arte Nader\n1984 — Galería de Arte Giotto\n1983 — Galería Pro-Venezuela, Caracas / Galería de Arte Chosseria\n1983 — I.C.D.A. Primavera\n1982 — VI Exhibition of Dominican Painters & Sculptors\n1982 — F.A.O. Visual Arts Competition\n1981 — II Exhibition "Painters of Our Land," Hotel Sheraton\n1980 — I Exhibition "Painters of Our Land," Hotel Sheraton / Galería Logos, Puerto Rico\n1979 — Cultural Center of Curaçao / Altos de Chavón, La Romana\n1978 — Palace of Fine Arts, Dominican College of Visual Artists\n1977 — Group Exhibition, Puerto Rico\n1976 — Group Exhibition, Panama\n1975 — Galería de Arte Giotto\n1974 — Museo del Hombre Dominicano / Galería Casa de Teatro, Santo Domingo\n1972 — First Biennial of the Santo Domingo City Council\n1971 — Reflejo Group at Galería Proyecto\n1970 — Galería de Arte André's, Santo Domingo\n1967 — E. León Jiménez Art Competition, Centro de la Cultura de Santiago`,
         recognition: `AWARDS\n1993 — First Drawing Prize, XIX National Visual Arts Biennial, Museum of Modern Art\n1992 — Honorable Mention, II National Drawing Salon, Arawak Foundation, Museum of Modern Art\n1989 — Third Painting Prize, XVII National Visual Arts Biennial, Museum of Modern Art\n1983 — First Painting Prize, Cocoa Competition, Secretariat of Agriculture, Santo Domingo\n1969 — First Drawing Prize, Student Competition, Friordano Group, Universidad Católica Madre y Maestra, Santiago\n\nPUBLIC & PRIVATE COLLECTIONS\nMuseum of Graphic Arts, Ciudad Bolívar, Venezuela\nUniversidad Católica Madre y Maestra, Santiago, Dominican Republic\nUniversidad Simón Rodríguez, Caracas, Venezuela\nBanco Popular Dominicano\nPrivate collections of Juan José Ceballos, Gregorio Hernández, Doña Chana Vda. Díaz, Doña Miguelina Contrera del Rosario, and Doña Margarita de Lluberes\n\nFEATURED IN PUBLICATIONS\n"Tesoros de Artes del Banco Popular Dominicano"\n"La Pintura en la Sociedad Dominicana" by Danilo De Los Santos\n"Enciclopedia de las Artes Plásticas Dominicanas" by Cándido Gerón\n"Antología de la Pintura Dominicana" by Cándido Gerón\n"Enciclopedia Dominicana"\n"Memoria de un Cortesano" by Joaquín Balaguer\nDominican press supplements: "Qué Pasa" (El Nacional), "La Tarde Alegre" (Ultima Hora), "Isla Abierta" (El Hoy), "Aquí" (La Noticia)`,
-        similar: ['sofia-martens', 'layla-hassan', 'james-lee'],
+        similar: ['juan-b-nina', 'sofia-martens', 'layla-hassan'],
+    },
+    {
+        slug: 'juan-b-nina',
+        name: 'Juan B. Nina',
+        location: 'San Cristóbal, Dominican Republic',
+        specialty: 'Paintings & Poetry',
+        joined: '1992',
+        photo: '/artists/juan-b-nina/portrait.jpg',
+        photoPosition: 'center top',
+        cover: '/artists/juan-b-nina/cover.jpg',
+        studio: '/artists/juan-b-nina/studio.jpg',
+        bioShort: 'Dominican painter, poet, and essayist born in San Cristóbal — a multidisciplinary artist who fuses Caribbean symbolism with a profound literary voice.',
+        about: `Born June 24, 1959, in San Cristóbal, Dominican Republic. Juan B. Nina is a poet, painter, and essayist belonging to the last generation of Dominican artists.\n\nHe has participated in more than thirty collective exhibitions and major fine arts biennials in the Dominican Republic, and has held three individual painting exhibitions — with his most recent in Santiago de Cuba.\n\nHe was invited to exhibit at Bluffton College, United States in 1997 and at the Patterson Museum in New Jersey in 2002. He was honored twice by the Universidad Autónoma de Santo Domingo (UASD) for his artistic contributions in 1994.\n\nNina has traveled to more than ten countries for political, cultural, and research activities. He is a member of the Dominican College of Visual Artists and the Dominican Association of Journalists and Writers, and co-founded the Cultural Group Cacibajagua and Peoti Club at the Casa de Teatro in Santo Domingo in 1992.\n\nHe also shares his artistic career with his profession as a Chef, having worked in restaurants and hotels across the Dominican Republic and taught culinary arts at the School of Hotel Management and Tourism in Santo Domingo (1991).`,
+        education: `School of Hotel Management and Tourism, Santo Domingo — Culinary Arts Professor (1991)\nCo-founder, Cultural Group Cacibajagua, Casa de Teatro, Santo Domingo (1992)\nMember, Dominican College of Visual Artists\nMember, Dominican Association of Journalists and Writers`,
+        exhibitions: `SOLO EXHIBITIONS\n1992 — "Birds and Symbols," Galería-Café Mundo Europeo, Santo Domingo, Dominican Republic\n1994 — "Metamorphosis of Fire," Hostal Nicolás de Ovando, Santo Domingo, Dominican Republic\n1995 — "Magic of the Circles," Casa del Caribe, Santiago de Cuba\n2003 — "Memory of the Signs," Peterson Museum, New Jersey, United States\n2004 — "Mythology of Dreams," Metarte International Gallery (MIG), Santo Domingo, D.R.\n2005 — "Musical Journey," Kasa Flavia, Dorado, Puerto Rico\n\nSELECTED COLLECTIVE EXHIBITIONS\n1983 — Provincial Government of San Cristóbal\n1987 — APEC University, Santo Domingo, Dominican Republic\n1991 — "From Here, 500 Years," Chambers of Commerce of Santo Domingo\n1991 — Urgent Exhibition for Peace, Nicolás de Ovando Art Center\n1991 — Mural Painting, Plaza Maria de Toledo\n1991 — Light and Color towards the V Centenary, Dominican Republic Library\n1992 — Carnival 92, February 22–23, Plaza Padre Billini\n1992 — First Magistral Biennial, Santo Domingo, D.R.\n1992 — Mural Painting, Restaurant La Atarazana\n1992 — Artists with UASD, Arts Hall, Faculty of Humanities, D.R.\n1993 — Collective, Hotel Playa Dorada, Puerto Plata, D.R.\n1993 — Collective Policromía 93, Casa del Periodista\n1993 — Collective Tribute to the Masters of Dominican Art\n1993 — Academy of Dominican Science\n1993 — Justina Corbacho Gallery, Madrid, Spain\n1993 — Art Santander, Santander, Spain\n1993 — Arfilia Gallery, Madrid, Spain\n1994 — XV Visual Arts Biennial E. León Jiménez, Santiago, Dominican Republic\n1994 — Art +Sur, Granada, Spain\n1994 — Orfilia Spacio Gallery, Madrid, Spain\n1995 — Gallery of Obligatory Art, Bogarra, Spain\n1996 — XVI Visual Arts Biennial E. León Jiménez, Santiago, D.R.\n1996 — Salon de Octubre, Casa de Bastidas, Santo Domingo, D.R.\n1997 — Gallery Durís De Samos, Madrid, Spain\n1999 — UNESCO Salon, Santo Domingo, D.R.\n1999 — UNESCO Salon, Havana, Cuba\n2002 — Art Workshop, Juan B. Nina, Santo Domingo, D.R.\n2002 — Metarte International Gallery, Santo Domingo–New York`,
+        recognition: `PUBLISHED WORKS\n"Voices of Time" (1989)\n"Manja... and Other Love Poems" (1990)\n"Evocation of the Times at the End of the Century" (1992)\n"Another Look at the Horizon" (1993)\n"In Praise of Fire" (1994)\n"Andromeda" (1994) — staged at the Teatro de Santiago de Cuba (1995)\n"Biographical Notes from San Cristóbal" (1998)\n"The Origin of Dominican Cuisine" (1999)\n"Notes on the History of Food" (1999)\n"The Kitchen of the Americas" (2000)\n"Anthology of San Cristóbal Writers, 1900–2001" (2001)\n"Secrets of the Mirror" (2002)\n\nFEATURED IN ANTHOLOGIES\n"Poets at the End of the Century in Santo Domingo"\n"Games of Images"\n"The City of Santo Domingo in Literature"\n"At the Edge of Water: 20 Years of Poetry in Santo Domingo"\n"Poets of the Caribbean" (published in Cuba)\n\nINSTITUTIONAL HONORS\nHonored twice by the Universidad Autónoma de Santo Domingo (UASD) for artistic participation (1994)\nInvited to exhibit at Bluffton College, United States (1997)\nInvited to exhibit at Patterson Museum, New Jersey (2002)`,
+        similar: ['freddy-javier', 'sofia-martens', 'layla-hassan'],
     },
     {
         slug: 'james-lee',
@@ -31,6 +49,7 @@ const artists = [
         specialty: 'Fine Art Prints',
         joined: '2019',
         photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
+        photoPosition: 'center top',
         cover: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=1600&q=80',
         studio: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
         bioShort: 'New York printmaker merging traditional etching techniques with digital processes to explore urban solitude.',
@@ -47,6 +66,7 @@ const artists = [
         specialty: 'Abstract Paintings',
         joined: '2017',
         photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',
+        photoPosition: 'center top',
         cover: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=1600&q=80',
         studio: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=800&q=80',
         bioShort: 'Brussels-based abstract painter building layers of texture and color that pulsate with energy and movement.',
@@ -63,6 +83,7 @@ const artists = [
         specialty: 'Prints & Illustration',
         joined: '2020',
         photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
+        photoPosition: 'center top',
         cover: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=1600&q=80',
         studio: 'https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=800&q=80',
         bioShort: 'Mexican artist blending pre-Columbian mythology with contemporary street culture in vibrant limited edition prints.',
@@ -79,6 +100,7 @@ const artists = [
         specialty: 'Oil Paintings',
         joined: '2016',
         photo: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80',
+        photoPosition: 'center top',
         cover: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=1600&q=80',
         studio: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
         bioShort: 'Egyptian painter capturing the quiet dignity of everyday life in North Africa through luminous oil paintings.',
@@ -95,6 +117,7 @@ const artists = [
         specialty: 'Fine Art Prints',
         joined: '2019',
         photo: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&q=80',
+        photoPosition: 'center top',
         cover: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1600&q=80',
         studio: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&q=80',
         bioShort: 'Copenhagen photographer capturing Nordic light in timeless fine art prints — fjords, forests, and coastlines.',
@@ -144,20 +167,27 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
                 <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 48px' }}>
 
                     <div style={{
-                        background: '#fff', padding: '28px 36px',
-                        display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
-                        gap: 24, marginTop: -60, position: 'relative', zIndex: 2,
-                        boxShadow: '0 4px 24px rgba(0,0,0,0.08)', flexWrap: 'wrap',
+                        background: '#fff', padding: '32px 40px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        gap: 24, marginTop: -72, position: 'relative', zIndex: 2,
+                        boxShadow: '0 4px 32px rgba(0,0,0,0.10)', flexWrap: 'wrap',
+                        borderBottom: '3px solid #B85C38',
                     }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-                            <img src={artist.photo} alt={artist.name}
-                                 style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', border: '3px solid #F0EDE8', flexShrink: 0 }}
-                            />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+                            <div style={{
+                                width: 96, height: 96, borderRadius: '50%', overflow: 'hidden',
+                                border: '4px solid #fff', boxShadow: '0 2px 16px rgba(0,0,0,0.15)',
+                                flexShrink: 0, background: '#F0EDE8',
+                            }}>
+                                <img src={artist.photo} alt={artist.name}
+                                     style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: artist.photoPosition ?? 'center top', display: 'block' }}
+                                />
+                            </div>
                             <div>
-                                <p style={{ fontSize: 24, fontWeight: 400, fontFamily: 'Georgia, serif', marginBottom: 4 }}>{artist.name}</p>
-                                <p style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>{artist.location}</p>
-                                <p style={{ fontSize: 11, color: '#B85C38', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: 8 }}>{artist.specialty}</p>
-                                <p style={{ fontSize: 13, color: '#666', lineHeight: 1.6, fontStyle: 'italic', fontFamily: 'Georgia, serif', maxWidth: 480 }}>
+                                <p style={{ fontSize: 11, letterSpacing: '2.5px', textTransform: 'uppercase', color: '#B85C38', marginBottom: 6 }}>{artist.specialty}</p>
+                                <p style={{ fontSize: 26, fontWeight: 400, fontFamily: 'Georgia, serif', marginBottom: 4, lineHeight: 1.2 }}>{artist.name}</p>
+                                <p style={{ fontSize: 12, color: '#999', marginBottom: 10 }}>{artist.location}</p>
+                                <p style={{ fontSize: 13, color: '#666', lineHeight: 1.7, fontStyle: 'italic', fontFamily: 'Georgia, serif', maxWidth: 520 }}>
                                     {artist.bioShort}
                                 </p>
                             </div>
@@ -330,7 +360,7 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
                                              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                                         />
                                         <img src={sim.photo} alt={sim.name} loading="lazy"
-                                             style={{ position: 'absolute', bottom: 8, left: 8, width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', border: '2px solid #fff' }}
+                                             style={{ position: 'absolute', bottom: 8, left: 8, width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', objectPosition: sim.photoPosition ?? 'center top', border: '2px solid #fff' }}
                                         />
                                     </div>
                                     <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 2 }}>{sim.name}</p>
