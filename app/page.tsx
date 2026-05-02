@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import Link from 'next/link'
 import { useLang } from './context/LanguageContext'
 import Navbar from './components/Navbar'
@@ -22,12 +22,20 @@ const artworks = [
     { handle: 'quiet-forest',        title: 'Quiet forest',        artist: 'Yuki Tanaka',   country: 'Japan',              price: 720,  medium: 'Fine art print',    size: '14 × 20 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
 ]
 
-const artists = [
-    { slug: 'freddy-javier', name: 'Freddy Javier', specialty: { en: 'Paintings',              es: 'Pinturas'               }, photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80' },
-    { slug: 'james-lee',     name: 'James Lee',     specialty: { en: 'Fine art prints',       es: 'Grabados de arte'       }, photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80' },
-    { slug: 'sofia-martens', name: 'Sofia Martens', specialty: { en: 'Abstract paintings',    es: 'Pinturas abstractas'    }, photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80' },
-    { slug: 'carlos-vega',   name: 'Carlos Vega',   specialty: { en: 'Prints & illustration', es: 'Grabados e ilustración' }, photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80' },
+const allArtists = [
+    { slug: 'freddy-javier', name: 'Freddy Javier', specialty: { en: 'Paintings',          es: 'Pinturas'              }, photo: '/artists/freddy-javier/portrait.jpg' },
+    { slug: 'juan-b-nina',   name: 'Juan B. Nina',  specialty: { en: 'Paintings & Poetry', es: 'Pinturas y Poesía'     }, photo: '/artists/juan-b-nina/portrait.jpg'   },
+    { slug: 'pablo-palasso', name: 'Pablo Palasso', specialty: { en: 'Paintings',          es: 'Pinturas'              }, photo: '/artists/pablo-palasso/portrait.jpg' },
 ]
+
+function shuffle<T>(arr: T[]): T[] {
+    const a = [...arr]
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]]
+    }
+    return a
+}
 
 const whyRows = [
     { labelKey: 'why.label1', descKey: 'why.desc1', img: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&q=80' },
@@ -90,6 +98,7 @@ export default function HomePage() {
     const [activeFilter, setActiveFilter] = useState('all')
     const [activeDot,    setActiveDot]    = useState(0)
     const [fading,       setFading]       = useState(false)
+    const artists = useMemo(() => shuffle(allArtists), [])
 
     const filtered =
         activeFilter === 'all'       ? artworks
