@@ -10,7 +10,7 @@ const artists = [
         name: 'Freddy Javier',
         location: 'Hato Mayor, Dominican Republic',
         specialty: 'Paintings',
-        joined: '1970',
+        joined: '2026',
         photo: '/artists/freddy-javier/portrait.jpg',
         photoPosition: 'center top',
         cover: '/artists/freddy-javier/cover.jpg',
@@ -22,11 +22,23 @@ const artists = [
         name: 'Juan B. Nina',
         location: 'San Cristóbal, Dominican Republic',
         specialty: 'Paintings & Poetry',
-        joined: '1992',
+        joined: '2026',
         photo: '/artists/juan-b-nina/portrait.jpg',
         photoPosition: 'center top',
         cover: '/artists/juan-b-nina/cover.jpg',
         bio: 'Dominican painter, poet, and essayist born in San Cristóbal. Participated in over thirty collective exhibitions and biennials, with solo shows in the Dominican Republic, Cuba, the United States, and Puerto Rico.',
+        works: 0,
+    },
+    {
+        slug: 'pablo-palasso',
+        name: 'Pablo Palasso',
+        location: 'Santo Domingo, Dominican Republic',
+        specialty: 'Paintings',
+        joined: '2026',
+        photo: '/artists/pablo-palasso/portrait.jpg',
+        photoPosition: 'center top',
+        cover: '/artists/pablo-palasso/cover.jpg',
+        bio: 'Renowned Dominican painter born in 1954. Self-taught minimalist with 30+ solo exhibitions and 60+ group shows across multiple continents, UNESCO Gold Medal laureate and Christie\'s auction house featured artist.',
         works: 0,
     },
     {
@@ -133,11 +145,12 @@ function ArtistCard({ artist, index }: { artist: typeof artists[0]; index: numbe
                             loading="lazy"
                         />
                     </div>
-                    <div style={{ padding: '0 20px 24px', background: '#fff' }}>
-                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 14, marginBottom: 14, marginTop: -28 }}>
+                    <div style={{ background: '#fff' }}>
+                        {/* Portrait circle — only this overlaps the cover image */}
+                        <div style={{ padding: '0 20px', marginTop: -32 }}>
                             <div style={{
-                                width: 60, height: 60, borderRadius: '50%', overflow: 'hidden', flexShrink: 0,
-                                border: '3px solid #fff', boxShadow: '0 2px 10px rgba(0,0,0,0.12)',
+                                width: 64, height: 64, borderRadius: '50%', overflow: 'hidden',
+                                border: '3px solid #fff', boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                                 background: '#F0EDE8',
                             }}>
                                 <img
@@ -147,27 +160,26 @@ function ArtistCard({ artist, index }: { artist: typeof artists[0]; index: numbe
                                     loading="lazy"
                                 />
                             </div>
-                            <div style={{ paddingBottom: 4 }}>
-                                <p style={{ fontSize: 11, color: '#B85C38', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: 2 }}>
-                                    {artist.specialty}
-                                </p>
-                                <p style={{ fontSize: 15, fontWeight: 500, marginBottom: 1 }}>{artist.name}</p>
-                                <p style={{ fontSize: 11, color: '#999', marginBottom: 0 }}>{artist.location}</p>
-                            </div>
                         </div>
-                        <p style={{ fontSize: 13, color: '#666', lineHeight: 1.7, marginBottom: 16, fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
-                            {artist.bio.slice(0, 130)}...
-                        </p>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 12, borderTop: '1px solid #f0ede8' }}>
-                            <div style={{ display: 'flex', gap: 20 }}>
+                        {/* Text — fully on white background, never overlapping image */}
+                        <div style={{ padding: '10px 20px 24px' }}>
+                            <p style={{ fontSize: 11, color: '#B85C38', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: 3 }}>
+                                {artist.specialty}
+                            </p>
+                            <p style={{ fontSize: 15, fontWeight: 600, marginBottom: 2 }}>{artist.name}</p>
+                            <p style={{ fontSize: 11, color: '#999', marginBottom: 12 }}>{artist.location}</p>
+                            <p style={{ fontSize: 13, color: '#555', lineHeight: 1.75, marginBottom: 16, fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+                                {artist.bio.slice(0, 130)}...
+                            </p>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 12, borderTop: '1px solid #f0ede8' }}>
                                 <div>
-                                    <p style={{ fontSize: 15, fontWeight: 600 }}>{artist.joined}</p>
-                                    <p style={{ fontSize: 10, color: '#aaa', textTransform: 'uppercase', letterSpacing: '1px' }}>Since</p>
+                                    <p style={{ fontSize: 15, fontWeight: 600, marginBottom: 1 }}>{artist.joined}</p>
+                                    <p style={{ fontSize: 10, color: '#aaa', textTransform: 'uppercase', letterSpacing: '1px' }}>Member since</p>
                                 </div>
+                                <span style={{ fontSize: 11, letterSpacing: '2px', textTransform: 'uppercase', borderBottom: '1px solid #111', paddingBottom: 2 }}>
+                                    View Profile
+                                </span>
                             </div>
-                            <span style={{ fontSize: 11, letterSpacing: '2px', textTransform: 'uppercase', borderBottom: '1px solid #111', paddingBottom: 2 }}>
-                                View Profile
-                            </span>
                         </div>
                     </div>
                 </div>
