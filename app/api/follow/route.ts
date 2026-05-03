@@ -1,16 +1,17 @@
 import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '../../lib/supabase'
+import { isValidSlug } from '../../lib/validate'
 
-// POST — follow an artist
 export async function POST(req: Request) {
     const { userId } = await auth()
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const { artist_slug } = await req.json()
-    if (!artist_slug) return NextResponse.json({ error: 'Missing artist_slug' }, { status: 400 })
+    if (!isValidSlug(artist_slug)) {
+        return NextResponse.json({ error: 'Invalid artist_slug' }, { status: 400 })
+    }
 
-    // Prevent artist following themselves
     const { data: artistProfile } = await supabaseAdmin
         .from('artist_profiles')
         .select('clerk_user_id')
@@ -27,10 +28,10 @@ export async function POST(req: Request) {
 
     if (error) {
         if (error.code === '23505') return NextResponse.json({ error: 'Already following' }, { status: 400 })
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        console.error('[follow] Insert error:', error)
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 
-    // Create notification for the artist
     await supabaseAdmin.from('notifications').insert({
         artist_slug,
         follower_id: userId,
@@ -40,13 +41,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true })
 }
 
-// DELETE — unfollow an artist
 export async function DELETE(req: Request) {
     const { userId } = await auth()
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const { artist_slug } = await req.json()
-    if (!artist_slug) return NextResponse.json({ error: 'Missing artist_slug' }, { status: 400 })
+    if (!isValidSlug(artist_slug)) {
+        return NextResponse.json({ error: 'Invalid artist_slug' }, { status: 400 })
+    }
 
     const { error } = await supabaseAdmin
         .from('follows')
@@ -54,17 +56,21 @@ export async function DELETE(req: Request) {
         .eq('follower_id', userId)
         .eq('artist_slug', artist_slug)
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    if (error) {
+        console.error('[follow] Delete error:', error)
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    }
     return NextResponse.json({ ok: true })
 }
 
-// GET — check follow status and count
 export async function GET(req: Request) {
     const { userId } = await auth()
     const { searchParams } = new URL(req.url)
     const artist_slug = searchParams.get('artist_slug')
 
-    if (!artist_slug) return NextResponse.json({ error: 'Missing artist_slug' }, { status: 400 })
+    if (!isValidSlug(artist_slug)) {
+        return NextResponse.json({ error: 'Invalid artist_slug' }, { status: 400 })
+    }
 
     const [{ count }, { data: userFollow }] = await Promise.all([
         supabaseAdmin

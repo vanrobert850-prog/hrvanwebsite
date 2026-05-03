@@ -57,17 +57,22 @@ export default function ArtistDashboardPage({ params }: { params: Promise<{ slug
     }, [params])
 
     useEffect(() => {
-        if (!isLoaded || !user || !slug) return
+        if (!isLoaded || !slug) return
+        if (!user) { router.replace('/'); return }
 
-        fetch(`/api/artist-stats?artist_slug=${slug}`)
-            .then(r => r.json())
-            .then(d => {
+        fetch(`/api/artist-stats?artist_slug=${encodeURIComponent(slug)}`)
+            .then(async r => {
+                if (r.status === 401 || r.status === 403) {
+                    router.replace('/')
+                    return
+                }
+                const d = await r.json()
                 if (d.error) { setError(d.error); return }
                 setData(d)
             })
             .catch(() => setError('Failed to load dashboard'))
             .finally(() => setLoading(false))
-    }, [user, isLoaded, slug])
+    }, [user, isLoaded, slug, router])
 
     if (!isLoaded || loading) return (
         <div style={{ minHeight: '100vh', background: '#FAF7F2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

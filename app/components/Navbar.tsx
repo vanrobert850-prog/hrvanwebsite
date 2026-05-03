@@ -6,7 +6,6 @@ import { useLang } from '../context/LanguageContext'
 import { useCart } from '../context/CartContext'
 import { SignInButton, UserButton, Show, useUser } from '@clerk/nextjs'
 
-const ADMIN_USER_ID = process.env.NEXT_PUBLIC_ADMIN_USER_ID
 
 const searchData = {
     artists: [
@@ -96,26 +95,22 @@ const ArtIcon   = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="no
 // ── ROLE BADGE — shown in navbar when signed in ───────────────────
 function RoleBadge() {
     const { user, isLoaded } = useUser()
+    const [isAdmin,    setIsAdmin]    = useState(false)
     const [artistSlug, setArtistSlug] = useState<string | null>(null)
     const [checking,   setChecking]   = useState(true)
 
-    const isAdmin = isLoaded && user?.id === ADMIN_USER_ID
-
     useEffect(() => {
-        if (!isLoaded || !user || isAdmin) { setChecking(false); return }
+        if (!isLoaded || !user) { setChecking(false); return }
 
-        // Check if this user is a linked artist
-        fetch('/api/admin/artists')
+        fetch('/api/auth/role')
             .then(r => r.json())
             .then(data => {
-                const profile = data.profiles?.find(
-                    (p: { clerk_user_id: string; artist_slug: string }) => p.clerk_user_id === user.id
-                )
-                setArtistSlug(profile?.artist_slug ?? null)
+                setIsAdmin(data.isAdmin ?? false)
+                setArtistSlug(data.artistSlug ?? null)
             })
             .catch(() => {})
             .finally(() => setChecking(false))
-    }, [user, isLoaded, isAdmin])
+    }, [user, isLoaded])
 
     if (!isLoaded || checking || !user) return null
 
