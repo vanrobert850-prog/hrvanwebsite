@@ -362,7 +362,7 @@ export default function ContactPage() {
                             </p>
                             {[
                                 { n: '01', title: 'We review your work', desc: 'Our curators review every application personally within 5 business days.' },
-                                { n: '02', title: 'We reach out',        desc: 'If it's a fit, we'll contact you to discuss next steps and onboarding.' },
+                                { n: '02', title: 'We reach out',        desc: 'If it is a fit, we will contact you to discuss next steps and onboarding.' },
                                 { n: '03', title: 'Set up your studio',  desc: 'Upload your art, set prices, and go live with your own gallery page.' },
                                 { n: '04', title: 'Start selling',       desc: 'We handle orders, printing, and worldwide shipping. You focus on art.' },
                             ].map((s, i) => (
