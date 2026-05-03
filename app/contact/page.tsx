@@ -13,6 +13,28 @@ const mediums = [
     'Sculpture', 'Printmaking', 'Other',
 ]
 
+const lbl: React.CSSProperties = {
+    fontSize: 10, color: '#999', letterSpacing: '2.5px',
+    textTransform: 'uppercase', marginBottom: 7,
+    display: 'block', fontWeight: 600,
+}
+
+// Defined OUTSIDE the page component so React never unmounts inputs on re-render
+function Field({ name, label, req, errors, children }: {
+    name: string; label: string; req?: boolean
+    errors: Record<string, string>; children: React.ReactNode
+}) {
+    return (
+        <div>
+            <label style={lbl}>
+                {label}{req && <span style={{ color: '#B85C38', marginLeft: 3 }}>*</span>}
+            </label>
+            {children}
+            {errors[name] && <p style={{ fontSize: 11, color: '#ef4444', marginTop: 5 }}>{errors[name]}</p>}
+        </div>
+    )
+}
+
 const steps = [
     { n: 1, label: 'Personal' },
     { n: 2, label: 'Your Art' },
@@ -53,20 +75,6 @@ export default function ContactPage() {
         boxShadow: focused === name ? '0 0 0 3px rgba(17,17,17,0.06)' : 'none',
         appearance: 'none' as any,
     })
-
-    const lbl: React.CSSProperties = {
-        fontSize: 10, color: '#999', letterSpacing: '2.5px',
-        textTransform: 'uppercase', marginBottom: 7,
-        display: 'block', fontWeight: 600,
-    }
-
-    const Field = ({ name, label, req, children }: { name: string; label: string; req?: boolean; children: React.ReactNode }) => (
-        <div>
-            <label style={lbl}>{label}{req && <span style={{ color: '#B85C38', marginLeft: 3 }}>*</span>}</label>
-            {children}
-            {errors[name] && <p style={{ fontSize: 11, color: '#ef4444', marginTop: 5 }}>{errors[name]}</p>}
-        </div>
-    )
 
     const validateStep = (s: Step) => {
         const e: Record<string, string> = {}
@@ -220,10 +228,10 @@ export default function ContactPage() {
                                             </p>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
                                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-                                                    <Field name="full_name" label="Full Name" req>
+                                                    <Field name="full_name" label="Full Name" req errors={errors}>
                                                         <input type="text" value={form.full_name} onChange={set('full_name')} placeholder="Your full name" style={inp('full_name')} onFocus={() => setFocused('full_name')} onBlur={() => setFocused(null)} />
                                                     </Field>
-                                                    <Field name="email" label="Email Address" req>
+                                                    <Field name="email" label="Email Address" req errors={errors}>
                                                         <input type="email" value={form.email} onChange={set('email')} placeholder="you@example.com" style={inp('email')} onFocus={() => setFocused('email')} onBlur={() => setFocused(null)} />
                                                     </Field>
                                                 </div>
@@ -247,10 +255,10 @@ export default function ContactPage() {
                                             </p>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
                                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-                                                    <Field name="artist_name" label="Artist / Stage Name" req>
+                                                    <Field name="artist_name" label="Artist / Stage Name" req errors={errors}>
                                                         <input type="text" value={form.artist_name} onChange={set('artist_name')} placeholder="How you sign your work" style={inp('artist_name')} onFocus={() => setFocused('artist_name')} onBlur={() => setFocused(null)} />
                                                     </Field>
-                                                    <Field name="medium" label="Primary Medium" req>
+                                                    <Field name="medium" label="Primary Medium" req errors={errors}>
                                                         <select value={form.medium} onChange={set('medium')} style={{ ...inp('medium'), cursor: 'pointer', background: '#fff' }} onFocus={() => setFocused('medium')} onBlur={() => setFocused(null)}>
                                                             <option value="">Select medium…</option>
                                                             {mediums.map(m => <option key={m} value={m}>{m}</option>)}
@@ -258,17 +266,17 @@ export default function ContactPage() {
                                                     </Field>
                                                 </div>
                                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-                                                    <Field name="instagram" label="Instagram Handle">
+                                                    <Field name="instagram" label="Instagram Handle" errors={errors}>
                                                         <input type="text" value={form.instagram} onChange={set('instagram')} placeholder="@yourhandle" style={inp('instagram')} onFocus={() => setFocused('instagram')} onBlur={() => setFocused(null)} />
                                                     </Field>
-                                                    <Field name="experience" label="Years Creating">
+                                                    <Field name="experience" label="Years Creating" errors={errors}>
                                                         <input type="number" min="0" max="80" value={form.experience} onChange={set('experience')} placeholder="e.g. 5" style={inp('experience')} onFocus={() => setFocused('experience')} onBlur={() => setFocused(null)} />
                                                     </Field>
                                                 </div>
-                                                <Field name="website" label="Personal Website">
+                                                <Field name="website" label="Personal Website" errors={errors}>
                                                     <input type="url" value={form.website} onChange={set('website')} placeholder="https://yourwebsite.com" style={inp('website')} onFocus={() => setFocused('website')} onBlur={() => setFocused(null)} />
                                                 </Field>
-                                                <Field name="portfolio" label="Link to Work Samples" req>
+                                                <Field name="portfolio" label="Link to Work Samples" req errors={errors}>
                                                     <input type="text" value={form.portfolio} onChange={set('portfolio')} placeholder="Google Drive, Dropbox, Instagram, Behance…" style={inp('portfolio')} onFocus={() => setFocused('portfolio')} onBlur={() => setFocused(null)} />
                                                     <p style={{ fontSize: 11, color: '#aaa', marginTop: 6 }}>Share a link where we can view samples of your work.</p>
                                                 </Field>
