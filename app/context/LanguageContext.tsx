@@ -21,6 +21,9 @@ const translations = {
         'nav.all': 'All works',
         'nav.about': 'About',
         'nav.search': 'Search for anything',
+        'menu.prints': 'Print Types',
+        'menu.merch':  'Merchandise',
+        'menu.decor':  'Home & Decor',
         // Hero
         'hero.title1': 'Discover',
         'hero.title2': 'original art',
@@ -163,6 +166,9 @@ const translations = {
         'nav.all': 'Todas las obras',
         'nav.about': 'Nosotros',
         'nav.search': 'Buscar cualquier cosa',
+        'menu.prints': 'Tipos de Impresión',
+        'menu.merch':  'Merchandising',
+        'menu.decor':  'Hogar y Decoración',
         // Hero
         'hero.title1': 'Descubre',
         'hero.title2': 'arte original',

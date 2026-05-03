@@ -75,13 +75,13 @@ const megaMenus = {
     },
     prints: {
         cols: [
-            { titleKey: 'gallery.style',   links: ['Contemporary', 'Modernism', 'Pop Art', 'Street Art'],       paramKey: 'style'   },
-            { titleKey: 'gallery.subject', links: ['Landscape', 'Nature', 'Architecture', 'Abstract'],          paramKey: 'subject' },
-            { titleKey: 'gallery.medium',  links: ['Fine art print', 'Etching', 'Lithograph', 'Screen print'], paramKey: 'medium'  },
+            { titleKey: 'menu.prints',  links: ['Fine Art Print', 'Canvas Print', 'Framed Print', 'Giclée Print', 'Photo Print'], paramKey: 'medium'   },
+            { titleKey: 'menu.merch',   links: ['T-Shirts', 'Hoodies', 'Tote Bags', 'Mugs', 'Phone Cases'],                      paramKey: 'category' },
+            { titleKey: 'menu.decor',   links: ['Wall Art', 'Throw Pillows', 'Blankets', 'Framed Posters', 'Stickers'],          paramKey: 'category' },
         ],
         featured: [
-            { label: 'Featured Prints', img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=400&q=80' },
-            { label: 'Photography',     img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=400&q=80' },
+            { label: 'Shop All Prints', img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=400&q=80' },
+            { label: 'Shop Merch',      img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&q=80' },
         ]
     }
 }
