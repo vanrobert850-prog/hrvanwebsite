@@ -37,9 +37,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
                 {/* Nav */}
                 <nav style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <a href="/admin"           className="adm-nav-link">Dashboard</a>
-                    <a href="/admin/artists"   className="adm-nav-link">Artists</a>
-                    <a href="/admin/followers" className="adm-nav-link">Followers</a>
+                    <a href="/admin"              className="adm-nav-link">Dashboard</a>
+                    <a href="/admin/artists"      className="adm-nav-link">Artists</a>
+                    <a href="/admin/followers"    className="adm-nav-link">Followers</a>
+                    <a href="/admin/applications" className="adm-nav-link">Applications</a>
                 </nav>
 
                 {/* Actions */}
