@@ -11,16 +11,18 @@ const heroSlides = [
     '/banner/slide3.jpg',
 ]
 
-const artworks = [
-    { handle: 'caribbean-light',     title: 'Caribbean light',     artist: 'Freddy Javier', country: 'Dominican Republic', price: 1800, medium: 'Oil on canvas',     size: '24 × 36 in', cat: 'Paintings', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=600&q=80' },
-    { handle: 'silent-garden',       title: 'Silent garden',       artist: 'James Lee',     country: 'United States',      price: 850,  medium: 'Fine art print',    size: '18 × 24 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80' },
-    { handle: 'urban-dusk',          title: 'Urban dusk',          artist: 'Sofia Martens', country: 'Belgium',            price: 2100, medium: 'Acrylic on canvas', size: '40 × 50 in', cat: 'Paintings', img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&q=80' },
-    { handle: 'morning-bloom',       title: 'Morning bloom',       artist: 'Carlos Vega',   country: 'Mexico',             price: 650,  medium: 'Fine art print',    size: '16 × 20 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=600&q=80' },
-    { handle: 'desert-wind',         title: 'Desert wind',         artist: 'Layla Hassan',  country: 'Egypt',              price: 1750, medium: 'Oil on canvas',     size: '30 × 40 in', cat: 'Paintings', img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&q=80' },
-    { handle: 'ocean-whisper',       title: 'Ocean whisper',       artist: 'Nina Storm',    country: 'Denmark',            price: 980,  medium: 'Fine art print',    size: '20 × 28 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80' },
-    { handle: 'crimson-fields',      title: 'Crimson fields',      artist: 'Andres Mora',   country: 'Colombia',           price: 3200, medium: 'Oil on canvas',     size: '48 × 60 in', cat: 'Paintings', img: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&q=80' },
-    { handle: 'quiet-forest',        title: 'Quiet forest',        artist: 'Yuki Tanaka',   country: 'Japan',              price: 720,  medium: 'Fine art print',    size: '14 × 20 in', cat: 'Prints',    img: 'https://images.unsplash.com/photo-1531913764164-f85c52e6e654?w=600&q=80' },
-]
+type ShopifyProduct = {
+    id: string
+    title: string
+    handle: string
+    description: string
+    vendor: string
+    productType: string
+    tags: string[]
+    priceRange: { minVariantPrice: { amount: string; currencyCode: string } }
+    images: { edges: { node: { url: string; altText: string | null } }[] }
+    variants: { edges: { node: { id: string; title: string; availableForSale: boolean; price: { amount: string; currencyCode: string } } }[] }
+}
 
 const allArtists = [
     { slug: 'van-robert',    name: 'Van Robert',    specialty: { en: 'Paintings',          es: 'Pinturas'              }, photo: '/artists/van-robert/portrait.jpg'    },
@@ -46,9 +48,30 @@ const whyRows = [
 ]
 
 const testimonials = [
-    { quoteKey: 'testimonial1', name: 'Sarah M.', piece: 'Caribbean light by Freddy Javier', img: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=300&q=80' },
-    { quoteKey: 'testimonial2', name: 'David K.',  piece: 'Ocean whisper by Nina Storm',     img: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=300&q=80' },
-    { quoteKey: 'testimonial3', name: 'Carlos V.', piece: 'Artist on Van Robert Art Gallery', img: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=300&q=80' },
+    {
+        quote: 'Van Robert\'s use of color is unlike anything I have seen before. His painting now hangs in my living room and every guest asks about it immediately. A true master.',
+        name: 'Marie-Claire D.',
+        piece: 'Collector — work by Van Robert',
+        img: '/artists/van-robert/cover.jpg',
+    },
+    {
+        quote: 'Freddy Javier captures something deeply Caribbean — the light, the heat, the soul of the island. I purchased two of his pieces and they transformed my home.',
+        name: 'Robert A.',
+        piece: 'Collector — work by Freddy Javier',
+        img: '/artists/freddy-javier/cover.jpg',
+    },
+    {
+        quote: 'Pablo Palasso\'s minimalism is deceptively powerful. One line, one gesture — and yet so much emotion. This gallery gave me access to work I never thought I could own.',
+        name: 'Isabelle M.',
+        piece: 'Collector — work by Pablo Palasso',
+        img: '/artists/pablo-palasso/cover.jpg',
+    },
+    {
+        quote: 'Juan B. Nina\'s poetry lives inside his paintings. His work transcends borders — I found it through this platform and it speaks to me across continents.',
+        name: 'Carlos F.',
+        piece: 'Collector — work by Juan B. Nina',
+        img: '/artists/juan-b-nina/cover.jpg',
+    },
 ]
 
 const ArrowIcon   = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -68,27 +91,58 @@ function useReveal() {
     return ref
 }
 
-function ArtCard({ art, delay }: { art: typeof artworks[0]; delay: number }) {
+function ShopifyArtCard({ product, delay }: { product: ShopifyProduct; delay: number }) {
     const ref = useReveal()
+    const img    = product.images.edges[0]?.node.url ?? ''
+    const price  = parseFloat(product.priceRange.minVariantPrice.amount)
+    const artist = product.vendor || product.tags.find(t => t.startsWith('artist:'))?.replace('artist:', '') || ''
     return (
         <Link
             ref={ref as any}
-            href={`/artwork/${art.handle}`}
+            href={`/artwork/${product.handle}`}
             className={`art-card reveal d${delay}`}
-            aria-label={`${art.title} by ${art.artist}`}
+            aria-label={`${product.title} by ${artist}`}
         >
             <div className="art-card-img">
-                <img src={art.img} alt={`${art.title} by ${art.artist}`} loading="lazy" width="400" height="533" />
+                {img && <img src={img} alt={product.title} loading="lazy" width="400" height="533" />}
                 <div className="art-card-actions">
                     <button className="art-card-btn" aria-label="Save" onClick={e => e.preventDefault()}><HeartSmIcon /></button>
                     <button className="art-card-btn" aria-label="Add to cart" onClick={e => e.preventDefault()}><CartSmIcon /></button>
                 </div>
             </div>
-            <p className="art-card-price">${art.price.toLocaleString()}</p>
-            <p className="art-card-title">{art.title}</p>
-            <p className="art-card-artist">{art.artist}, {art.country}</p>
-            <p className="art-card-meta">{art.medium} &nbsp;·&nbsp; {art.size}</p>
+            <p className="art-card-price">${price.toLocaleString()}</p>
+            <p className="art-card-title">{product.title}</p>
+            {artist && <p className="art-card-artist">{artist}</p>}
+            {product.productType && <p className="art-card-meta">{product.productType}</p>}
         </Link>
+    )
+}
+
+function ArtworkEmptyState() {
+    return (
+        <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '64px 24px' }}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ddd" strokeWidth="1" style={{ margin: '0 auto 20px', display: 'block' }}>
+                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+            </svg>
+            <p style={{ fontSize: 17, fontFamily: 'Georgia, serif', color: '#888', fontStyle: 'italic', marginBottom: 8 }}>No artwork available at the moment</p>
+            <p style={{ fontSize: 13, color: '#bbb' }}>Check back soon — new works are added regularly</p>
+        </div>
+    )
+}
+
+function ArtworkSkeleton() {
+    return (
+        <>
+            {[1,2,3,4].map(i => (
+                <div key={i} style={{ animation: 'pulse 1.5s ease-in-out infinite' }}>
+                    <div style={{ background: '#F0EDE8', height: 320, marginBottom: 12 }} />
+                    <div style={{ background: '#F0EDE8', height: 14, width: '40%', marginBottom: 8 }} />
+                    <div style={{ background: '#F0EDE8', height: 16, width: '70%', marginBottom: 6 }} />
+                    <div style={{ background: '#F0EDE8', height: 12, width: '50%' }} />
+                </div>
+            ))}
+            <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }`}</style>
+        </>
     )
 }
 
@@ -99,12 +153,25 @@ export default function HomePage() {
     const [activeFilter, setActiveFilter] = useState('all')
     const [activeDot,    setActiveDot]    = useState(0)
     const [fading,       setFading]       = useState(false)
+    const [allProducts,  setAllProducts]  = useState<ShopifyProduct[]>([])
+    const [loadingArt,   setLoadingArt]   = useState(true)
     const artists = useMemo(() => shuffle(allArtists), [])
 
+    useEffect(() => {
+        fetch('/api/artist-products')
+            .then(r => r.json())
+            .then(data => {
+                const products: ShopifyProduct[] = data.products ?? []
+                setAllProducts(shuffle(products))
+            })
+            .catch(() => setAllProducts([]))
+            .finally(() => setLoadingArt(false))
+    }, [])
+
     const filtered =
-        activeFilter === 'all'       ? artworks
-            : activeFilter === 'Paintings' ? artworks.filter(a => a.cat === 'Paintings')
-                : artworks.filter(a => a.cat === 'Prints')
+        activeFilter === 'all'       ? allProducts
+            : activeFilter === 'Paintings' ? allProducts.filter(p => p.productType === 'Paintings' || p.tags.includes('Paintings'))
+                : allProducts.filter(p => p.productType === 'Prints' || p.tags.includes('Prints'))
 
     useEffect(() => {
         const timer = setInterval(() => setHeroIndex(i => (i + 1) % heroSlides.length), 6000)
@@ -189,7 +256,12 @@ export default function HomePage() {
                         <Link href="/gallery" className="view-all-link">{t('section.viewAll')}</Link>
                     </div>
                     <div className="art-grid">
-                        {filtered.slice(0, 4).map((art, i) => <ArtCard key={art.handle} art={art} delay={i + 1} />)}
+                        {loadingArt
+                            ? <ArtworkSkeleton />
+                            : filtered.length === 0
+                                ? <ArtworkEmptyState />
+                                : filtered.slice(0, 4).map((p, i) => <ShopifyArtCard key={p.id} product={p} delay={i + 1} />)
+                        }
                     </div>
                 </section>
 
@@ -243,7 +315,12 @@ export default function HomePage() {
                         <Link href="/gallery" className="view-all-link">{t('section.browseAll')}</Link>
                     </div>
                     <div className="art-grid">
-                        {filtered.slice(4, 8).map((art, i) => <ArtCard key={art.handle} art={art} delay={i + 1} />)}
+                        {loadingArt
+                            ? <ArtworkSkeleton />
+                            : filtered.length <= 4
+                                ? <ArtworkEmptyState />
+                                : filtered.slice(4, 8).map((p, i) => <ShopifyArtCard key={p.id} product={p} delay={i + 1} />)
+                        }
                     </div>
                 </section>
 
@@ -280,7 +357,7 @@ export default function HomePage() {
                             <img src={testimonials[activeDot].img} alt="Collector artwork" loading="lazy" width="120" height="120" />
                         </div>
                         <div>
-                            <p className="testimonial-quote">{t(testimonials[activeDot].quoteKey)}</p>
+                            <p className="testimonial-quote">{testimonials[activeDot].quote}</p>
                             <cite className="testimonial-name">{testimonials[activeDot].name}</cite>
                             <p className="testimonial-piece">{testimonials[activeDot].piece}</p>
                         </div>

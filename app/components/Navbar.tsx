@@ -546,7 +546,7 @@ export default function Navbar() {
 
             <nav className="navbar">
                 <Link href="/" className="navbar-logo">
-                    <img src="/logo/logo.png" alt="Van Robert Art Gallery" style={{ height: 64, width: 'auto', display: 'block' }} />
+                    <img src="/logo/logo.png" alt="Van Robert Art Gallery" style={{ height: 88, width: 'auto', display: 'block' }} />
                 </Link>
 
                 <div className="navbar-links">
