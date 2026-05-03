@@ -262,7 +262,7 @@ export default function HomePage() {
                             ? <ArtworkSkeleton />
                             : filtered.length === 0
                                 ? <ArtworkEmptyState />
-                                : filtered.map((p, i) => <ShopifyArtCard key={p.id} product={p} delay={(i % 4) + 1} />)
+                                : filtered.slice(0, 4).map((p, i) => <ShopifyArtCard key={p.id} product={p} delay={i + 1} />)
                         }
                     </div>
                 </section>
