@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useLang } from './context/LanguageContext'
 import Navbar from './components/Navbar'
@@ -155,7 +155,9 @@ export default function HomePage() {
     const [fading,       setFading]       = useState(false)
     const [allProducts,  setAllProducts]  = useState<ShopifyProduct[]>([])
     const [loadingArt,   setLoadingArt]   = useState(true)
-    const artists = useMemo(() => shuffle(allArtists), [])
+    const [artists,      setArtists]      = useState(allArtists)
+
+    useEffect(() => { setArtists(shuffle(allArtists)) }, [])
 
     useEffect(() => {
         fetch('/api/artist-products')
