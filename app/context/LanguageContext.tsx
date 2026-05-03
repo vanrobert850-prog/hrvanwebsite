@@ -19,6 +19,7 @@ const translations = {
         'nav.prints': 'Prints',
         'nav.artists': 'Artists',
         'nav.all': 'All works',
+        'nav.about': 'About',
         'nav.search': 'Search for anything',
         // Hero
         'hero.title1': 'Discover',
@@ -160,6 +161,7 @@ const translations = {
         'nav.prints': 'Grabados',
         'nav.artists': 'Artistas',
         'nav.all': 'Todas las obras',
+        'nav.about': 'Nosotros',
         'nav.search': 'Buscar cualquier cosa',
         // Hero
         'hero.title1': 'Descubre',

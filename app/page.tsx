@@ -262,7 +262,7 @@ export default function HomePage() {
                             ? <ArtworkSkeleton />
                             : filtered.length === 0
                                 ? <ArtworkEmptyState />
-                                : filtered.slice(0, 4).map((p, i) => <ShopifyArtCard key={p.id} product={p} delay={i + 1} />)
+                                : filtered.map((p, i) => <ShopifyArtCard key={p.id} product={p} delay={(i % 4) + 1} />)
                         }
                     </div>
                 </section>
@@ -308,21 +308,6 @@ export default function HomePage() {
                                 <p>{t(item.descKey)}</p>
                             </div>
                         ))}
-                    </div>
-                </section>
-
-                <section className="section-wrap" style={{ paddingTop: '56px' }} aria-labelledby="arrivals-heading">
-                    <div className="section-head">
-                        <h2 id="arrivals-heading">{t('section.newArrivals')}</h2>
-                        <Link href="/gallery" className="view-all-link">{t('section.browseAll')}</Link>
-                    </div>
-                    <div className="art-grid">
-                        {loadingArt
-                            ? <ArtworkSkeleton />
-                            : filtered.length <= 4
-                                ? <ArtworkEmptyState />
-                                : filtered.slice(4, 8).map((p, i) => <ShopifyArtCard key={p.id} product={p} delay={i + 1} />)
-                        }
                     </div>
                 </section>
 

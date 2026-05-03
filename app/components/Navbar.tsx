@@ -557,6 +557,9 @@ export default function Navbar() {
                         <Link href="/artists">{t('nav.artists')}</Link>
                     </div>
                     <div className="navbar-item">
+                        <Link href="/about">{t('nav.about')}</Link>
+                    </div>
+                    <div className="navbar-item">
                         <Link href="/gallery">{t('nav.all')}</Link>
                     </div>
                 </div>
@@ -612,6 +615,7 @@ export default function Navbar() {
                 <Link href="/gallery?category=Paintings" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>{t('nav.paintings')}</Link>
                 <Link href="/gallery?category=Prints"    className="mobile-nav-link" onClick={() => setMobileOpen(false)}>{t('nav.prints')}</Link>
                 <Link href="/artists"                    className="mobile-nav-link" onClick={() => setMobileOpen(false)}>{t('nav.artists')}</Link>
+                <Link href="/about"                      className="mobile-nav-link" onClick={() => setMobileOpen(false)}>{t('nav.about')}</Link>
                 <Link href="/gallery"                    className="mobile-nav-link" onClick={() => setMobileOpen(false)}>{t('nav.all')}</Link>
 
                 {/* Mobile role links */}
