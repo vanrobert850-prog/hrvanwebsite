@@ -20,7 +20,7 @@ export async function GET(req: Request) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Shopify-Storefront-Access-Token': process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN!,
+                    'X-Shopify-Storefront-Access-Token': process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN!,
                 },
                 body: JSON.stringify(gqlQuery),
                 next: { revalidate: 60 },
