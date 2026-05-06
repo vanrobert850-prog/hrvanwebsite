@@ -7,6 +7,12 @@ function sanitize(val: unknown, max: number): string {
 }
 
 export async function POST(req: Request) {
+    // Limit body size – Next.js default is 4 MB; keep it tight
+    const contentLength = req.headers.get('content-length')
+    if (contentLength && parseInt(contentLength) > 8000) {
+        return NextResponse.json({ error: 'Request too large' }, { status: 413 })
+    }
+
     let body: unknown
     try { body = await req.json() } catch {
         return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
@@ -54,5 +60,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 
-    return NextResponse.json({ ok: true })
+    return NextResponse.json({ ok: true }, {
+        headers: { 'X-Robots-Tag': 'noindex' }
+    })
 }

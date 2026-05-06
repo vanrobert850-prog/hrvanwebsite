@@ -96,6 +96,9 @@ function ShopifyArtCard({ product, delay }: { product: ShopifyProduct; delay: nu
     const img    = product.images.edges[0]?.node.url ?? ''
     const price  = parseFloat(product.priceRange.minVariantPrice.amount)
     const artist = product.vendor || product.tags.find(t => t.startsWith('artist:'))?.replace('artist:', '') || ''
+    const priceStr = price % 1 === 0
+        ? `$${price.toLocaleString()}`
+        : `$${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
     return (
         <Link
             ref={ref as any}
@@ -110,10 +113,14 @@ function ShopifyArtCard({ product, delay }: { product: ShopifyProduct; delay: nu
                     <button className="art-card-btn" aria-label="Add to cart" onClick={e => e.preventDefault()}><CartSmIcon /></button>
                 </div>
             </div>
-            <p className="art-card-price">${price.toLocaleString()}</p>
-            <p className="art-card-title">{product.title}</p>
-            {artist && <p className="art-card-artist">{artist}</p>}
-            {product.productType && <p className="art-card-meta">{product.productType}</p>}
+            <div className="art-card-info">
+                <p className="art-card-price">{priceStr}</p>
+                <p className="art-card-title">{product.title}</p>
+                <div className="art-card-footer">
+                    {artist && <span className="art-card-artist">{artist}</span>}
+                    {product.productType && <span className="art-card-tag">{product.productType}</span>}
+                </div>
+            </div>
         </Link>
     )
 }

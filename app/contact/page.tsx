@@ -132,7 +132,7 @@ export default function ContactPage() {
             <main style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif", background: '#FAF7F2', minHeight: '100vh' }}>
 
                 {/* ── HEADER ── */}
-                <div style={{ background: '#111', padding: '72px 64px 64px' }}>
+                <div className="contact-header" style={{ background: '#111', padding: '72px 64px 64px' }}>
                     <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                         <p style={{ fontSize: 11, letterSpacing: '4px', textTransform: 'uppercase', color: '#B85C38', marginBottom: 16, fontWeight: 600 }}>
                             Join the Gallery
@@ -147,7 +147,7 @@ export default function ContactPage() {
                 </div>
 
                 {/* ── BODY ── */}
-                <div style={{ maxWidth: 1100, margin: '0 auto', padding: '56px 64px 96px', display: 'grid', gridTemplateColumns: '1fr 340px', gap: 56, alignItems: 'start' }}>
+                <div className="contact-body" style={{ maxWidth: 1100, margin: '0 auto', padding: '56px 64px 96px', display: 'grid', gridTemplateColumns: '1fr 340px', gap: 56, alignItems: 'start' }}>
 
                     {/* ── FORM COLUMN ── */}
                     <div>
@@ -227,7 +227,7 @@ export default function ContactPage() {
                                                 Step 1 — Personal Information
                                             </p>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-                                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                                                <div className="contact-field-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
                                                     <Field name="full_name" label="Full Name" req errors={errors}>
                                                         <input type="text" value={form.full_name} onChange={set('full_name')} placeholder="Your full name" style={inp('full_name')} onFocus={() => setFocused('full_name')} onBlur={() => setFocused(null)} />
                                                     </Field>
@@ -254,7 +254,7 @@ export default function ContactPage() {
                                                 Step 2 — About Your Art
                                             </p>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-                                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                                                <div className="contact-field-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
                                                     <Field name="artist_name" label="Artist / Stage Name" req errors={errors}>
                                                         <input type="text" value={form.artist_name} onChange={set('artist_name')} placeholder="How you sign your work" style={inp('artist_name')} onFocus={() => setFocused('artist_name')} onBlur={() => setFocused(null)} />
                                                     </Field>
@@ -265,7 +265,7 @@ export default function ContactPage() {
                                                         </select>
                                                     </Field>
                                                 </div>
-                                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                                                <div className="contact-field-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
                                                     <Field name="instagram" label="Instagram Handle" errors={errors}>
                                                         <input type="text" value={form.instagram} onChange={set('instagram')} placeholder="@yourhandle" style={inp('instagram')} onFocus={() => setFocused('instagram')} onBlur={() => setFocused(null)} />
                                                     </Field>
@@ -362,7 +362,7 @@ export default function ContactPage() {
                     </div>
 
                     {/* ── SIDEBAR ── */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 2, position: 'sticky', top: 80 }}>
+                    <div className="contact-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: 2, position: 'sticky', top: 80 }}>
 
                         <div style={{ background: '#fff', border: '1px solid #e8e8e8', padding: '32px 28px' }}>
                             <p style={{ fontSize: 10, color: '#B85C38', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: 700, marginBottom: 24 }}>
@@ -416,11 +416,21 @@ export default function ContactPage() {
                 </div>
 
                 <style>{`
-                    @keyframes fadeInUp {
-                        from { opacity: 0; transform: translateY(16px); }
-                        to   { opacity: 1; transform: translateY(0); }
-                    }
-                `}</style>
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 768px) {
+        .contact-header { padding: 48px 24px 40px !important; }
+        .contact-header h1 { font-size: 32px !important; }
+        .contact-body { grid-template-columns: 1fr !important; padding: 40px 20px 64px !important; gap: 32px !important; }
+        .contact-sidebar { position: static !important; }
+        .contact-field-grid { grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 480px) {
+        .contact-header h1 { font-size: 26px !important; }
+    }
+`}</style>
 
             </main>
             <Footer />

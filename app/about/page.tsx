@@ -221,7 +221,7 @@ export default function AboutPage() {
                         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
                     />
                     <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.72) 40%, rgba(0,0,0,0.2) 100%)' }} />
-                    <div style={{ position: 'relative', zIndex: 2, maxWidth: 680, padding: '0 64px' }}>
+                    <div className="about-hero" style={{ position: 'relative', zIndex: 2, maxWidth: 680, padding: '0 64px' }}>
                         <p style={{ fontSize: 11, letterSpacing: '4px', textTransform: 'uppercase', color: '#B85C38', marginBottom: 16, fontWeight: 600 }}>
                             About Us
                         </p>
@@ -236,7 +236,7 @@ export default function AboutPage() {
                 </section>
 
                 {/* ── MISSION ────────────────────────────────────────────── */}
-                <section style={{ background: '#FAF7F2', padding: '96px 64px' }}>
+                <section className="about-section" style={{ background: '#FAF7F2', padding: '96px 64px' }}>
                     <div
                         ref={missionRef as any}
                         className="reveal"
@@ -258,8 +258,8 @@ export default function AboutPage() {
                 </section>
 
                 {/* ── STATS BAR ──────────────────────────────────────────── */}
-                <section style={{ background: '#111', padding: '56px 64px' }}>
-                    <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0 }}>
+                <section className="about-header" style={{ background: '#111', padding: '56px 64px' }}>
+                    <div className="about-stats" style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0 }}>
                         {stats.map((s, i) => (
                             <div key={i} style={{
                                 textAlign: 'center', padding: '24px 16px',
@@ -275,7 +275,7 @@ export default function AboutPage() {
                 </section>
 
                 {/* ── WHAT WE OFFER ──────────────────────────────────────── */}
-                <section style={{ padding: '96px 64px', background: '#fff' }}>
+                <section className="about-section" style={{ padding: '96px 64px', background: '#fff' }}>
                     <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                         <div style={{ textAlign: 'center', marginBottom: 64 }}>
                             <p style={{ fontSize: 11, letterSpacing: '4px', textTransform: 'uppercase', color: '#B85C38', marginBottom: 16, fontWeight: 600 }}>
@@ -285,15 +285,15 @@ export default function AboutPage() {
                                 Art in every form
                             </h2>
                         </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+                        <div className="about-offerings" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
                             {offerings.map((item, i) => <OfferingCard key={i} item={item} index={i} />)}
                         </div>
                     </div>
                 </section>
 
                 {/* ── OUR STORY ──────────────────────────────────────────── */}
-                <section style={{ background: '#FAF7F2', padding: '96px 64px' }}>
-                    <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+                <section className="about-section" style={{ background: '#FAF7F2', padding: '96px 64px' }}>
+                    <div className="about-story" style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
                         <div ref={storyRef as any} className="reveal">
                             <p style={{ fontSize: 11, letterSpacing: '4px', textTransform: 'uppercase', color: '#B85C38', marginBottom: 16, fontWeight: 600 }}>
                                 Our Story
@@ -334,7 +334,7 @@ export default function AboutPage() {
                 </section>
 
                 {/* ── FOR ARTISTS ────────────────────────────────────────── */}
-                <section style={{ background: '#fff', padding: '96px 64px' }}>
+                <section className="about-section" style={{ background: '#fff', padding: '96px 64px' }}>
                     <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                         <div style={{ textAlign: 'center', marginBottom: 64 }}>
                             <p style={{ fontSize: 11, letterSpacing: '4px', textTransform: 'uppercase', color: '#B85C38', marginBottom: 16, fontWeight: 600 }}>
@@ -347,14 +347,14 @@ export default function AboutPage() {
                                 Join a gallery that puts artists first — from your first sale to a full-time art career.
                             </p>
                         </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '40px 48px' }}>
+                        <div className="about-benefits" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '40px 48px' }}>
                             {benefits.map((item, i) => <BenefitCard key={i} item={item} index={i} />)}
                         </div>
                     </div>
                 </section>
 
                 {/* ── MEET THE ARTISTS ───────────────────────────────────── */}
-                <section style={{ background: '#FAF7F2', padding: '96px 64px' }}>
+                <section className="about-section" style={{ background: '#FAF7F2', padding: '96px 64px' }}>
                     <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56 }}>
                             <div>
@@ -369,7 +369,7 @@ export default function AboutPage() {
                                 View all artists
                             </Link>
                         </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
+                        <div className="about-artists-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
                             {artists.map((a, i) => (
                                 <Link
                                     key={a.slug}
@@ -397,10 +397,10 @@ export default function AboutPage() {
                 {/* ── JOIN CTA ────────────────────────────────────────────── */}
                 <section
                     ref={joinRef as any}
-                    className="reveal"
+                    className="reveal about-section"
                     style={{ background: '#111', padding: '96px 64px' }}
                 >
-                    <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+                    <div className="about-join" style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
 
                         {/* Collect */}
                         <div style={{ background: '#1a1a1a', padding: '56px 48px', display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -461,6 +461,26 @@ export default function AboutPage() {
                     </div>
                 </section>
 
+                <style>{`
+    @media (max-width: 768px) {
+        .about-hero { padding: 0 20px !important; }
+        .about-hero h1 { font-size: 32px !important; }
+        .about-stats { grid-template-columns: repeat(2,1fr) !important; padding: 40px 24px !important; }
+        .about-stats > div { border-right: none !important; border-bottom: 1px solid #2a2a2a; padding: 20px 12px !important; }
+        .about-offerings { grid-template-columns: 1fr !important; }
+        .about-story { grid-template-columns: 1fr !important; gap: 40px !important; }
+        .about-benefits { grid-template-columns: 1fr !important; }
+        .about-artists-grid { grid-template-columns: repeat(2,1fr) !important; }
+        .about-join { grid-template-columns: 1fr !important; }
+        .about-section { padding: 56px 24px !important; }
+        .about-header { padding: 48px 24px 40px !important; }
+    }
+    @media (max-width: 480px) {
+        .about-hero h1 { font-size: 26px !important; }
+        .about-stats { grid-template-columns: 1fr !important; }
+        .about-stats > div { border-bottom: 1px solid #2a2a2a; }
+    }
+`}</style>
             </main>
             <Footer />
         </>
