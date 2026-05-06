@@ -6,6 +6,7 @@ import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import FollowButton from '../../components/FollowButton'
 import { type ShopifyProduct } from '../../lib/shopify'
+import { useLang } from '../../context/LanguageContext'
 
 const artists = [
     {
@@ -82,6 +83,7 @@ const TABS = ['About', 'Education', 'Exhibitions', 'Recognition']
 
 export default function ArtistPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params)
+    const { lang } = useLang()
     const artist = artists.find(a => a.slug === slug)
     if (!artist) notFound()
 
@@ -89,15 +91,15 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
     const [products, setProducts]   = useState<ShopifyProduct[]>([])
     const [loading,  setLoading]    = useState(true)
 
-    // Fetch this artist's products from Shopify by tag
+    // Fetch this artist's products from Shopify by tag — refetch on language change
     useEffect(() => {
         setLoading(true)
-        fetch(`/api/artist-products?artist_slug=${slug}`)
+        fetch(`/api/artist-products?artist_slug=${slug}&lang=${lang}`)
             .then(r => r.json())
             .then(data => setProducts(data.products ?? []))
             .catch(() => setProducts([]))
             .finally(() => setLoading(false))
-    }, [slug])
+    }, [slug, lang])
 
     const tabContent     = [artist.about, artist.education, artist.exhibitions, artist.recognition]
     const similarArtists = artists.filter(a => artist.similar.includes(a.slug))

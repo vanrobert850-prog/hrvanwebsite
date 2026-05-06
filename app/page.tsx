@@ -160,7 +160,8 @@ export default function HomePage() {
     useEffect(() => { setArtists(shuffle(allArtists)) }, [])
 
     useEffect(() => {
-        fetch('/api/artist-products')
+        setLoadingArt(true)
+        fetch(`/api/artist-products?lang=${lang}`)
             .then(r => r.json())
             .then(data => {
                 const products: ShopifyProduct[] = data.products ?? []
@@ -168,7 +169,7 @@ export default function HomePage() {
             })
             .catch(() => setAllProducts([]))
             .finally(() => setLoadingArt(false))
-    }, [])
+    }, [lang])
 
     const filtered =
         activeFilter === 'all'       ? allProducts
