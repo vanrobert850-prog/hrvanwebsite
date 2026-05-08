@@ -586,6 +586,13 @@ export default function Navbar() {
 
                     <FlagSwitcher />
 
+                    {/* WISHLIST */}
+                    <Show when="signed-in">
+                        <Link href="/account" className="navbar-icon-btn" title="My Wishlist" aria-label="My Wishlist" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', color: 'inherit' }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+                        </Link>
+                    </Show>
+
                     {/* CART */}
                     <button onClick={() => setCartOpen(true)} className="navbar-icon-btn" style={{ position: 'relative' }} aria-label="Cart">
                         <CartIcon />
@@ -617,6 +624,9 @@ export default function Navbar() {
                 <Link href="/artists"                    className="mobile-nav-link" onClick={() => setMobileOpen(false)}>{t('nav.artists')}</Link>
                 <Link href="/about"                      className="mobile-nav-link" onClick={() => setMobileOpen(false)}>{t('nav.about')}</Link>
                 <Link href="/gallery"                    className="mobile-nav-link" onClick={() => setMobileOpen(false)}>{t('nav.all')}</Link>
+                <Show when="signed-in">
+                    <Link href="/account" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>My Wishlist</Link>
+                </Show>
 
                 {/* Mobile role links */}
                 <Show when="signed-in">

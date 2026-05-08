@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { useLang } from '../../context/LanguageContext'
 import { useCart } from '../../context/CartContext'
+import { useUser } from '@clerk/nextjs'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import {
@@ -67,6 +68,7 @@ function Skeleton({ w, h, style }: { w?: string | number; h?: string | number; s
 export default function ArtworkPage({ params }: { params: Promise<{ handle: string }> }) {
     const { lang } = useLang()
     const { addItem, loading: cartLoading } = useCart()
+    const { user, isLoaded: userLoaded } = useUser()
 
     // Unwrap params
     const [handle, setHandle] = useState<string | null>(null)
@@ -74,12 +76,14 @@ export default function ArtworkPage({ params }: { params: Promise<{ handle: stri
         params.then(p => setHandle(p.handle))
     }, [params])
 
-    const [product,      setProduct]      = useState<ShopifyProduct | null>(null)
-    const [related,      setRelated]      = useState<ShopifyProduct[]>([])
-    const [loading,      setLoading]      = useState(true)
-    const [notFound404,  setNotFound404]  = useState(false)
-    const [mounted,      setMounted]      = useState(false)
-    const [wishlisted,   setWishlisted]   = useState(false)
+    const [product,        setProduct]        = useState<ShopifyProduct | null>(null)
+    const [related,        setRelated]        = useState<ShopifyProduct[]>([])
+    const [loading,        setLoading]        = useState(true)
+    const [notFound404,    setNotFound404]    = useState(false)
+    const [mounted,        setMounted]        = useState(false)
+    const [wishlisted,     setWishlisted]     = useState(false)
+    const [wishlistCount,  setWishlistCount]  = useState(0)
+    const [wishlistBusy,   setWishlistBusy]   = useState(false)
     const [addedToCart,  setAddedToCart]  = useState(false)
     const [zoomed,       setZoomed]       = useState(false)
     const [activeImg,    setActiveImg]    = useState(0)
@@ -111,7 +115,24 @@ export default function ArtworkPage({ params }: { params: Promise<{ handle: stri
                 })
             })
             .catch(() => { setNotFound404(true); setLoading(false) })
+        // Fetch public wishlist count
+        fetch(`/api/wishlist/count?handle=${encodeURIComponent(handle)}`)
+            .then(r => r.json())
+            .then(d => setWishlistCount(d.count ?? 0))
+            .catch(() => {})
     }, [handle])
+
+    // Check if current user has this in their wishlist
+    useEffect(() => {
+        if (!handle || !userLoaded || !user) return
+        fetch('/api/wishlist')
+            .then(r => r.json())
+            .then(d => {
+                const saved = (d.items ?? []).some((i: { product_handle: string }) => i.product_handle === handle)
+                setWishlisted(saved)
+            })
+            .catch(() => {})
+    }, [handle, user, userLoaded])
 
     if (notFound404) notFound()
 
@@ -136,6 +157,37 @@ export default function ArtworkPage({ params }: { params: Promise<{ handle: stri
             setAddedToCart(true)
             setTimeout(() => setAddedToCart(false), 2500)
         }
+    }
+
+    const handleWishlist = async () => {
+        if (!user) {
+            // Trigger Clerk sign-in modal programmatically via redirect
+            window.location.href = `/sign-in?redirect_url=${encodeURIComponent(window.location.pathname)}`
+            return
+        }
+        if (!handle || !product || wishlistBusy) return
+        setWishlistBusy(true)
+        if (wishlisted) {
+            await fetch(`/api/wishlist?handle=${encodeURIComponent(handle)}`, { method: 'DELETE' })
+            setWishlisted(false)
+            setWishlistCount(c => Math.max(0, c - 1))
+        } else {
+            const img = product.images?.edges?.[0]?.node?.url ?? ''
+            const priceVal = formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)
+            await fetch('/api/wishlist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    product_handle: handle,
+                    product_title: product.title,
+                    product_image: img,
+                    product_price: priceVal,
+                }),
+            })
+            setWishlisted(true)
+            setWishlistCount(c => c + 1)
+        }
+        setWishlistBusy(false)
     }
 
     const handleShare = () => {
@@ -475,17 +527,41 @@ export default function ArtworkPage({ params }: { params: Promise<{ handle: stri
                                     {L.addToCart}
                                 </button>
 
+                                {/* Wishlist count */}
+                                {wishlistCount > 0 && (
+                                    <div style={{
+                                        display: 'flex', alignItems: 'center', gap: 8,
+                                        marginBottom: 10, fontSize: 12, color: '#888',
+                                    }}>
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="#B85C38" stroke="#B85C38" strokeWidth="1.5">
+                                            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/>
+                                        </svg>
+                                        <span>
+                                            <strong style={{ color: '#111' }}>{wishlistCount}</strong>
+                                            {' '}{lang === 'en'
+                                                ? `collector${wishlistCount !== 1 ? 's have' : ' has'} this on their wishlist`
+                                                : `coleccionista${wishlistCount !== 1 ? 's tienen' : ' tiene'} esto en su lista`}
+                                        </span>
+                                    </div>
+                                )}
+
                                 {/* Secondary actions */}
                                 <div style={{ display: 'flex', gap: 8, marginBottom: 28 }}>
-                                    <button onClick={() => setWishlisted(w => !w)} style={{
-                                        flex: 1, padding: '11px', border: `1px solid ${wishlisted ? '#111' : '#ddd'}`,
-                                        background: wishlisted ? '#111' : 'transparent',
-                                        color: wishlisted ? '#fff' : '#555',
+                                    <button onClick={handleWishlist} disabled={wishlistBusy} style={{
+                                        flex: 1, padding: '11px', border: `1px solid ${wishlisted ? '#B85C38' : '#ddd'}`,
+                                        background: wishlisted ? '#fdf5f1' : 'transparent',
+                                        color: wishlisted ? '#B85C38' : '#555',
                                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-                                        fontSize: 12, letterSpacing: '1px', cursor: 'pointer', fontFamily: 'inherit',
-                                        transition: 'all 0.25s ease',
+                                        fontSize: 12, letterSpacing: '1px', cursor: wishlistBusy ? 'wait' : 'pointer',
+                                        fontFamily: 'inherit', transition: 'all 0.25s ease',
+                                        opacity: wishlistBusy ? 0.7 : 1,
                                     }}>
-                                        <HeartIcon /> {L.save}
+                                        <svg width="14" height="14" viewBox="0 0 24 24"
+                                             fill={wishlisted ? '#B85C38' : 'none'}
+                                             stroke={wishlisted ? '#B85C38' : 'currentColor'} strokeWidth="1.5">
+                                            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/>
+                                        </svg>
+                                        {L.save}
                                     </button>
                                     <button onClick={handleShare} style={{
                                         flex: 1, padding: '11px', border: '1px solid #ddd',

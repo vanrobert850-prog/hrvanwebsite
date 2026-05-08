@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useUser } from '@clerk/nextjs'
 import { useLang } from './context/LanguageContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -91,7 +92,13 @@ function useReveal() {
     return ref
 }
 
-function ShopifyArtCard({ product, delay }: { product: ShopifyProduct; delay: number }) {
+function ShopifyArtCard({ product, delay, wishlistedHandles, onWishlistToggle, showWishlist }: {
+    product: ShopifyProduct
+    delay: number
+    wishlistedHandles?: Set<string>
+    onWishlistToggle?: (handle: string) => void
+    showWishlist?: boolean
+}) {
     const ref = useReveal()
     const img    = product.images.edges[0]?.node.url ?? ''
     const price  = parseFloat(product.priceRange.minVariantPrice.amount)
@@ -99,6 +106,7 @@ function ShopifyArtCard({ product, delay }: { product: ShopifyProduct; delay: nu
     const priceStr = price % 1 === 0
         ? `$${price.toLocaleString()}`
         : `$${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    const isWishlisted = wishlistedHandles?.has(product.handle) ?? false
     return (
         <Link
             ref={ref as any}
@@ -106,8 +114,30 @@ function ShopifyArtCard({ product, delay }: { product: ShopifyProduct; delay: nu
             className={`art-card reveal d${delay}`}
             aria-label={`${product.title} by ${artist}`}
         >
-            <div className="art-card-img">
+            <div className="art-card-img" style={{ position: 'relative' }}>
                 {img && <img src={img} alt={product.title} loading="lazy" width="400" height="533" />}
+                {showWishlist && onWishlistToggle && (
+                    <button
+                        className="art-card-heart"
+                        aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+                        onClick={e => { e.preventDefault(); e.stopPropagation(); onWishlistToggle(product.handle) }}
+                        style={{
+                            position: 'absolute', top: 10, right: 10,
+                            width: 34, height: 34, borderRadius: '50%',
+                            background: '#fff', border: 'none', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 1px 4px rgba(0,0,0,0.15)',
+                            opacity: 0, transition: 'opacity 0.2s ease',
+                        }}
+                    >
+                        <svg width="16" height="16" viewBox="0 0 24 24"
+                             fill={isWishlisted ? '#B85C38' : 'none'}
+                             stroke={isWishlisted ? '#B85C38' : '#555'}
+                             strokeWidth="1.5">
+                            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/>
+                        </svg>
+                    </button>
+                )}
                 <div className="art-card-actions">
                     <button className="art-card-btn" aria-label="Save" onClick={e => e.preventDefault()}><HeartSmIcon /></button>
                     <button className="art-card-btn" aria-label="Add to cart" onClick={e => e.preventDefault()}><CartSmIcon /></button>
@@ -155,16 +185,56 @@ function ArtworkSkeleton() {
 
 export default function HomePage() {
     const { lang, t } = useLang()
+    const { user } = useUser()
 
-    const [heroIndex,    setHeroIndex]    = useState(0)
-    const [activeFilter, setActiveFilter] = useState('all')
-    const [activeDot,    setActiveDot]    = useState(0)
-    const [fading,       setFading]       = useState(false)
-    const [allProducts,  setAllProducts]  = useState<ShopifyProduct[]>([])
-    const [loadingArt,   setLoadingArt]   = useState(true)
-    const [artists,      setArtists]      = useState(allArtists)
+    const [heroIndex,          setHeroIndex]          = useState(0)
+    const [activeFilter,       setActiveFilter]       = useState('all')
+    const [activeDot,          setActiveDot]          = useState(0)
+    const [fading,             setFading]             = useState(false)
+    const [allProducts,        setAllProducts]        = useState<ShopifyProduct[]>([])
+    const [loadingArt,         setLoadingArt]         = useState(true)
+    const [artists,            setArtists]            = useState(allArtists)
+    const [wishlistedHandles,  setWishlistedHandles]  = useState<Set<string>>(new Set())
 
     useEffect(() => { setArtists(shuffle(allArtists)) }, [])
+
+    useEffect(() => {
+        if (!user) return
+        fetch('/api/wishlist')
+            .then(r => r.ok ? r.json() : { items: [] })
+            .then(data => {
+                const handles = (data.items ?? []).map((item: { product_handle: string }) => item.product_handle)
+                setWishlistedHandles(new Set(handles))
+            })
+            .catch(() => {})
+    }, [user])
+
+    const handleWishlistToggle = async (handle: string) => {
+        if (!user) return
+        const wasWishlisted = wishlistedHandles.has(handle)
+        // Optimistic update
+        setWishlistedHandles(prev => {
+            const next = new Set(prev)
+            if (wasWishlisted) next.delete(handle)
+            else next.add(handle)
+            return next
+        })
+        try {
+            if (wasWishlisted) {
+                await fetch('/api/wishlist', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ product_handle: handle }) })
+            } else {
+                await fetch('/api/wishlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ product_handle: handle }) })
+            }
+        } catch {
+            // Revert on error
+            setWishlistedHandles(prev => {
+                const next = new Set(prev)
+                if (wasWishlisted) next.add(handle)
+                else next.delete(handle)
+                return next
+            })
+        }
+    }
 
     useEffect(() => {
         setLoadingArt(true)
@@ -270,7 +340,7 @@ export default function HomePage() {
                             ? <ArtworkSkeleton />
                             : filtered.length === 0
                                 ? <ArtworkEmptyState />
-                                : filtered.slice(0, 4).map((p, i) => <ShopifyArtCard key={p.id} product={p} delay={i + 1} />)
+                                : filtered.slice(0, 4).map((p, i) => <ShopifyArtCard key={p.id} product={p} delay={i + 1} wishlistedHandles={wishlistedHandles} onWishlistToggle={handleWishlistToggle} showWishlist={!!user} />)
                         }
                     </div>
                 </section>

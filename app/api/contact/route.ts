@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     }
 
     // Basic email format check
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
         return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
     }
 

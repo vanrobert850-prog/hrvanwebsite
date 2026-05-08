@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { useUser } from '@clerk/nextjs'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import {
@@ -108,7 +109,13 @@ function SkeletonCard() {
 }
 
 // ── ART CARD ──────────────────────────────────────────────────────
-function ArtCard({ product, index }: { product: ShopifyProduct; index: number }) {
+function ArtCard({ product, index, wishlistedHandles, onWishlistToggle, showWishlist }: {
+    product: ShopifyProduct
+    index: number
+    wishlistedHandles?: Set<string>
+    onWishlistToggle?: (handle: string) => void
+    showWishlist?: boolean
+}) {
     const ref = useRef<HTMLDivElement>(null)
     const tagMap    = parseTags(product.tags)
     const price     = getProductPrice(product)
@@ -119,6 +126,7 @@ function ArtCard({ product, index }: { product: ShopifyProduct; index: number })
     const imgWidth  = imageNode?.width  ?? 800
     const imgHeight = imageNode?.height ?? 800
     const aspectRatio = `${imgWidth} / ${imgHeight}`
+    const isWishlisted = wishlistedHandles?.has(product.handle) ?? false
 
     useEffect(() => {
         const el = ref.current; if (!el) return
@@ -137,14 +145,18 @@ function ArtCard({ product, index }: { product: ShopifyProduct; index: number })
                     onMouseEnter={e => {
                         const img  = e.currentTarget.querySelector('img') as HTMLImageElement
                         const acts = e.currentTarget.querySelector('.acts') as HTMLElement
+                        const heart = e.currentTarget.querySelector('.gallery-card-heart') as HTMLElement
                         if (img)  img.style.transform = 'scale(1.05)'
                         if (acts) { acts.style.opacity = '1'; acts.style.transform = 'translateY(0)' }
+                        if (heart) heart.style.opacity = '1'
                     }}
                     onMouseLeave={e => {
                         const img  = e.currentTarget.querySelector('img') as HTMLImageElement
                         const acts = e.currentTarget.querySelector('.acts') as HTMLElement
+                        const heart = e.currentTarget.querySelector('.gallery-card-heart') as HTMLElement
                         if (img)  img.style.transform = 'scale(1)'
                         if (acts) { acts.style.opacity = '0'; acts.style.transform = 'translateY(6px)' }
+                        if (heart && window.innerWidth > 768) heart.style.opacity = '0'
                     }}
                 >
                     {imgUrl ? (
@@ -171,6 +183,31 @@ function ArtCard({ product, index }: { product: ShopifyProduct; index: number })
                                 <path d="M21 15l-5-5L5 21"/>
                             </svg>
                         </div>
+                    )}
+
+                    {/* Wishlist heart button */}
+                    {showWishlist && onWishlistToggle && (
+                        <button
+                            className="gallery-card-heart"
+                            aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+                            onClick={e => { e.preventDefault(); e.stopPropagation(); onWishlistToggle(product.handle) }}
+                            style={{
+                                position: 'absolute', top: 10, right: 10,
+                                width: 34, height: 34, borderRadius: '50%',
+                                background: '#fff', border: 'none', cursor: 'pointer',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                boxShadow: '0 1px 4px rgba(0,0,0,0.15)',
+                                opacity: 0, transition: 'opacity 0.2s ease',
+                                zIndex: 3,
+                            }}
+                        >
+                            <svg width="16" height="16" viewBox="0 0 24 24"
+                                 fill={isWishlisted ? '#B85C38' : 'none'}
+                                 stroke={isWishlisted ? '#B85C38' : '#555'}
+                                 strokeWidth="1.5">
+                                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/>
+                            </svg>
+                        </button>
                     )}
 
                     {/* Action buttons */}
@@ -216,16 +253,19 @@ function ArtCard({ product, index }: { product: ShopifyProduct; index: number })
 // ── MAIN GALLERY ──────────────────────────────────────────────────
 function GalleryInner() {
     const searchParams = useSearchParams()
+    const { user } = useUser()
 
-    const [allProducts,     setAllProducts]     = useState<ShopifyProduct[]>([])
-    const [loading,         setLoading]         = useState(true)
-    const [category,        setCategory]        = useState('All')
-    const [selectedStyles,  setSelectedStyles]  = useState<string[]>([])
-    const [selectedMediums, setSelectedMediums] = useState<string[]>([])
-    const [selectedPrice,   setSelectedPrice]   = useState('')
-    const [sortBy,          setSortBy]          = useState('Featured')
-    const [sidebarOpen,     setSidebarOpen]     = useState(true)
-    const [headerVisible,   setHeaderVisible]   = useState(false)
+    const [allProducts,        setAllProducts]        = useState<ShopifyProduct[]>([])
+    const [loading,            setLoading]            = useState(true)
+    const [category,           setCategory]           = useState('All')
+    const [selectedStyles,     setSelectedStyles]     = useState<string[]>([])
+    const [selectedMediums,    setSelectedMediums]    = useState<string[]>([])
+    const [selectedPrice,      setSelectedPrice]      = useState('')
+    const [sortBy,             setSortBy]             = useState('Featured')
+    const [sidebarOpen,        setSidebarOpen]        = useState(true)
+    const [mobileSidebarOpen,  setMobileSidebarOpen]  = useState(false)
+    const [headerVisible,      setHeaderVisible]      = useState(false)
+    const [wishlistedHandles,  setWishlistedHandles]  = useState<Set<string>>(new Set())
 
     // Fetch all products from Shopify on mount
     useEffect(() => {
@@ -234,6 +274,42 @@ function GalleryInner() {
             .then(products => { setAllProducts(products); setLoading(false) })
             .catch(() => setLoading(false))
     }, [])
+
+    useEffect(() => {
+        if (!user) return
+        fetch('/api/wishlist')
+            .then(r => r.ok ? r.json() : { items: [] })
+            .then(data => {
+                const handles = (data.items ?? []).map((item: { product_handle: string }) => item.product_handle)
+                setWishlistedHandles(new Set(handles))
+            })
+            .catch(() => {})
+    }, [user])
+
+    const handleWishlistToggle = async (handle: string) => {
+        if (!user) return
+        const wasWishlisted = wishlistedHandles.has(handle)
+        setWishlistedHandles(prev => {
+            const next = new Set(prev)
+            if (wasWishlisted) next.delete(handle)
+            else next.add(handle)
+            return next
+        })
+        try {
+            if (wasWishlisted) {
+                await fetch('/api/wishlist', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ product_handle: handle }) })
+            } else {
+                await fetch('/api/wishlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ product_handle: handle }) })
+            }
+        } catch {
+            setWishlistedHandles(prev => {
+                const next = new Set(prev)
+                if (wasWishlisted) next.add(handle)
+                else next.delete(handle)
+                return next
+            })
+        }
+    }
 
     useEffect(() => { setTimeout(() => setHeaderVisible(true), 50) }, [])
 
@@ -299,6 +375,20 @@ function GalleryInner() {
             <style>{`
                 @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
                 @keyframes sideIn  { from { opacity:0; transform:translateX(-16px); } to { opacity:1; transform:translateX(0); } }
+                .gallery-filter-btn { display: none; }
+                @media (max-width: 768px) {
+                  .gallery-sidebar { display: none !important; }
+                  .gallery-sidebar.open { display: block !important; }
+                  .gallery-filter-btn { display: flex !important; }
+                  .gallery-layout { flex-direction: column !important; padding: 0 20px 60px !important; }
+                  .gallery-masonry { columns: 2 !important; }
+                }
+                @media (max-width: 480px) {
+                  .gallery-masonry { columns: 1 !important; }
+                }
+                @media (max-width: 768px) {
+                  .gallery-card-heart { opacity: 1 !important; }
+                }
             `}</style>
 
             {/* HEADER */}
@@ -373,52 +463,75 @@ function GalleryInner() {
             </div>
 
             {/* SIDEBAR + GRID */}
-            <div style={{ display: 'flex', padding: '0 48px 80px', gap: 40, alignItems: 'flex-start' }}>
+            <div className="gallery-layout" style={{ display: 'flex', padding: '0 48px 80px', gap: 40, alignItems: 'flex-start' }}>
 
                 {/* SIDEBAR */}
-                {sidebarOpen && (
-                    <aside style={{ width: 220, minWidth: 220, flexShrink: 0, animation: 'sideIn 0.3s ease' }}>
+                <aside
+                    className={`gallery-sidebar${mobileSidebarOpen ? ' open' : ''}`}
+                    style={{
+                        width: 220, minWidth: 220, flexShrink: 0,
+                        animation: 'sideIn 0.3s ease',
+                        display: sidebarOpen ? undefined : 'none',
+                    }}
+                >
 
-                        <FilterSection title="Category">
-                            {allCategories.map(c => (
-                                <CheckRow key={c} label={c} checked={category === c} onChange={() => setCategory(c)} radio />
+                    <FilterSection title="Category">
+                        {allCategories.map(c => (
+                            <CheckRow key={c} label={c} checked={category === c} onChange={() => setCategory(c)} radio />
+                        ))}
+                    </FilterSection>
+
+                    {allStyles.length > 0 && (
+                        <FilterSection title="Style">
+                            {allStyles.map(s => (
+                                <CheckRow key={s} label={s} checked={selectedStyles.includes(s)} onChange={() => toggleStyle(s)} />
                             ))}
                         </FilterSection>
+                    )}
 
-                        {allStyles.length > 0 && (
-                            <FilterSection title="Style">
-                                {allStyles.map(s => (
-                                    <CheckRow key={s} label={s} checked={selectedStyles.includes(s)} onChange={() => toggleStyle(s)} />
-                                ))}
-                            </FilterSection>
-                        )}
-
-                        {allMediums.length > 0 && (
-                            <FilterSection title="Medium" defaultOpen={false}>
-                                {allMediums.map(m => (
-                                    <CheckRow key={m} label={m} checked={selectedMediums.includes(m)} onChange={() => toggleMedium(m)} />
-                                ))}
-                            </FilterSection>
-                        )}
-
-                        <FilterSection title="Price">
-                            {PRICES.map(p => (
-                                <CheckRow
-                                    key={p.label}
-                                    label={p.label}
-                                    checked={selectedPrice === p.label}
-                                    onChange={() => setSelectedPrice(prev => prev === p.label ? '' : p.label)}
-                                    radio
-                                />
+                    {allMediums.length > 0 && (
+                        <FilterSection title="Medium" defaultOpen={false}>
+                            {allMediums.map(m => (
+                                <CheckRow key={m} label={m} checked={selectedMediums.includes(m)} onChange={() => toggleMedium(m)} />
                             ))}
                         </FilterSection>
-                    </aside>
-                )}
+                    )}
+
+                    <FilterSection title="Price">
+                        {PRICES.map(p => (
+                            <CheckRow
+                                key={p.label}
+                                label={p.label}
+                                checked={selectedPrice === p.label}
+                                onChange={() => setSelectedPrice(prev => prev === p.label ? '' : p.label)}
+                                radio
+                            />
+                        ))}
+                    </FilterSection>
+                </aside>
 
                 {/* ART GRID — masonry-style using CSS columns so images show at natural size */}
                 <div style={{ flex: 1, minWidth: 0 }}>
+                    {/* Mobile filters toggle button */}
+                    <button
+                        className="gallery-filter-btn"
+                        onClick={() => setMobileSidebarOpen(o => !o)}
+                        style={{
+                            alignItems: 'center', gap: 8,
+                            border: '1px solid #ccc', background: '#fff', padding: '8px 16px',
+                            fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
+                            marginBottom: 16, width: '100%', justifyContent: 'center',
+                        }}
+                    >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <line x1="4" y1="6" x2="20" y2="6"/>
+                            <line x1="4" y1="12" x2="14" y2="12"/>
+                            <line x1="4" y1="18" x2="17" y2="18"/>
+                        </svg>
+                        {mobileSidebarOpen ? 'Hide' : 'Show'} Filters{activeCount > 0 ? ` (${activeCount})` : ''}
+                    </button>
                     {loading ? (
-                        <div style={{ columns: '3 auto', columnGap: 20 }}>
+                        <div className="gallery-masonry" style={{ columns: '3 auto', columnGap: 20 }}>
                             {Array.from({ length: 6 }).map((_, i) => (
                                 <div key={i} style={{ breakInside: 'avoid', marginBottom: 20 }}>
                                     <SkeletonCard />
@@ -444,10 +557,16 @@ function GalleryInner() {
                         </div>
                     ) : (
                         // CSS columns (masonry layout) — each image uses its natural aspect ratio
-                        <div style={{ columns: '3 auto', columnGap: 20 }}>
+                        <div className="gallery-masonry" style={{ columns: '3 auto', columnGap: 20 }}>
                             {filtered.map((product, i) => (
                                 <div key={product.id} style={{ breakInside: 'avoid', marginBottom: 20 }}>
-                                    <ArtCard product={product} index={i} />
+                                    <ArtCard
+                                        product={product}
+                                        index={i}
+                                        wishlistedHandles={wishlistedHandles}
+                                        onWishlistToggle={handleWishlistToggle}
+                                        showWishlist={!!user}
+                                    />
                                 </div>
                             ))}
                         </div>
