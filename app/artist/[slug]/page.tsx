@@ -284,7 +284,7 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
                         <p style={{ fontSize: 14, color: '#888', maxWidth: 440, margin: '0 auto 28px', lineHeight: 1.7 }}>
                             Interested in a custom artwork by {artist.name.split(' ')[0]}? Inquire here and our curators will connect you directly with the artist.
                         </p>
-                        <Link href="/contact" style={{
+                        <Link href={`/inquire?artist=${encodeURIComponent(artist.name)}`} style={{
                             display: 'inline-block', border: '1px solid #111', padding: '12px 32px',
                             fontSize: 11, letterSpacing: '2px', textTransform: 'uppercase', fontFamily: 'inherit',
                             transition: 'all 0.25s ease',
