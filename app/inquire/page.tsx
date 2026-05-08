@@ -34,11 +34,11 @@ const TIMELINES = [
 ]
 
 // Input component defined outside to prevent remount on re-render
-function Field({ label, required, error, children }: {
-    label: string; required?: boolean; error?: string; children: React.ReactNode
+function Field({ label, required, error, children, span }: {
+    label: string; required?: boolean; error?: string; children: React.ReactNode; span?: boolean
 }) {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+        <div className="inq-field" style={{ display: 'flex', flexDirection: 'column', gap: 7, gridColumn: span ? '1 / -1' : undefined }}>
             <label style={{ fontSize: 10, letterSpacing: '2px', textTransform: 'uppercase', color: '#666', fontWeight: 600 }}>
                 {label}{required && <span style={{ color: '#B85C38', marginLeft: 3 }}>*</span>}
             </label>
@@ -51,7 +51,8 @@ function Field({ label, required, error, children }: {
 const inputBase: React.CSSProperties = {
     padding: '12px 14px', fontSize: 13, border: '1px solid #e8e0d8',
     background: '#fff', color: '#111', outline: 'none', fontFamily: 'inherit',
-    borderRadius: 2, transition: 'border-color 0.2s', width: '100%', boxSizing: 'border-box',
+    borderRadius: 2, width: '100%', boxSizing: 'border-box',
+    transition: 'border-color 0.25s ease, box-shadow 0.25s ease, background 0.2s ease',
 }
 
 function InquireForm() {
@@ -195,25 +196,21 @@ function InquireForm() {
                 </Field>
 
                 {/* Timeline */}
-                <div style={{ gridColumn: '1 / -1' }}>
-                    <Field label="Desired timeline">
-                        <select value={form.timeline} onChange={set('timeline')} style={{ ...inputBase, cursor: 'pointer', appearance: 'none' }}>
-                            <option value="">When do you need it?</option>
-                            {TIMELINES.map(t => <option key={t} value={t}>{t}</option>)}
-                        </select>
-                    </Field>
-                </div>
+                <Field label="Desired timeline" span>
+                    <select value={form.timeline} onChange={set('timeline')} style={{ ...inputBase, cursor: 'pointer', appearance: 'none' }}>
+                        <option value="">When do you need it?</option>
+                        {TIMELINES.map(t => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                </Field>
 
                 {/* Message */}
-                <div style={{ gridColumn: '1 / -1' }}>
-                    <Field label="Tell us about your project" required error={errors.message}>
-                        <textarea
-                            value={form.message} onChange={set('message')} rows={5}
-                            placeholder="Describe what you're looking for — the style, size, subject matter, where it will be displayed, or anything else that helps us match you with the right artist and artwork."
-                            style={{ ...inputBase, borderColor: errors.message ? '#ef4444' : '#e8e0d8', resize: 'vertical', minHeight: 120 }}
-                        />
-                    </Field>
-                </div>
+                <Field label="Tell us about your project" required error={errors.message} span>
+                    <textarea
+                        value={form.message} onChange={set('message')} rows={5}
+                        placeholder="Describe what you're looking for — the style, size, subject matter, where it will be displayed, or anything else that helps us match you with the right artist and artwork."
+                        style={{ ...inputBase, borderColor: errors.message ? '#ef4444' : '#e8e0d8', minHeight: 120 }}
+                    />
+                </Field>
             </div>
 
             {errors._form && (
@@ -225,13 +222,14 @@ function InquireForm() {
             <button
                 type="submit"
                 disabled={submitting}
+                className="inq-submit"
                 style={{
-                    marginTop: 28, width: '100%', padding: '15px',
+                    marginTop: 28, width: '100%', padding: '16px',
                     background: submitting ? '#888' : '#111',
                     color: '#fff', border: 'none', fontSize: 11,
                     letterSpacing: '2.5px', textTransform: 'uppercase',
                     cursor: submitting ? 'not-allowed' : 'pointer',
-                    fontFamily: 'inherit', borderRadius: 2, transition: 'background 0.2s',
+                    fontFamily: 'inherit', borderRadius: 2,
                 }}
             >
                 {submitting ? 'Sending…' : 'Send Inquiry'}
@@ -249,6 +247,52 @@ export default function InquirePage() {
         <>
             <style>{`
                 @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+
+                /* ── Smooth input focus & hover ── */
+                .inq-field input,
+                .inq-field textarea,
+                .inq-field select {
+                    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+                }
+                .inq-field input:hover,
+                .inq-field textarea:hover,
+                .inq-field select:hover {
+                    border-color: #c8b8a8 !important;
+                    background: #fffdf9 !important;
+                }
+                .inq-field input:focus,
+                .inq-field textarea:focus,
+                .inq-field select:focus {
+                    border-color: #B85C38 !important;
+                    box-shadow: 0 0 0 3px rgba(184,92,56,0.10) !important;
+                    background: #fff !important;
+                }
+                .inq-field textarea { resize: vertical; }
+
+                /* ── Submit button ── */
+                .inq-submit {
+                    position: relative; overflow: hidden;
+                    transition: background 0.3s ease, transform 0.15s ease, box-shadow 0.3s ease !important;
+                }
+                .inq-submit:not(:disabled):hover {
+                    background: #9a4a28 !important;
+                    box-shadow: 0 6px 20px rgba(184,92,56,0.35) !important;
+                    transform: translateY(-1px);
+                }
+                .inq-submit:not(:disabled):active {
+                    transform: translateY(0px);
+                    box-shadow: 0 2px 8px rgba(184,92,56,0.2) !important;
+                }
+
+                /* ── Select arrow ── */
+                .inq-field select {
+                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+                    background-repeat: no-repeat !important;
+                    background-position: right 14px center !important;
+                    padding-right: 38px !important;
+                    cursor: pointer;
+                }
+
                 @media (max-width: 900px) {
                     .inquire-layout { grid-template-columns: 1fr !important; }
                     .inquire-sidebar { border-left: none !important; border-top: 1px solid #f0ebe3 !important; padding: 32px 0 0 !important; margin-top: 8px !important; }
