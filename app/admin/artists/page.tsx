@@ -1,12 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-
-const ARTIST_SLUGS = [
-    'van-robert',
-    'freddy-javier',
-    'juan-b-nina',
-    'pablo-palasso',
-]
+import Link from 'next/link'
 
 interface ArtistProfile {
     id: string
@@ -34,13 +28,18 @@ export default function AdminArtistsPage() {
     useEffect(() => { fetchProfiles() }, [])
 
     const handleSave = async () => {
-        if (!form.artist_slug || !form.clerk_user_id || !form.display_name) {
+        const slug = form.artist_slug.trim().toLowerCase()
+        if (!slug || !form.clerk_user_id || !form.display_name) {
             setMsg({ text: 'All fields are required.', ok: false }); return
+        }
+        // Basic slug format check
+        if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+            setMsg({ text: 'Artist slug must be lowercase letters, numbers, and hyphens only (e.g. van-robert).', ok: false }); return
         }
         setSaving(true)
         const res  = await fetch('/api/admin/artists', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(form),
+            body: JSON.stringify({ ...form, artist_slug: slug }),
         })
         const data = await res.json()
         if (data.ok) {
@@ -85,38 +84,31 @@ export default function AdminArtistsPage() {
                 </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: 24, alignItems: 'start' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '380px 1fr', gap: 24, alignItems: 'start' }}>
 
-                {/* Form */}
+                {/* ── Form ── */}
                 <div style={{ background: '#0d0d0d', border: '1px solid #1c1c1c', padding: 28, borderRadius: 2 }}>
                     <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: '#555', marginBottom: 24 }}>
                         Link New Artist
                     </p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+
+                        {/* Artist Slug — free text */}
                         <div>
-                            <label style={labelStyle}>Artist Profile</label>
-                            <select
-                                value={form.artist_slug}
-                                onChange={e => setForm(f => ({ ...f, artist_slug: e.target.value }))}
-                                style={{ ...inputStyle, cursor: 'pointer' }}
-                            >
-                                <option value="">Select artist...</option>
-                                {ARTIST_SLUGS.map(s => <option key={s} value={s}>{s}</option>)}
-                            </select>
-                        </div>
-                        <div>
-                            <label style={labelStyle}>Clerk User ID</label>
+                            <label style={labelStyle}>Artist Slug</label>
                             <input
                                 type="text"
-                                placeholder="user_xxxxxxxxxxxxxxxx"
-                                value={form.clerk_user_id}
-                                onChange={e => setForm(f => ({ ...f, clerk_user_id: e.target.value }))}
+                                placeholder="e.g. van-robert"
+                                value={form.artist_slug}
+                                onChange={e => setForm(f => ({ ...f, artist_slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') }))}
                                 style={inputStyle}
                             />
                             <p style={{ fontSize: 10, color: '#444', marginTop: 6 }}>
-                                clerk.com → Users → click user → copy User ID
+                                Must match the <code style={{ color: '#666' }}>artist:slug</code> tag used in Shopify products.
                             </p>
                         </div>
+
+                        {/* Display Name */}
                         <div>
                             <label style={labelStyle}>Display Name</label>
                             <input
@@ -127,6 +119,22 @@ export default function AdminArtistsPage() {
                                 style={inputStyle}
                             />
                         </div>
+
+                        {/* Clerk User ID */}
+                        <div>
+                            <label style={labelStyle}>Clerk User ID</label>
+                            <input
+                                type="text"
+                                placeholder="user_xxxxxxxxxxxxxxxx"
+                                value={form.clerk_user_id}
+                                onChange={e => setForm(f => ({ ...f, clerk_user_id: e.target.value }))}
+                                style={inputStyle}
+                            />
+                            <p style={{ fontSize: 10, color: '#444', marginTop: 6 }}>
+                                Clerk dashboard → Users → click user → copy User ID
+                            </p>
+                        </div>
+
                         <button
                             onClick={handleSave}
                             disabled={saving}
@@ -138,8 +146,9 @@ export default function AdminArtistsPage() {
                                 fontFamily: 'inherit', transition: 'background 0.2s', borderRadius: 2,
                             }}
                         >
-                            {saving ? 'Saving...' : 'Link Artist'}
+                            {saving ? 'Saving…' : 'Link Artist'}
                         </button>
+
                         {msg && (
                             <div style={{
                                 fontSize: 12, padding: '12px 14px',
@@ -154,20 +163,18 @@ export default function AdminArtistsPage() {
                     </div>
                 </div>
 
-                {/* Linked artists table */}
+                {/* ── Linked artists table ── */}
                 <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                         <p style={{ fontSize: 10, color: '#555', letterSpacing: '2px', textTransform: 'uppercase' }}>
                             Linked Artists
-                            {!loading && (
-                                <span style={{ color: '#333', marginLeft: 8 }}>({profiles.length})</span>
-                            )}
+                            {!loading && <span style={{ color: '#333', marginLeft: 8 }}>({profiles.length})</span>}
                         </p>
                     </div>
 
                     {loading ? (
                         <div style={{ background: '#0d0d0d', border: '1px solid #1c1c1c', padding: 32, textAlign: 'center' }}>
-                            <p style={{ fontSize: 13, color: '#444', fontStyle: 'italic' }}>Loading...</p>
+                            <p style={{ fontSize: 13, color: '#444', fontStyle: 'italic' }}>Loading…</p>
                         </div>
                     ) : profiles.length === 0 ? (
                         <div style={{ background: '#0d0d0d', border: '1px solid #1c1c1c', padding: 48, textAlign: 'center' }}>
@@ -181,23 +188,25 @@ export default function AdminArtistsPage() {
                         <>
                             {/* Table header */}
                             <div style={{
-                                display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto',
-                                padding: '10px 20px', background: '#0a0a0a', border: '1px solid #1c1c1c',
-                                borderBottom: 'none',
+                                display: 'grid', gridTemplateColumns: '1fr 140px 1fr auto auto',
+                                padding: '10px 20px', background: '#0a0a0a',
+                                border: '1px solid #1c1c1c', borderBottom: 'none',
+                                gap: 12,
                             }}>
-                                {['Artist', 'Slug', 'Clerk ID', ''].map(h => (
+                                {['Artist', 'Slug', 'Clerk ID', 'Dashboard', ''].map(h => (
                                     <p key={h} style={{ fontSize: 9, color: '#444', letterSpacing: '2px', textTransform: 'uppercase' }}>{h}</p>
                                 ))}
                             </div>
 
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
                                 {profiles.map(p => (
                                     <div key={p.id} style={{
-                                        display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto',
+                                        display: 'grid', gridTemplateColumns: '1fr 140px 1fr auto auto',
                                         padding: '16px 20px', alignItems: 'center',
                                         background: '#0d0d0d', border: '1px solid #1c1c1c', borderTop: 'none',
-                                        gap: 16,
+                                        gap: 12,
                                     }}>
+                                        {/* Name */}
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                                             <div style={{
                                                 width: 30, height: 30, borderRadius: '50%',
@@ -209,13 +218,40 @@ export default function AdminArtistsPage() {
                                             </div>
                                             <span style={{ fontSize: 13, color: '#fff', fontWeight: 500 }}>{p.display_name}</span>
                                         </div>
+
+                                        {/* Slug */}
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                                             <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#22c55e', flexShrink: 0 }} />
                                             <span style={{ fontSize: 11, color: '#B85C38' }}>@{p.artist_slug}</span>
                                         </div>
+
+                                        {/* Clerk ID */}
                                         <p style={{ fontSize: 10, color: '#555', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                             {p.clerk_user_id}
                                         </p>
+
+                                        {/* View Dashboard link */}
+                                        <Link
+                                            href={`/artist-dashboard/${p.artist_slug}`}
+                                            target="_blank"
+                                            style={{
+                                                fontSize: 9, color: '#3b82f6', textDecoration: 'none',
+                                                border: '1px solid #1a2a3a', padding: '5px 12px',
+                                                letterSpacing: '1.5px', textTransform: 'uppercase',
+                                                borderRadius: 2, whiteSpace: 'nowrap',
+                                                transition: 'border-color 0.2s, color 0.2s',
+                                            }}
+                                            onMouseEnter={e => {
+                                                (e.currentTarget as HTMLElement).style.borderColor = '#3b82f6'
+                                            }}
+                                            onMouseLeave={e => {
+                                                (e.currentTarget as HTMLElement).style.borderColor = '#1a2a3a'
+                                            }}
+                                        >
+                                            View Dashboard ↗
+                                        </Link>
+
+                                        {/* Remove */}
                                         <button
                                             onClick={() => handleDelete(p.id, p.display_name)}
                                             style={{
