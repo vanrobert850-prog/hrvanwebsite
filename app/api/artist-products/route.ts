@@ -18,7 +18,7 @@ export async function GET(req: Request) {
     const productFields = `id title handle description vendor productType tags priceRange { minVariantPrice { amount currencyCode } } images(first: 5) { edges { node { url altText width height } } } variants(first: 5) { edges { node { id title availableForSale price { amount currencyCode } } } }`
 
     const gqlQuery = artistSlug
-        ? { query: `query getProducts($q: String!, $lang: LanguageCode!) @inContext(language: $lang) { products(first: 50, query: $q) { edges { node { ${productFields} } } } }`, variables: { q: `tag:artist:${artistSlug}`, lang: language } }
+        ? { query: `query getProducts($q: String!, $lang: LanguageCode!) @inContext(language: $lang) { products(first: 50, query: $q) { edges { node { ${productFields} } } } }`, variables: { q: `tag:"artist:${artistSlug}"`, lang: language } }
         : { query: `query getProducts($lang: LanguageCode!) @inContext(language: $lang) { products(first: 50) { edges { node { ${productFields} } } } }`, variables: { lang: language } }
 
     try {

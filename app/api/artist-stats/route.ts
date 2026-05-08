@@ -63,7 +63,7 @@ export async function GET(req: Request) {
                             }
                         }
                     `,
-                    variables: { query: `tag:artist:${artistSlug}` },
+                    variables: { query: `tag:"artist:${artistSlug}"` },
                 }),
                 next: { revalidate: 60 },
             }
