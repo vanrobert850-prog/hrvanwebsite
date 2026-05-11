@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useUser } from '@clerk/nextjs'
-import { useRouter } from 'next/navigation'
+import { useUser, useClerk } from '@clerk/nextjs'
 
 interface FollowButtonProps {
     artistSlug: string
@@ -9,7 +8,7 @@ interface FollowButtonProps {
 
 export default function FollowButton({ artistSlug }: FollowButtonProps) {
     const { user, isLoaded } = useUser()
-    const router = useRouter()
+    const { openSignIn } = useClerk()
 
     const [isFollowing,   setIsFollowing]   = useState(false)
     const [followerCount, setFollowerCount] = useState(0)
@@ -42,7 +41,7 @@ export default function FollowButton({ artistSlug }: FollowButtonProps) {
 
     const handleFollow = async () => {
         if (!user) {
-            router.push('/sign-in')
+            openSignIn({ afterSignInUrl: window.location.href })
             return
         }
         setActing(true)

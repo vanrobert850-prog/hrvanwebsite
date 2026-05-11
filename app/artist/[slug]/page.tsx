@@ -87,9 +87,10 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
     const artist = artists.find(a => a.slug === slug)
     if (!artist) notFound()
 
-    const [activeTab, setActiveTab] = useState(0)
-    const [products, setProducts]   = useState<ShopifyProduct[]>([])
-    const [loading,  setLoading]    = useState(true)
+    const [activeTab,   setActiveTab]   = useState(0)
+    const [products,    setProducts]    = useState<ShopifyProduct[]>([])
+    const [loading,     setLoading]     = useState(true)
+    const [photoError,  setPhotoError]  = useState(false)
 
     // Fetch this artist's products from Shopify by tag — refetch on language change
     useEffect(() => {
@@ -129,10 +130,18 @@ export default function ArtistPage({ params }: { params: Promise<{ slug: string 
                                 width: 96, height: 96, borderRadius: '50%', overflow: 'hidden',
                                 border: '4px solid #fff', boxShadow: '0 2px 16px rgba(0,0,0,0.15)',
                                 flexShrink: 0, background: '#F0EDE8',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
                             }}>
-                                <img src={artist.photo} alt={artist.name}
-                                     style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: artist.photoPosition ?? 'center top', display: 'block' }}
-                                />
+                                {!photoError ? (
+                                    <img src={artist.photo} alt={artist.name}
+                                         style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: artist.photoPosition ?? 'center top', display: 'block' }}
+                                         onError={() => setPhotoError(true)}
+                                    />
+                                ) : (
+                                    <span style={{ fontSize: 26, fontWeight: 600, color: '#B85C38', fontFamily: 'Georgia, serif' }}>
+                                        {artist.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()}
+                                    </span>
+                                )}
                             </div>
                             <div>
                                 <p style={{ fontSize: 11, letterSpacing: '2.5px', textTransform: 'uppercase', color: '#B85C38', marginBottom: 6 }}>{artist.specialty}</p>

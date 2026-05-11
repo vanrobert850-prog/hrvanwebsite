@@ -55,8 +55,13 @@ const artists = [
     },
 ]
 
+function initials(name: string) {
+    return name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+}
+
 function ArtistCard({ artist, index }: { artist: typeof artists[0]; index: number }) {
     const ref = useRef<HTMLDivElement>(null)
+    const [photoError, setPhotoError] = useState(false)
 
     useEffect(() => {
         const el = ref.current
@@ -103,14 +108,21 @@ function ArtistCard({ artist, index }: { artist: typeof artists[0]; index: numbe
                             <div style={{
                                 width: 64, height: 64, borderRadius: '50%', overflow: 'hidden',
                                 border: '3px solid #fff', boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-                                background: '#F0EDE8',
+                                background: '#F0EDE8', display: 'flex', alignItems: 'center', justifyContent: 'center',
                             }}>
-                                <img
-                                    src={artist.photo}
-                                    alt={artist.name}
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: artist.photoPosition ?? 'center top', display: 'block' }}
-                                    loading="lazy"
-                                />
+                                {!photoError ? (
+                                    <img
+                                        src={artist.photo}
+                                        alt={artist.name}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: artist.photoPosition ?? 'center top', display: 'block' }}
+                                        loading="lazy"
+                                        onError={() => setPhotoError(true)}
+                                    />
+                                ) : (
+                                    <span style={{ fontSize: 18, fontWeight: 600, color: '#B85C38', fontFamily: 'Georgia, serif' }}>
+                                        {initials(artist.name)}
+                                    </span>
+                                )}
                             </div>
                         </div>
                         {/* Text — fully on white background, never overlapping image */}
