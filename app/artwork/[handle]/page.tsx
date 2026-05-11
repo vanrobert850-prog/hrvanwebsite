@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { useLang } from '../../context/LanguageContext'
 import { useCart } from '../../context/CartContext'
-import { useUser } from '@clerk/nextjs'
+import { useUser, useClerk } from '@clerk/nextjs'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import {
@@ -69,6 +69,7 @@ export default function ArtworkPage({ params }: { params: Promise<{ handle: stri
     const { lang } = useLang()
     const { addItem, loading: cartLoading } = useCart()
     const { user, isLoaded: userLoaded } = useUser()
+    const { openSignIn } = useClerk()
 
     // Unwrap params
     const [handle, setHandle] = useState<string | null>(null)
@@ -161,8 +162,7 @@ export default function ArtworkPage({ params }: { params: Promise<{ handle: stri
 
     const handleWishlist = async () => {
         if (!user) {
-            // Trigger Clerk sign-in modal programmatically via redirect
-            window.location.href = `/sign-in?redirect_url=${encodeURIComponent(window.location.pathname)}`
+            openSignIn({ afterSignInUrl: window.location.href })
             return
         }
         if (!handle || !product || wishlistBusy) return

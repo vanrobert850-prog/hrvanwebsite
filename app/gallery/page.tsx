@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { useUser } from '@clerk/nextjs'
+import { useUser, useClerk } from '@clerk/nextjs'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import {
@@ -186,7 +186,7 @@ function ArtCard({ product, index, wishlistedHandles, onWishlistToggle, showWish
                     )}
 
                     {/* Wishlist heart button */}
-                    {showWishlist && onWishlistToggle && (
+                    {onWishlistToggle && (
                         <button
                             className="gallery-card-heart"
                             aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
@@ -254,6 +254,7 @@ function ArtCard({ product, index, wishlistedHandles, onWishlistToggle, showWish
 function GalleryInner() {
     const searchParams = useSearchParams()
     const { user } = useUser()
+    const { openSignIn } = useClerk()
 
     const [allProducts,        setAllProducts]        = useState<ShopifyProduct[]>([])
     const [loading,            setLoading]            = useState(true)
@@ -287,7 +288,10 @@ function GalleryInner() {
     }, [user])
 
     const handleWishlistToggle = async (handle: string) => {
-        if (!user) return
+        if (!user) {
+            openSignIn({ afterSignInUrl: window.location.href })
+            return
+        }
         const wasWishlisted = wishlistedHandles.has(handle)
         setWishlistedHandles(prev => {
             const next = new Set(prev)
@@ -565,7 +569,6 @@ function GalleryInner() {
                                         index={i}
                                         wishlistedHandles={wishlistedHandles}
                                         onWishlistToggle={handleWishlistToggle}
-                                        showWishlist={!!user}
                                     />
                                 </div>
                             ))}

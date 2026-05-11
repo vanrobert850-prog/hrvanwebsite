@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { useUser } from '@clerk/nextjs'
+import { useUser, useClerk } from '@clerk/nextjs'
 import { useLang } from './context/LanguageContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -116,7 +116,7 @@ function ShopifyArtCard({ product, delay, wishlistedHandles, onWishlistToggle, s
         >
             <div className="art-card-img" style={{ position: 'relative' }}>
                 {img && <img src={img} alt={product.title} loading="lazy" width="400" height="533" />}
-                {showWishlist && onWishlistToggle && (
+                {onWishlistToggle && (
                     <button
                         className="art-card-heart"
                         aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
@@ -186,6 +186,7 @@ function ArtworkSkeleton() {
 export default function HomePage() {
     const { lang, t } = useLang()
     const { user } = useUser()
+    const { openSignIn } = useClerk()
 
     const [heroIndex,          setHeroIndex]          = useState(0)
     const [activeFilter,       setActiveFilter]       = useState('all')
@@ -210,7 +211,10 @@ export default function HomePage() {
     }, [user])
 
     const handleWishlistToggle = async (handle: string) => {
-        if (!user) return
+        if (!user) {
+            openSignIn({ afterSignInUrl: window.location.href })
+            return
+        }
         const wasWishlisted = wishlistedHandles.has(handle)
         // Optimistic update
         setWishlistedHandles(prev => {
@@ -340,7 +344,7 @@ export default function HomePage() {
                             ? <ArtworkSkeleton />
                             : filtered.length === 0
                                 ? <ArtworkEmptyState />
-                                : filtered.slice(0, 4).map((p, i) => <ShopifyArtCard key={p.id} product={p} delay={i + 1} wishlistedHandles={wishlistedHandles} onWishlistToggle={handleWishlistToggle} showWishlist={!!user} />)
+                                : filtered.slice(0, 4).map((p, i) => <ShopifyArtCard key={p.id} product={p} delay={i + 1} wishlistedHandles={wishlistedHandles} onWishlistToggle={handleWishlistToggle} />)
                         }
                     </div>
                 </section>
