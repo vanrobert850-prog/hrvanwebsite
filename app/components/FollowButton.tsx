@@ -41,7 +41,7 @@ export default function FollowButton({ artistSlug }: FollowButtonProps) {
 
     const handleFollow = async () => {
         if (!user) {
-            openSignIn({ afterSignInUrl: window.location.href })
+            openSignIn({ fallbackRedirectUrl: window.location.href })
             return
         }
         setActing(true)

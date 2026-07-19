@@ -212,7 +212,7 @@ export default function HomePage() {
 
     const handleWishlistToggle = async (handle: string) => {
         if (!user) {
-            openSignIn({ afterSignInUrl: window.location.href })
+            openSignIn({ fallbackRedirectUrl: window.location.href })
             return
         }
         const wasWishlisted = wishlistedHandles.has(handle)

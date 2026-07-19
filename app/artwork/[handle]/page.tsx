@@ -162,7 +162,7 @@ export default function ArtworkPage({ params }: { params: Promise<{ handle: stri
 
     const handleWishlist = async () => {
         if (!user) {
-            openSignIn({ afterSignInUrl: window.location.href })
+            openSignIn({ fallbackRedirectUrl: window.location.href })
             return
         }
         if (!handle || !product || wishlistBusy) return
